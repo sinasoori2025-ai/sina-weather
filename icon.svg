@@ -1,0 +1,48 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#183d68"/>
+      <stop offset="100%" stop-color="#11152f"/>
+    </linearGradient>
+    <linearGradient id="drop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b8e8ff"/>
+      <stop offset="100%" stop-color="#4a9cff"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+
+  <circle cx="335" cy="170" r="70" fill="#ffd77d"/>
+
+  <path
+    d="M130 310
+       C130 263 168 226 215 226
+       C237 157 326 145 367 204
+       C409 202 440 236 440 277
+       C440 321 405 352 361 352
+       H194
+       C157 352 130 334 130 310Z"
+    fill="#e5f2ff"
+    opacity=".94"
+  />
+
+  <path
+    d="M256 350
+       C256 350 195 420 195 449
+       C195 483 221 500 256 500
+       C291 500 317 483 317 449
+       C317 420 256 350 256 350Z"
+    fill="url(#drop)"
+    transform="translate(0,-18) scale(1,0.92)"
+  />
+
+  <path
+    d="M225 432 C226 415 239 400 254 392"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="10"
+    stroke-linecap="round"
+    opacity=".65"
+  />
+</svg>

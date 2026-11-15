@@ -1,0 +1,21 @@
+
+{
+  "id": "./",
+  "name": "SINA WEATHER",
+  "short_name": "SINA WEATHER",
+  "description": "Advanced real-time weather and balcony monitoring",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
