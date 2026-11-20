@@ -8,29 +8,30 @@
 <title>SINA WEATHER</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 /* =========================================================
-   SINA WEATHER
-   COMPLETE SINGLE FILE VERSION
+   SINA WEATHER — ULTRA-GLASSY METEOROLOGICAL SUITE
+   Preserves all original layout structure, IDs, and themes
+   while upgrading glass depth, specular rims, & controls.
    ========================================================= */
 
 :root {
     --bg: #07111f;
-    --panel: rgba(19, 38, 60, .68);
-    --panel-light: rgba(255,255,255,.075);
-    --border: rgba(255,255,255,.13);
-    --text: #f5f9ff;
-    --muted: #9aadc2;
+    --panel: rgba(18, 39, 64, .62);
+    --panel-light: rgba(255, 255, 255, .085);
+    --border: rgba(255, 255, 255, .16);
+    --border-bright: rgba(130, 232, 255, .36);
+    --text: #f6faff;
+    --muted: #9eb2c9;
     --cyan: #5de1e8;
     --blue: #58b9ff;
     --green: #72d6b0;
     --gold: #ffc978;
     --red: #ff7b86;
-    --radius: 23px;
-    --shadow: 0 20px 65px rgba(0,0,0,.28);
+    --radius: 24px;
+    --shadow: 0 24px 70px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .18);
 }
 
 * {
@@ -48,11 +49,11 @@ body {
     overflow-x: hidden;
     font-family: Inter, "Segoe UI", Arial, sans-serif;
     color: var(--text);
-    background: linear-gradient(145deg,#07111f,#102d48,#07111f);
+    background: linear-gradient(145deg, #07111f, #102d48, #07111f);
     transition: background 1.5s ease;
 }
 
-button,input,select {
+button, input, select {
     font: inherit;
 }
 
@@ -82,8 +83,9 @@ select:focus-visible {
     z-index: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at 10% 20%,rgba(80,160,230,.12),transparent 38%),
-        radial-gradient(circle at 90% 80%,rgba(110,90,230,.08),transparent 38%);
+        radial-gradient(circle at 12% 18%, rgba(93, 225, 232, .15), transparent 40%),
+        radial-gradient(circle at 88% 78%, rgba(88, 185, 255, .12), transparent 42%),
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, .04), transparent 55%);
 }
 
 .app-shell {
@@ -91,24 +93,36 @@ select:focus-visible {
     z-index: 2;
     max-width: 1450px;
     margin: auto;
-    padding: 0 38px 50px;
+    padding: 0 38px 54px;
 }
 
+/* Layered Frosted Glass Card with Specular Top Highlight */
 .glass {
     position: relative;
+    overflow: hidden;
     background:
-        linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.012)),
+        linear-gradient(155deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .018) 45%, rgba(93, 225, 232, .03)),
         var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    transition: border-color .3s,transform .3s,background .3s;
+    backdrop-filter: blur(28px) saturate(155%);
+    -webkit-backdrop-filter: blur(28px) saturate(155%);
+    transition: border-color .3s ease, transform .3s ease, background .3s ease, box-shadow .3s ease;
+}
+
+.glass::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .36), transparent);
+    pointer-events: none;
 }
 
 .glass:hover {
-    border-color: rgba(100,220,255,.3);
+    border-color: var(--border-bright);
+    box-shadow: 0 28px 78px rgba(0, 0, 0, .4), 0 0 28px rgba(93, 225, 232, .08);
 }
 
 .topbar {
@@ -134,8 +148,8 @@ select:focus-visible {
     width: 45px;
     height: 45px;
     border-radius: 15px;
-    background: linear-gradient(135deg,#58b9ff,#5de1e8);
-    box-shadow: 0 0 25px rgba(88,185,255,.25);
+    background: linear-gradient(135deg, #58b9ff, #5de1e8);
+    box-shadow: 0 0 25px rgba(88, 185, 255, .32), inset 0 1px 1px rgba(255, 255, 255, .65);
     font-size: 24px;
 }
 
@@ -159,9 +173,11 @@ select:focus-visible {
     gap: 9px;
     color: var(--muted);
     font-size: 11px;
-    padding: 9px 13px;
+    padding: 9px 14px;
     border-radius: 25px;
-    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255, 255, 255, .1);
+    background: rgba(255, 255, 255, .055);
+    backdrop-filter: blur(14px);
 }
 
 .status-dot {
@@ -183,18 +199,19 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 14px;
     color: white;
-    background: rgba(255,255,255,.07);
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(12px);
     font-size: 24px;
     transition: .3s;
 }
 
 .icon-button:hover {
     transform: rotate(180deg);
-    background: rgba(88,185,255,.2);
+    background: rgba(88, 185, 255, .24);
+    border-color: var(--cyan);
 }
 
 /* Navigation */
-
 .main-nav {
     display: flex;
     gap: 7px;
@@ -204,8 +221,9 @@ select:focus-visible {
     max-width: 100%;
     border: 1px solid var(--border);
     border-radius: 18px;
-    background: rgba(5,17,31,.4);
-    backdrop-filter: blur(18px);
+    background: rgba(6, 19, 36, .52);
+    backdrop-filter: blur(22px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
 }
 
 .nav-item {
@@ -222,8 +240,9 @@ select:focus-visible {
 .nav-item:hover,
 .nav-item.active {
     color: white;
-    border-color: rgba(88,185,255,.3);
-    background: linear-gradient(120deg,rgba(88,185,255,.2),rgba(93,225,232,.08));
+    border-color: rgba(93, 225, 232, .38);
+    background: linear-gradient(120deg, rgba(88, 185, 255, .24), rgba(93, 225, 232, .12));
+    box-shadow: 0 6px 20px rgba(88, 185, 255, .15);
 }
 
 .page {
@@ -241,7 +260,6 @@ select:focus-visible {
 }
 
 /* Location */
-
 .location-section {
     display: flex;
     align-items: center;
@@ -260,8 +278,9 @@ select:focus-visible {
 }
 
 .location-title h1 {
-    font-size: clamp(30px,4vw,45px);
+    font-size: clamp(30px, 4vw, 45px);
     letter-spacing: -1.7px;
+    text-shadow: 0 6px 24px rgba(0, 0, 0, .3);
 }
 
 .location-title p {
@@ -271,7 +290,7 @@ select:focus-visible {
 }
 
 .location-tools {
-    width: min(460px,100%);
+    width: min(460px, 100%);
     position: relative;
 }
 
@@ -283,12 +302,14 @@ select:focus-visible {
     min-height: 52px;
     border: 1px solid var(--border);
     border-radius: 15px;
-    background: rgba(255,255,255,.055);
+    background: rgba(255, 255, 255, .065);
+    backdrop-filter: blur(18px);
+    transition: border-color .25s ease, box-shadow .25s ease;
 }
 
 .search-box:focus-within {
     border-color: var(--cyan);
-    box-shadow: 0 0 0 3px rgba(93,225,232,.08);
+    box-shadow: 0 0 0 3px rgba(93, 225, 232, .12), 0 10px 28px rgba(0, 0, 0, .2);
 }
 
 .search-box span {
@@ -307,7 +328,7 @@ select:focus-visible {
 }
 
 .search-box input::placeholder {
-    color: #8193a8;
+    color: #879bb3;
 }
 
 .search-box button,
@@ -317,9 +338,11 @@ select:focus-visible {
     border: none;
     border-radius: 10px;
     color: #07111f;
-    background: linear-gradient(120deg,#65dce8,#65baff);
+    background: linear-gradient(120deg, #65dce8, #65baff);
+    box-shadow: 0 6px 18px rgba(93, 225, 232, .22);
     font-size: 11px;
     font-weight: 900;
+    transition: .25s ease;
 }
 
 .secondary-button {
@@ -327,13 +350,16 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 11px;
     color: white;
-    background: rgba(255,255,255,.06);
+    background: rgba(255, 255, 255, .07);
+    backdrop-filter: blur(12px);
     font-size: 11px;
     font-weight: 700;
+    transition: .25s ease;
 }
 
 .secondary-button:hover {
-    background: rgba(255,255,255,.13);
+    background: rgba(255, 255, 255, .15);
+    border-color: rgba(93, 225, 232, .35);
 }
 
 .search-box button:hover,
@@ -355,8 +381,9 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 13px;
     overflow: hidden;
-    background: #102239;
-    backdrop-filter: blur(20px);
+    background: rgba(14, 31, 52, .92);
+    backdrop-filter: blur(22px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
 }
 
 .location-result {
@@ -373,7 +400,7 @@ select:focus-visible {
 }
 
 .location-result:hover {
-    background: rgba(88,185,255,.16);
+    background: rgba(88, 185, 255, .18);
 }
 
 .location-result small {
@@ -387,28 +414,29 @@ select:focus-visible {
 }
 
 /* Hero */
-
 .hero-weather {
     position: relative;
     overflow: hidden;
     min-height: 295px;
     padding: 40px;
     background:
-        radial-gradient(circle at 85% 15%,rgba(93,225,232,.16),transparent 35%),
-        linear-gradient(115deg,rgba(41,103,151,.35),rgba(18,43,67,.65));
+        radial-gradient(circle at 85% 15%, rgba(93, 225, 232, .2), transparent 38%),
+        radial-gradient(circle at 15% 85%, rgba(88, 185, 255, .14), transparent 42%),
+        linear-gradient(125deg, rgba(47, 114, 168, .38), rgba(16, 40, 65, .7));
     border-radius: 30px;
 }
 
 .hero-weather::after {
     content: "";
     position: absolute;
-    width: 300px;
-    height: 300px;
-    right: 5%;
+    width: 320px;
+    height: 320px;
+    right: 4%;
     top: -200px;
-    background: rgba(88,185,255,.2);
-    filter: blur(70px);
+    background: rgba(93, 225, 232, .22);
+    filter: blur(75px);
     border-radius: 50%;
+    pointer-events: none;
 }
 
 .hero-weather-content {
@@ -427,15 +455,16 @@ select:focus-visible {
 }
 
 .temperature-row h2 {
-    font-size: clamp(80px,12vw,125px);
+    font-size: clamp(80px, 12vw, 125px);
     line-height: 1;
     font-weight: 500;
     letter-spacing: -8px;
+    text-shadow: 0 12px 32px rgba(0, 0, 0, .28);
 }
 
 .weather-icon {
     font-size: 75px;
-    filter: drop-shadow(0 9px 17px rgba(0,0,0,.3));
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .35));
     animation: weatherFloat 4s ease-in-out infinite;
 }
 
@@ -456,32 +485,35 @@ select:focus-visible {
 
 .day-night {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 13px;
     margin-top: 13px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 25px;
+    background: rgba(255, 255, 255, .06);
     font-size: 10px;
     color: var(--muted);
 }
 
 .hero-right {
     display: grid;
-    grid-template-columns: repeat(2,minmax(110px,1fr));
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
     gap: 12px;
 }
 
 .hero-info {
     padding: 16px;
     min-width: 115px;
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03));
+    backdrop-filter: blur(16px);
     transition: .3s;
 }
 
 .hero-info:hover {
     transform: translateY(-4px);
-    background: rgba(255,255,255,.1);
+    background: rgba(255, 255, 255, .14);
+    border-color: rgba(93, 225, 232, .35);
 }
 
 .hero-info span {
@@ -495,8 +527,69 @@ select:focus-visible {
     font-size: 17px;
 }
 
-/* Sections */
+/* Interactive Atmosphere & Snow Lab Strip */
+.atmosphere-lab {
+    margin-top: 16px;
+    padding: 18px 22px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
 
+.lab-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+}
+
+.lab-slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 155px;
+}
+
+.lab-slider-group label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.lab-slider-group label em {
+    font-style: normal;
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+.lab-slider-group input[type="range"] {
+    accent-color: var(--cyan);
+    cursor: pointer;
+}
+
+.lab-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.lab-pill {
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    background: rgba(255, 255, 255, .05);
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.lab-pill strong {
+    color: var(--text);
+}
+
+/* Sections */
 .content-section {
     margin-top: 43px;
 }
@@ -533,10 +626,9 @@ select:focus-visible {
 }
 
 /* Details */
-
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
 }
 
@@ -547,7 +639,7 @@ select:focus-visible {
     justify-content: center;
     padding: 20px;
     overflow: hidden;
-    background: linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+    background: linear-gradient(155deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02));
 }
 
 .stat-card:hover {
@@ -570,13 +662,12 @@ select:focus-visible {
 }
 
 /* Hourly */
-
 .hourly-forecast {
     display: flex;
     gap: 0;
     overflow-x: auto;
     padding: 20px 8px;
-    scrollbar-color: rgba(93,225,232,.4) transparent;
+    scrollbar-color: rgba(93, 225, 232, .45) transparent;
     scrollbar-width: thin;
 }
 
@@ -587,15 +678,17 @@ select:focus-visible {
     align-items: center;
     gap: 14px;
     padding: 11px;
-    border-right: 1px solid rgba(255,255,255,.06);
+    border-right: 1px solid rgba(255, 255, 255, .07);
+    transition: background .25s ease, transform .25s ease;
 }
 
 .hour-item:hover {
-    background: rgba(88,185,255,.08);
+    background: rgba(88, 185, 255, .12);
     border-radius: 12px;
+    transform: translateY(-2px);
 }
 
-.hour-time,.hour-rain {
+.hour-time, .hour-rain {
     color: var(--muted);
     font-size: 10px;
 }
@@ -613,7 +706,6 @@ select:focus-visible {
 }
 
 /* Daily */
-
 .weekly-forecast {
     padding: 5px 16px;
     overflow: hidden;
@@ -625,12 +717,18 @@ select:focus-visible {
     grid-template-columns: 1fr 45px 1.4fr 65px 85px 75px;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
     padding: 8px;
+    transition: background .25s ease;
+}
+
+.week-item:last-child {
+    border-bottom: none;
 }
 
 .week-item:hover {
-    background: rgba(88,185,255,.06);
+    background: rgba(88, 185, 255, .09);
+    border-radius: 12px;
 }
 
 .week-date {
@@ -671,10 +769,9 @@ select:focus-visible {
 }
 
 /* Environment */
-
 .environment-grid {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
 }
 
@@ -683,6 +780,10 @@ select:focus-visible {
     flex-direction: column;
     gap: 10px;
     padding: 22px;
+}
+
+.environment-card:hover {
+    transform: translateY(-4px);
 }
 
 .environment-card span {
@@ -699,10 +800,9 @@ select:focus-visible {
 }
 
 /* Solar */
-
 .sun-grid {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
 }
 
@@ -711,6 +811,10 @@ select:focus-visible {
     align-items: center;
     gap: 20px;
     padding: 24px;
+}
+
+.sun-card:hover {
+    transform: translateY(-4px);
 }
 
 .sun-card > span {
@@ -733,7 +837,6 @@ select:focus-visible {
 }
 
 /* Alerts */
-
 .weather-alerts {
     padding: 17px;
 }
@@ -758,17 +861,21 @@ select:focus-visible {
     margin-bottom: 9px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: rgba(255,255,255,.04);
+    background: rgba(255, 255, 255, .05);
+}
+
+.weather-alert:last-child {
+    margin-bottom: 0;
 }
 
 .weather-alert.high {
-    border-color: rgba(255,123,134,.35);
-    background: rgba(255,123,134,.08);
+    border-color: rgba(255, 123, 134, .42);
+    background: rgba(255, 123, 134, .1);
 }
 
 .weather-alert.medium {
-    border-color: rgba(255,201,120,.3);
-    background: rgba(255,201,120,.06);
+    border-color: rgba(255, 201, 120, .38);
+    background: rgba(255, 201, 120, .08);
 }
 
 .alert-symbol {
@@ -787,7 +894,6 @@ select:focus-visible {
 }
 
 /* Air quality */
-
 .aqi-main {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -824,12 +930,12 @@ select:focus-visible {
     margin-top: 23px;
     overflow: hidden;
     border-radius: 10px;
-    background: linear-gradient(90deg,#62d58b,#d8d45a,#f5a04f,#ef6879,#9d69dc);
+    background: linear-gradient(90deg, #62d58b, #d8d45a, #f5a04f, #ef6879, #9d69dc);
 }
 
 .aqi-pollutants {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
 }
 
@@ -867,7 +973,7 @@ select:focus-visible {
 
 .atmosphere-grid {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
     margin-top: 14px;
 }
@@ -902,7 +1008,6 @@ select:focus-visible {
 }
 
 /* Mountain */
-
 .mountain-panel {
     padding: 25px;
 }
@@ -917,7 +1022,8 @@ select:focus-visible {
     gap: 22px;
     padding: 22px;
     border-radius: 18px;
-    background: rgba(88,185,255,.1);
+    background: linear-gradient(135deg, rgba(88, 185, 255, .16), rgba(93, 225, 232, .06));
+    border: 1px solid rgba(255, 255, 255, .12);
 }
 
 .mountain-main > span {
@@ -943,7 +1049,7 @@ select:focus-visible {
 .mountain-stats {
     margin-top: 13px;
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 11px;
 }
 
@@ -953,7 +1059,7 @@ select:focus-visible {
     gap: 9px;
     padding: 15px;
     border-radius: 13px;
-    background: rgba(255,255,255,.04);
+    background: rgba(255, 255, 255, .05);
     border: 1px solid var(--border);
 }
 
@@ -976,7 +1082,7 @@ select:focus-visible {
     font-size: 14px;
 }
 
-.risk-panel p,.risk-panel li {
+.risk-panel p, .risk-panel li {
     color: var(--muted);
     font-size: 11px;
     line-height: 1.9;
@@ -989,11 +1095,10 @@ select:focus-visible {
 
 .risk-panel[data-risk="high"],
 .risk-panel[data-risk="extreme"] {
-    border-color: rgba(255,123,134,.5);
+    border-color: rgba(255, 123, 134, .55);
 }
 
 /* Settings */
-
 .settings-panel {
     padding: 10px 22px;
 }
@@ -1004,7 +1109,7 @@ select:focus-visible {
     align-items: center;
     justify-content: space-between;
     gap: 15px;
-    border-bottom: 1px solid rgba(255,255,255,.07);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
 }
 
 .setting-row:last-child {
@@ -1033,11 +1138,10 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 9px;
     color: white;
-    background: rgba(255,255,255,.06);
+    background: rgba(255, 255, 255, .08);
 }
 
 /* Radar */
-
 .radar-container {
     padding: 10px;
     overflow: hidden;
@@ -1075,18 +1179,17 @@ select:focus-visible {
 .legend-snow { background: white; }
 
 /* Station */
-
 .station-status {
     color: var(--red);
     padding: 8px 12px;
     border-radius: 20px;
-    background: rgba(255,123,134,.08);
+    background: rgba(255, 123, 134, .1);
     font-size: 10px;
 }
 
 .station-status.connected {
     color: var(--green);
-    background: rgba(114,214,176,.09);
+    background: rgba(114, 214, 176, .12);
 }
 
 .connection-panel {
@@ -1110,7 +1213,7 @@ select:focus-visible {
     min-width: 0;
     padding: 13px;
     color: white;
-    background: rgba(255,255,255,.05);
+    background: rgba(255, 255, 255, .06);
     border: 1px solid var(--border);
     border-radius: 12px;
 }
@@ -1165,7 +1268,6 @@ select:focus-visible {
 }
 
 /* Footer */
-
 .app-footer {
     margin-top: 75px;
     padding: 27px 0;
@@ -1187,13 +1289,12 @@ select:focus-visible {
 
 .app-footer span {
     display: block;
-    color: #71859c;
+    color: #7b90a8;
     font-size: 9px;
     margin-top: 8px;
 }
 
 /* Loading */
-
 .loading {
     opacity: .45;
     pointer-events: none;
@@ -1206,194 +1307,192 @@ select:focus-visible {
 }
 
 /* Weather themes */
-
 body.weather-clear {
-    background: linear-gradient(145deg,#0a1729,#234763,#07111f);
+    background: linear-gradient(145deg, #0a1729, #234763, #07111f);
 }
 
 body.weather-cloudy {
-    background: linear-gradient(145deg,#101b2b,#243b51,#091522);
+    background: linear-gradient(145deg, #101b2b, #243b51, #091522);
 }
 
 body.weather-wind {
-    background: linear-gradient(145deg,#071a2c,#16465e,#07111f);
+    background: linear-gradient(145deg, #071a2c, #16465e, #07111f);
 }
 
 body.weather-rain,
 body.weather-heavy-rain {
-    background: linear-gradient(145deg,#071323,#102b46,#06101d);
+    background: linear-gradient(145deg, #071323, #102b46, #06101d);
 }
 
 body.weather-storm,
 body.weather-hail {
-    background: linear-gradient(145deg,#080c1b,#171d36,#070b17);
+    background: linear-gradient(145deg, #080c1b, #171d36, #070b17);
 }
 
-body.weather-snow {
-    background: linear-gradient(145deg,#0d1d30,#25445d,#081523);
+body.weather-snow,
+body.weather-sleet {
+    background: linear-gradient(145deg, #10243b, #2b506e, #0b1929);
 }
 
 body.weather-fog {
-    background: linear-gradient(145deg,#182433,#34495b,#101b28);
+    background: linear-gradient(145deg, #182433, #34495b, #101b28);
 }
 
 /* Accessibility */
-
-@media(prefers-reduced-motion:reduce) {
-    *,*::before,*::after {
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:.01ms !important;
-        scroll-behavior:auto !important;
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
     }
 }
 
 /* Responsive */
-
-@media(max-width:1050px) {
+@media (max-width: 1050px) {
     .hero-weather-content {
-        align-items:flex-start;
-        flex-direction:column;
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .stats-grid {
-        grid-template-columns:repeat(3,1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .app-shell {
-        padding-left:24px;
-        padding-right:24px;
+        padding-left: 24px;
+        padding-right: 24px;
     }
 }
 
-@media(max-width:700px) {
+@media (max-width: 700px) {
     .app-shell {
-        padding:0 14px 30px;
+        padding: 0 14px 30px;
     }
 
     .topbar {
-        min-height:68px;
+        min-height: 68px;
     }
 
     .brand-icon {
-        width:36px;
-        height:36px;
-        font-size:20px;
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
     }
 
     .brand-text {
-        font-size:12px;
+        font-size: 12px;
     }
 
     .header-status {
-        font-size:9px;
+        font-size: 9px;
     }
 
     .main-nav {
-        width:100%;
-        justify-content:space-between;
-        gap:3px;
-        margin:15px 0 27px;
+        width: 100%;
+        justify-content: space-between;
+        gap: 3px;
+        margin: 15px 0 27px;
     }
 
     .nav-item {
-        flex:1;
-        padding:11px 5px;
-        font-size:9px;
+        flex: 1;
+        padding: 11px 5px;
+        font-size: 9px;
     }
 
     .location-section {
-        align-items:stretch;
-        flex-direction:column;
-        gap:18px;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 18px;
     }
 
     .hero-weather {
-        padding:24px 19px;
+        padding: 24px 19px;
     }
 
     .temperature-row h2 {
-        font-size:82px;
-        letter-spacing:-5px;
+        font-size: 82px;
+        letter-spacing: -5px;
     }
 
     .weather-icon {
-        font-size:49px;
+        font-size: 49px;
     }
 
     .hero-right {
-        width:100%;
-        grid-template-columns:repeat(2,1fr);
+        width: 100%;
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .stats-grid {
-        grid-template-columns:repeat(2,1fr);
-        gap:9px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
     }
 
     .stat-card {
-        min-height:110px;
-        padding:14px;
+        min-height: 110px;
+        padding: 14px;
     }
 
     .environment-grid {
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .environment-card {
-        padding:16px;
+        padding: 16px;
     }
 
     .sun-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
     }
 
     .aqi-main {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
     }
 
     .atmosphere-grid {
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .mountain-stats {
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .week-item {
-        grid-template-columns:1fr 35px 55px 65px 60px;
-        gap:5px;
-        min-height:63px;
+        grid-template-columns: 1fr 35px 55px 65px 60px;
+        gap: 5px;
+        min-height: 63px;
     }
 
     .week-description {
-        display:none;
+        display: none;
     }
 
     .radar-map {
-        height:390px;
+        height: 390px;
     }
 
     .connection-form {
-        flex-direction:column;
+        flex-direction: column;
     }
 
     .app-footer {
-        margin-top:50px;
+        margin-top: 50px;
     }
 }
 
-@media(max-width:390px) {
+@media (max-width: 390px) {
     .header-status {
-        display:none;
+        display: none;
     }
 
     .temperature-row h2 {
-        font-size:69px;
+        font-size: 69px;
     }
 
     .atmosphere-grid {
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -1492,8 +1591,36 @@ body.weather-fog {
     </div>
 </section>
 
-<!-- Alerts -->
+<!-- Interactive Scene & Snow Reaction Telemetry Bar -->
+<section class="atmosphere-lab glass" aria-label="Atmospheric scene reactions">
+    <div class="lab-controls">
+        <div class="lab-slider-group">
+            <label for="snowCoverSlider">
+                <span>❄️ Snow Accumulation</span>
+                <em id="snowCoverValue">0%</em>
+            </label>
+            <input id="snowCoverSlider" type="range" min="0" max="100" value="0">
+        </div>
 
+        <div class="lab-slider-group">
+            <label for="windBoostSlider">
+                <span>💨 Scene Wind Speed</span>
+                <em id="windBoostValue">Live</em>
+            </label>
+            <input id="windBoostSlider" type="range" min="0" max="90" value="0">
+        </div>
+
+        <button id="clearSnowButton" class="secondary-button" type="button">Reset Snow</button>
+    </div>
+
+    <div class="lab-badges">
+        <span class="lab-pill">Dew Point: <strong id="dewPointReadout">--°C</strong></span>
+        <span class="lab-pill">Rain Chance: <strong id="precipProbReadout">--%</strong></span>
+        <span class="lab-pill">Ground Cover: <strong id="groundSnowReadout">Bare</strong></span>
+    </div>
+</section>
+
+<!-- Alerts -->
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1510,7 +1637,6 @@ body.weather-fog {
 </section>
 
 <!-- Atmospheric details -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1530,11 +1656,12 @@ body.weather-fog {
         <div class="stat-card glass"><span class="stat-icon">👁️</span><span class="stat-label">Visibility</span><strong id="visibility">--</strong></div>
         <div class="stat-card glass"><span class="stat-icon">☀️</span><span class="stat-label">UV Index</span><strong id="uvIndex">--</strong></div>
         <div class="stat-card glass"><span class="stat-icon">❄️</span><span class="stat-label">Snowfall</span><strong id="currentSnow">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">💦</span><span class="stat-label">Dew Point</span><strong id="dewPointDetail">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">☔</span><span class="stat-label">Precip Probability</span><strong id="precipProbDetail">--</strong></div>
     </div>
 </section>
 
 <!-- Hourly -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1548,7 +1675,6 @@ body.weather-fog {
 </section>
 
 <!-- 14 days -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1564,7 +1690,6 @@ body.weather-fog {
 </section>
 
 <!-- Daily environment -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1584,7 +1709,6 @@ body.weather-fog {
 </section>
 
 <!-- Sun -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1600,7 +1724,6 @@ body.weather-fog {
 </section>
 
 <!-- AIR QUALITY -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1650,7 +1773,6 @@ body.weather-fog {
 </section>
 
 <!-- ATMOSPHERE AND EARTH -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1703,7 +1825,6 @@ body.weather-fog {
 </section>
 
 <!-- MOUNTAIN -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1754,7 +1875,6 @@ body.weather-fog {
 </section>
 
 <!-- ALERT SETTINGS -->
-
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1924,13 +2044,14 @@ const CONFIG = {
 
 const $ = id => document.getElementById(id);
 
-let currentLocation = {...CONFIG.defaultLocation};
+let currentLocation = { ...CONFIG.defaultLocation };
 let currentWeatherData = null;
 let currentAirData = null;
 let currentMountainData = null;
 
 let currentMode = "clear";
 let manualWeatherOverride = null;
+let manualWindOverride = null;
 
 let radarMap = null;
 let radarLayer = null;
@@ -1961,9 +2082,9 @@ let alertSettings = {
    3. HELPERS
    ========================================================= */
 
-const clamp = (v,min,max) => Math.max(min,Math.min(max,v));
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-const num = (v,d=0) => {
+const num = (v, d = 0) => {
     const n = Number(v);
     return Number.isFinite(n) ? n.toFixed(d) : "--";
 };
@@ -1974,20 +2095,30 @@ const valid = v =>
     v !== "" &&
     Number.isFinite(Number(v));
 
-const text = (id,value) => {
+const text = (id, value) => {
     const element = $(id);
     if (element) element.textContent = value;
 };
 
 const safeHTML = value =>
     String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
-async function requestJSON(url,timeout=CONFIG.requestTimeout) {
+function computeDewPoint(tempC, humidity) {
+    if (!valid(tempC) || !valid(humidity)) return null;
+    const t = Number(tempC);
+    const rh = clamp(Number(humidity), 1, 100);
+    const a = 17.27;
+    const b = 237.7;
+    const alpha = ((a * t) / (b + t)) + Math.log(rh / 100);
+    return (b * alpha) / (a - alpha);
+}
+
+async function requestJSON(url, timeout = CONFIG.requestTimeout) {
     const controller = new AbortController();
 
     const timer = setTimeout(
@@ -1996,9 +2127,9 @@ async function requestJSON(url,timeout=CONFIG.requestTimeout) {
     );
 
     try {
-        const response = await fetch(url,{
-            cache:"no-store",
-            signal:controller.signal
+        const response = await fetch(url, {
+            cache: "no-store",
+            signal: controller.signal
         });
 
         if (!response.ok) {
@@ -2013,7 +2144,7 @@ async function requestJSON(url,timeout=CONFIG.requestTimeout) {
 
         return data;
 
-    } catch(error) {
+    } catch (error) {
         if (error.name === "AbortError") {
             throw new Error("Request timeout");
         }
@@ -2030,43 +2161,43 @@ async function requestJSON(url,timeout=CONFIG.requestTimeout) {
    ========================================================= */
 
 const WEATHER = {
-    0:["Clear sky","☀️","clear"],
-    1:["Mainly clear","🌤️","clear"],
-    2:["Partly cloudy","⛅","cloudy"],
-    3:["Overcast","☁️","cloudy"],
-    45:["Fog","🌫️","fog"],
-    48:["Rime fog","🌫️","fog"],
-    51:["Light drizzle","🌦️","rain"],
-    53:["Drizzle","🌦️","rain"],
-    55:["Dense drizzle","🌧️","rain"],
-    56:["Freezing drizzle","🌧️","sleet"],
-    57:["Heavy freezing drizzle","🌧️","sleet"],
-    61:["Slight rain","🌧️","rain"],
-    63:["Moderate rain","🌧️","rain"],
-    65:["Heavy rain","🌧️","heavy-rain"],
-    66:["Freezing rain","🌧️","sleet"],
-    67:["Heavy freezing rain","🌧️","sleet"],
-    71:["Light snow","🌨️","snow"],
-    73:["Moderate snow","🌨️","snow"],
-    75:["Heavy snow","❄️","snow"],
-    77:["Snow grains","❄️","snow"],
-    80:["Rain showers","🌦️","rain"],
-    81:["Moderate showers","🌧️","rain"],
-    82:["Violent showers","🌧️","heavy-rain"],
-    85:["Snow showers","🌨️","snow"],
-    86:["Heavy snow showers","❄️","snow"],
-    95:["Thunderstorm","⛈️","storm"],
-    96:["Thunderstorm with hail","⛈️","hail"],
-    99:["Severe thunderstorm","⛈️","hail"]
+    0: ["Clear sky", "☀️", "clear"],
+    1: ["Mainly clear", "🌤️", "clear"],
+    2: ["Partly cloudy", "⛅", "cloudy"],
+    3: ["Overcast", "☁️", "cloudy"],
+    45: ["Fog", "🌫️", "fog"],
+    48: ["Rime fog", "🌫️", "fog"],
+    51: ["Light drizzle", "🌦️", "rain"],
+    53: ["Drizzle", "🌦️", "rain"],
+    55: ["Dense drizzle", "🌧️", "rain"],
+    56: ["Freezing drizzle", "🌧️", "sleet"],
+    57: ["Heavy freezing drizzle", "🌧️", "sleet"],
+    61: ["Slight rain", "🌧️", "rain"],
+    63: ["Moderate rain", "🌧️", "rain"],
+    65: ["Heavy rain", "🌧️", "heavy-rain"],
+    66: ["Freezing rain", "🌧️", "sleet"],
+    67: ["Heavy freezing rain", "🌧️", "sleet"],
+    71: ["Light snow", "🌨️", "snow"],
+    73: ["Moderate snow", "🌨️", "snow"],
+    75: ["Heavy snow", "❄️", "snow"],
+    77: ["Snow grains", "❄️", "snow"],
+    80: ["Rain showers", "🌦️", "rain"],
+    81: ["Moderate showers", "🌧️", "rain"],
+    82: ["Violent showers", "🌧️", "heavy-rain"],
+    85: ["Snow showers", "🌨️", "snow"],
+    86: ["Heavy snow showers", "❄️", "snow"],
+    95: ["Thunderstorm", "⛈️", "storm"],
+    96: ["Thunderstorm with hail", "⛈️", "hail"],
+    99: ["Severe thunderstorm", "⛈️", "hail"]
 };
 
 function weatherInfo(code) {
     const item = WEATHER[code] || WEATHER[3];
 
     return {
-        description:item[0],
-        icon:item[1],
-        mode:item[2]
+        description: item[0],
+        icon: item[1],
+        mode: item[2]
     };
 }
 
@@ -2074,12 +2205,12 @@ function weatherInfo(code) {
    5. API DATA
    ========================================================= */
 
-async function getWeather(lat,lon) {
+async function getWeather(lat, lon) {
     const params = new URLSearchParams({
-        latitude:lat,
-        longitude:lon,
+        latitude: lat,
+        longitude: lon,
 
-        current:[
+        current: [
             "temperature_2m",
             "relative_humidity_2m",
             "apparent_temperature",
@@ -2096,7 +2227,7 @@ async function getWeather(lat,lon) {
             "wind_gusts_10m"
         ].join(","),
 
-        hourly:[
+        hourly: [
             "temperature_2m",
             "relative_humidity_2m",
             "precipitation_probability",
@@ -2112,7 +2243,7 @@ async function getWeather(lat,lon) {
             "soil_temperature_0cm"
         ].join(","),
 
-        daily:[
+        daily: [
             "weather_code",
             "temperature_2m_max",
             "temperature_2m_min",
@@ -2129,19 +2260,19 @@ async function getWeather(lat,lon) {
             "wind_gusts_10m_max"
         ].join(","),
 
-        timezone:"auto",
-        forecast_days:14
+        timezone: "auto",
+        forecast_days: 14
     });
 
     return requestJSON(`${CONFIG.weatherURL}?${params}`);
 }
 
-async function getAir(lat,lon) {
+async function getAir(lat, lon) {
     const params = new URLSearchParams({
-        latitude:lat,
-        longitude:lon,
+        latitude: lat,
+        longitude: lon,
 
-        current:[
+        current: [
             "european_aqi",
             "us_aqi",
             "pm10",
@@ -2154,7 +2285,7 @@ async function getAir(lat,lon) {
             "aerosol_optical_depth"
         ].join(","),
 
-        hourly:[
+        hourly: [
             "european_aqi",
             "us_aqi",
             "pm10",
@@ -2162,20 +2293,20 @@ async function getAir(lat,lon) {
             "ozone"
         ].join(","),
 
-        timezone:"auto",
-        forecast_days:3
+        timezone: "auto",
+        forecast_days: 3
     });
 
     return requestJSON(`${CONFIG.airURL}?${params}`);
 }
 
-function getCurrentHourlyIndex(hourly,currentTime) {
+function getCurrentHourlyIndex(hourly, currentTime) {
     if (!hourly?.time?.length) return 0;
 
-    const target = String(currentTime || "").slice(0,13);
+    const target = String(currentTime || "").slice(0, 13);
 
     let index = hourly.time.findIndex(
-        value => value.slice(0,13) >= target
+        value => value.slice(0, 13) >= target
     );
 
     return index < 0 ? 0 : index;
@@ -2197,6 +2328,12 @@ async function loadWeather() {
 
         currentWeatherData = data;
 
+        // Synchronize atmospheric canvas temperature & wind with live weather
+        sceneTemperature = Number(data.current?.temperature_2m) || 20;
+        if (manualWindOverride === null) {
+            sceneWind = Number(data.current?.wind_speed_10m) || 0;
+        }
+
         renderCurrentWeather(data);
         renderHourly(data);
         renderDaily(data);
@@ -2209,9 +2346,14 @@ async function loadWeather() {
             setWeatherTheme(info.mode);
         }
 
+        // If snow or sleet is actively falling in live weather, boost snow accumulation automatically
+        if (["snow", "sleet"].includes(info.mode) || Number(data.current.snowfall) > 0) {
+            setSnowAccumulation(Math.max(snowAccumulation, 0.45), true);
+        }
+
         checkAlerts(data);
 
-        text("weatherStatus","Weather data updated");
+        text("weatherStatus", "Weather data updated");
 
         text(
             "lastUpdated",
@@ -2220,9 +2362,9 @@ async function loadWeather() {
 
         loadAtmosphere(data);
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        text("weatherStatus","Weather service unavailable");
+        text("weatherStatus", "Weather service unavailable");
     } finally {
         button?.classList.remove("loading");
     }
@@ -2236,45 +2378,55 @@ function renderCurrentWeather(data) {
     const c = data.current;
     const info = weatherInfo(c.weather_code);
 
-    text("locationName",currentLocation.name);
+    text("locationName", currentLocation.name);
 
-    text("currentTemperature",`${Math.round(c.temperature_2m)}°`);
-    text("currentWeatherIcon",info.icon);
-    text("currentDescription",info.description);
+    text("currentTemperature", `${Math.round(c.temperature_2m)}°`);
+    text("currentWeatherIcon", info.icon);
+    text("currentDescription", info.description);
 
-    text("feelsLike",`${Math.round(c.apparent_temperature)}°`);
+    text("feelsLike", `${Math.round(c.apparent_temperature)}°`);
 
-    text("humidity",`${c.relative_humidity_2m}%`);
-    text("windSpeed",`${num(c.wind_speed_10m)} km/h`);
-    text("pressure",`${num(c.pressure_msl)} hPa`);
-    text("cloudCover",`${c.cloud_cover}%`);
+    text("humidity", `${c.relative_humidity_2m}%`);
+    text("windSpeed", `${num(c.wind_speed_10m)} km/h`);
+    text("pressure", `${num(c.pressure_msl)} hPa`);
+    text("cloudCover", `${c.cloud_cover}%`);
 
-    text("humidityDetail",`${c.relative_humidity_2m}%`);
-    text("windSpeedDetail",`${num(c.wind_speed_10m)} km/h`);
+    text("humidityDetail", `${c.relative_humidity_2m}%`);
+    text("windSpeedDetail", `${num(c.wind_speed_10m)} km/h`);
 
-    text("windDirection",`${Math.round(c.wind_direction_10m)}°`);
-    text("windGust",`${num(c.wind_gusts_10m)} km/h`);
+    text("windDirection", `${Math.round(c.wind_direction_10m)}°`);
+    text("windGust", `${num(c.wind_gusts_10m)} km/h`);
 
-    text("pressureDetail",`${num(c.pressure_msl)} hPa`);
-    text("cloudCoverDetail",`${c.cloud_cover}%`);
+    text("pressureDetail", `${num(c.pressure_msl)} hPa`);
+    text("cloudCoverDetail", `${c.cloud_cover}%`);
 
-    text("rainAmount",`${num(c.precipitation,1)} mm`);
-    text("currentSnow",`${num(c.snowfall,1)} cm`);
+    text("rainAmount", `${num(c.precipitation, 1)} mm`);
+    text("currentSnow", `${num(c.snowfall, 1)} cm`);
 
-    const index = getCurrentHourlyIndex(data.hourly,c.time);
+    const index = getCurrentHourlyIndex(data.hourly, c.time);
 
     const visibility = data.hourly.visibility?.[index];
     const uv = data.hourly.uv_index?.[index];
+    const precipProb = data.hourly.precipitation_probability?.[index];
 
     text(
         "visibility",
         valid(visibility)
-            ? `${(Number(visibility)/1000).toFixed(1)} km`
+            ? `${(Number(visibility) / 1000).toFixed(1)} km`
             : "--"
     );
 
-    text("uvIndex",num(uv));
-    text("dayNight",c.is_day ? "Daytime ☀️" : "Nighttime 🌙");
+    text("uvIndex", num(uv));
+    text("dayNight", c.is_day ? "Daytime ☀️" : "Nighttime 🌙");
+
+    const dew = computeDewPoint(c.temperature_2m, c.relative_humidity_2m);
+    const dewText = valid(dew) ? `${dew.toFixed(1)}°C` : "--";
+    const probText = valid(precipProb) ? `${Math.round(Number(precipProb))}%` : "--";
+
+    text("dewPointReadout", dewText);
+    text("dewPointDetail", dewText);
+    text("precipProbReadout", probText);
+    text("precipProbDetail", probText);
 }
 
 /* =========================================================
@@ -2293,12 +2445,12 @@ function renderHourly(data) {
     );
 
     container.innerHTML = hourly.time
-        .slice(start,start+24)
-        .map((time,position) => {
+        .slice(start, start + 24)
+        .map((time, position) => {
             const i = start + position;
             const info = weatherInfo(hourly.weather_code[i]);
 
-            const hour = time.slice(11,16);
+            const hour = time.slice(11, 16);
             const temp = Math.round(hourly.temperature_2m[i]);
             const rain = hourly.precipitation_probability?.[i] ?? 0;
 
@@ -2323,18 +2475,18 @@ function renderDaily(data) {
 
     if (!container || !daily?.time) return;
 
-    container.innerHTML = daily.time.map((time,i) => {
+    container.innerHTML = daily.time.map((time, i) => {
         const info = weatherInfo(daily.weather_code[i]);
 
         const date = new Date(`${time}T12:00:00`);
 
-        const day = date.toLocaleDateString("en",{
-            weekday:"short"
+        const day = date.toLocaleDateString("en", {
+            weekday: "short"
         });
 
-        const dateLabel = date.toLocaleDateString("en",{
-            day:"numeric",
-            month:"short"
+        const dateLabel = date.toLocaleDateString("en", {
+            day: "numeric",
+            month: "short"
         });
 
         const max = Math.round(daily.temperature_2m_max[i]);
@@ -2369,12 +2521,12 @@ function renderEnvironment(data) {
     const c = data.current;
     const d = data.daily;
 
-    text("environmentRain",`${num(d.rain_sum?.[0],1)} mm`);
-    text("environmentSnow",`${num(d.snowfall_sum?.[0],1)} cm`);
-    text("environmentWind",`${num(d.wind_speed_10m_max?.[0])} km/h`);
-    text("environmentGust",`${num(d.wind_gusts_10m_max?.[0])} km/h`);
-    text("environmentHumidity",`${c.relative_humidity_2m}%`);
-    text("environmentPressure",`${num(c.pressure_msl)} hPa`);
+    text("environmentRain", `${num(d.rain_sum?.[0], 1)} mm`);
+    text("environmentSnow", `${num(d.snowfall_sum?.[0], 1)} cm`);
+    text("environmentWind", `${num(d.wind_speed_10m_max?.[0])} km/h`);
+    text("environmentGust", `${num(d.wind_gusts_10m_max?.[0])} km/h`);
+    text("environmentHumidity", `${c.relative_humidity_2m}%`);
+    text("environmentPressure", `${num(c.pressure_msl)} hPa`);
 }
 
 /* =========================================================
@@ -2384,8 +2536,8 @@ function renderEnvironment(data) {
 function renderSun(data) {
     const d = data.daily;
 
-    text("sunrise",String(d.sunrise?.[0] || "--:--").slice(11,16));
-    text("sunset",String(d.sunset?.[0] || "--:--").slice(11,16));
+    text("sunrise", String(d.sunrise?.[0] || "--:--").slice(11, 16));
+    text("sunset", String(d.sunset?.[0] || "--:--").slice(11, 16));
 }
 
 /* =========================================================
@@ -2396,49 +2548,49 @@ function europeanAQI(value) {
     const n = Number(value);
 
     if (!Number.isFinite(n)) return {
-        label:"Unavailable",
-        level:"unknown",
-        advice:"No valid air quality index is available."
+        label: "Unavailable",
+        level: "unknown",
+        advice: "No valid air quality index is available."
     };
 
     if (n <= 20) return {
-        label:"Good",
-        level:"good",
-        advice:"Air quality is generally suitable for outdoor activity."
+        label: "Good",
+        level: "good",
+        advice: "Air quality is generally suitable for outdoor activity."
     };
 
     if (n <= 40) return {
-        label:"Fair",
-        level:"fair",
-        advice:"Most people can enjoy ordinary outdoor activities."
+        label: "Fair",
+        level: "fair",
+        advice: "Most people can enjoy ordinary outdoor activities."
     };
 
     if (n <= 60) return {
-        label:"Moderate",
-        level:"moderate",
-        advice:"Sensitive people should consider reducing prolonged outdoor exertion."
+        label: "Moderate",
+        level: "moderate",
+        advice: "Sensitive people should consider reducing prolonged outdoor exertion."
     };
 
     if (n <= 80) return {
-        label:"Poor",
-        level:"poor",
-        advice:"Sensitive groups should reduce prolonged outdoor exertion."
+        label: "Poor",
+        level: "poor",
+        advice: "Sensitive groups should reduce prolonged outdoor exertion."
     };
 
     if (n <= 100) return {
-        label:"Very Poor",
-        level:"very-poor",
-        advice:"Avoid strenuous outdoor activity, especially if sensitive."
+        label: "Very Poor",
+        level: "very-poor",
+        advice: "Avoid strenuous outdoor activity, especially if sensitive."
     };
 
     return {
-        label:"Extremely Poor",
-        level:"extreme",
-        advice:"Avoid outdoor exercise and follow official health guidance."
+        label: "Extremely Poor",
+        level: "extreme",
+        advice: "Avoid outdoor exercise and follow official health guidance."
     };
 }
 
-async function loadAtmosphere(weatherData=currentWeatherData) {
+async function loadAtmosphere(weatherData = currentWeatherData) {
     try {
         const data = await getAir(
             currentLocation.latitude,
@@ -2449,11 +2601,11 @@ async function loadAtmosphere(weatherData=currentWeatherData) {
 
         renderAir(data);
 
-    } catch(error) {
-        console.error("Air quality:",error);
+    } catch (error) {
+        console.error("Air quality:", error);
 
-        text("outdoorAQILevel","Air quality unavailable");
-        text("outdoorUSLevel","Air quality unavailable");
+        text("outdoorAQILevel", "Air quality unavailable");
+        text("outdoorUSLevel", "Air quality unavailable");
     }
 
     if (weatherData) {
@@ -2469,10 +2621,10 @@ function renderAir(data) {
 
     const euInfo = europeanAQI(eu);
 
-    text("outdoorAQI",num(eu));
-    text("outdoorUSAQI",num(us));
+    text("outdoorAQI", num(eu));
+    text("outdoorUSAQI", num(us));
 
-    text("outdoorAQILevel",euInfo.label);
+    text("outdoorAQILevel", euInfo.label);
 
     const usInfo = Number(us);
 
@@ -2484,17 +2636,17 @@ function renderAir(data) {
         usInfo <= 200 ? "Unhealthy" :
         usInfo <= 300 ? "Very unhealthy" : "Hazardous";
 
-    text("outdoorUSLevel",usLabel);
-    text("outdoorActivityAdvice",euInfo.advice);
+    text("outdoorUSLevel", usLabel);
+    text("outdoorActivityAdvice", euInfo.advice);
 
-    text("outdoorPM25",num(c.pm2_5,1));
-    text("outdoorPM10",num(c.pm10,1));
-    text("outdoorOzone",num(c.ozone,1));
-    text("outdoorNO2",num(c.nitrogen_dioxide,1));
-    text("outdoorCO",num(c.carbon_monoxide,1));
-    text("outdoorSO2",num(c.sulphur_dioxide,1));
-    text("outdoorDust",num(c.dust,1));
-    text("outdoorAOD",num(c.aerosol_optical_depth,3));
+    text("outdoorPM25", num(c.pm2_5, 1));
+    text("outdoorPM10", num(c.pm10, 1));
+    text("outdoorOzone", num(c.ozone, 1));
+    text("outdoorNO2", num(c.nitrogen_dioxide, 1));
+    text("outdoorCO", num(c.carbon_monoxide, 1));
+    text("outdoorSO2", num(c.sulphur_dioxide, 1));
+    text("outdoorDust", num(c.dust, 1));
+    text("outdoorAOD", num(c.aerosol_optical_depth, 3));
 
     const card = $("outdoorAQILevel");
 
@@ -2525,63 +2677,63 @@ function renderAQChart(data) {
     );
 
     const points = values
-        .slice(start,start+24)
+        .slice(start, start + 24)
         .filter(valid)
         .map(Number);
 
     if (!points.length) return;
 
-    const width = Math.max(280,canvas.clientWidth);
+    const width = Math.max(280, canvas.clientWidth);
     const height = 180;
-    const ratio = Math.min(window.devicePixelRatio || 1,2);
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
 
-    canvas.width = width*ratio;
-    canvas.height = height*ratio;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
 
     const ctx = canvas.getContext("2d");
-    ctx.setTransform(ratio,0,0,ratio,0,0);
-    ctx.clearRect(0,0,width,height);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.clearRect(0, 0, width, height);
 
     const padding = 28;
-    const max = Math.max(100,Math.ceil(Math.max(...points)/25)*25);
-    const graphHeight = height-padding*2;
-    const graphWidth = width-padding*2;
+    const max = Math.max(100, Math.ceil(Math.max(...points) / 25) * 25);
+    const graphHeight = height - padding * 2;
+    const graphWidth = width - padding * 2;
 
     ctx.font = "10px Arial";
     ctx.strokeStyle = "rgba(255,255,255,.1)";
 
-    for (let i=0;i<5;i++) {
-        const y = padding+i*graphHeight/4;
+    for (let i = 0; i < 5; i++) {
+        const y = padding + i * graphHeight / 4;
 
         ctx.beginPath();
-        ctx.moveTo(padding,y);
-        ctx.lineTo(width-padding,y);
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - padding, y);
         ctx.stroke();
     }
 
-    const coords = points.map((value,i) => ({
-        x:padding+i*graphWidth/Math.max(1,points.length-1),
-        y:padding+(1-value/max)*graphHeight
+    const coords = points.map((value, i) => ({
+        x: padding + i * graphWidth / Math.max(1, points.length - 1),
+        y: padding + (1 - value / max) * graphHeight
     }));
 
     ctx.beginPath();
-    ctx.moveTo(coords[0].x,coords[0].y);
+    ctx.moveTo(coords[0].x, coords[0].y);
 
     coords.slice(1).forEach(p => {
-        ctx.lineTo(p.x,p.y);
+        ctx.lineTo(p.x, p.y);
     });
 
     ctx.strokeStyle = "#5de1e8";
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    const gradient = ctx.createLinearGradient(0,padding,0,height);
+    const gradient = ctx.createLinearGradient(0, padding, 0, height);
 
-    gradient.addColorStop(0,"rgba(93,225,232,.25)");
-    gradient.addColorStop(1,"rgba(93,225,232,0)");
+    gradient.addColorStop(0, "rgba(93,225,232,.25)");
+    gradient.addColorStop(1, "rgba(93,225,232,0)");
 
-    ctx.lineTo(coords[coords.length-1].x,height-padding);
-    ctx.lineTo(coords[0].x,height-padding);
+    ctx.lineTo(coords[coords.length - 1].x, height - padding);
+    ctx.lineTo(coords[0].x, height - padding);
     ctx.closePath();
 
     ctx.fillStyle = gradient;
@@ -2589,7 +2741,7 @@ function renderAQChart(data) {
 
     coords.forEach(p => {
         ctx.beginPath();
-        ctx.arc(p.x,p.y,3,0,Math.PI*2);
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
     });
@@ -2603,21 +2755,21 @@ function renderEarthAtmosphere(data) {
     const c = data.current;
     const h = data.hourly;
 
-    const index = getCurrentHourlyIndex(h,c.time);
+    const index = getCurrentHourlyIndex(h, c.time);
 
     const soil = h.soil_moisture_0_to_1cm?.[index];
     const soilTemp = h.soil_temperature_0cm?.[index];
     const visibility = h.visibility?.[index];
 
-    text("oxygenPercent","20.95%");
-    text("oxygenSourceNote","Standard dry-air reference, not locally measured.");
+    text("oxygenPercent", "20.95%");
+    text("oxygenSourceNote", "Standard dry-air reference, not locally measured.");
 
-    text("ozoneLayerStatus","Not measured");
-    text("ozoneLayerNote","No satellite total-column ozone measurement connected.");
+    text("ozoneLayerStatus", "Not measured");
+    text("ozoneLayerNote", "No satellite total-column ozone measurement connected.");
 
     text(
         "soilMoisture",
-        valid(soil) ? `${(Number(soil)*100).toFixed(0)}%` : "--"
+        valid(soil) ? `${(Number(soil) * 100).toFixed(0)}%` : "--"
     );
 
     text(
@@ -2633,7 +2785,7 @@ function renderEarthAtmosphere(data) {
     text(
         "atmosphereVisibility",
         valid(visibility)
-            ? `${(Number(visibility)/1000).toFixed(1)} km`
+            ? `${(Number(visibility) / 1000).toFixed(1)} km`
             : "--"
     );
 
@@ -2661,49 +2813,49 @@ function checkAlerts(data) {
 
     if (alertSettings.rain && rain >= alertSettings.rainThreshold) {
         alerts.push({
-            id:"rain",
-            title:"Rain alert",
-            message:`Current precipitation ${rain} mm`,
-            level:"medium"
+            id: "rain",
+            title: "Rain alert",
+            message: `Current precipitation ${rain} mm`,
+            level: "medium"
         });
     }
 
     if (
         alertSettings.heavyRain &&
-        ([65,82].includes(code) || rain >= 10)
+        ([65, 82].includes(code) || rain >= 10)
     ) {
         alerts.push({
-            id:"heavy",
-            title:"Heavy rain warning",
-            message:"Heavy rainfall is reported.",
-            level:"high"
+            id: "heavy",
+            title: "Heavy rain warning",
+            message: "Heavy rainfall is reported.",
+            level: "high"
         });
     }
 
     if (alertSettings.snow && code >= 71 && code <= 86) {
         alerts.push({
-            id:"snow",
-            title:"Snow alert",
-            message:"Snowfall is forecast.",
-            level:"medium"
+            id: "snow",
+            title: "Snow alert",
+            message: "Snowfall is forecast.",
+            level: "medium"
         });
     }
 
-    if (alertSettings.storm && [95,96,99].includes(code)) {
+    if (alertSettings.storm && [95, 96, 99].includes(code)) {
         alerts.push({
-            id:"storm",
-            title:"Thunderstorm warning",
-            message:"Thunderstorm conditions are reported.",
-            level:"high"
+            id: "storm",
+            title: "Thunderstorm warning",
+            message: "Thunderstorm conditions are reported.",
+            level: "high"
         });
     }
 
-    if (alertSettings.hail && [96,99].includes(code)) {
+    if (alertSettings.hail && [96, 99].includes(code)) {
         alerts.push({
-            id:"hail",
-            title:"Hail warning",
-            message:"Hail is included in the weather code.",
-            level:"high"
+            id: "hail",
+            title: "Hail warning",
+            message: "Hail is included in the weather code.",
+            level: "high"
         });
     }
 
@@ -2713,10 +2865,10 @@ function checkAlerts(data) {
          gust >= alertSettings.windThreshold)
     ) {
         alerts.push({
-            id:"wind",
-            title:"Strong wind warning",
-            message:`Wind ${wind} km/h, gusts ${gust} km/h`,
-            level:"high"
+            id: "wind",
+            title: "Strong wind warning",
+            message: `Wind ${wind} km/h, gusts ${gust} km/h`,
+            level: "high"
         });
     }
 
@@ -2744,7 +2896,7 @@ function checkAlerts(data) {
         }
     });
 
-    oldAlerts = new Set(alerts.map(a=>a.id));
+    oldAlerts = new Set(alerts.map(a => a.id));
 }
 
 function sendNotification(alert) {
@@ -2752,8 +2904,8 @@ function sendNotification(alert) {
         "Notification" in window &&
         Notification.permission === "granted"
     ) {
-        new Notification(alert.title,{
-            body:alert.message
+        new Notification(alert.title, {
+            body: alert.message
         });
     }
 }
@@ -2764,7 +2916,7 @@ function sendNotification(alert) {
 
 function saveAlertSettings() {
     const keys = [
-        "rain","heavyRain","snow","hail","storm","wind"
+        "rain", "heavyRain", "snow", "hail", "storm", "wind"
     ];
 
     keys.forEach(key => {
@@ -2799,20 +2951,20 @@ function restoreAlertSettings() {
             ...alertSettings,
             ...saved
         };
-    } catch(error) {
+    } catch (error) {
         console.warn(error);
     }
 
     const mapping = {
-        rain:"alertRain",
-        heavyRain:"alertHeavyRain",
-        snow:"alertSnow",
-        hail:"alertHail",
-        storm:"alertStorm",
-        wind:"alertWind"
+        rain: "alertRain",
+        heavyRain: "alertHeavyRain",
+        snow: "alertSnow",
+        hail: "alertHail",
+        storm: "alertStorm",
+        wind: "alertWind"
     };
 
-    Object.entries(mapping).forEach(([key,id]) => {
+    Object.entries(mapping).forEach(([key, id]) => {
         if ($(id)) $(id).checked = !!alertSettings[key];
     });
 
@@ -2826,7 +2978,7 @@ function restoreAlertSettings() {
 
 async function enableNotifications() {
     if (!("Notification" in window)) {
-        text("notificationStatus","Notifications not supported");
+        text("notificationStatus", "Notifications not supported");
         return;
     }
 
@@ -2851,10 +3003,10 @@ async function searchLocation(query) {
 
     try {
         const params = new URLSearchParams({
-            name:query,
-            count:8,
-            language:"en",
-            format:"json"
+            name: query,
+            count: 8,
+            language: "en",
+            format: "json"
         });
 
         const result = await requestJSON(
@@ -2863,9 +3015,9 @@ async function searchLocation(query) {
 
         renderLocationResults(result.results || []);
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        text("locationSearchStatus","Location search failed");
+        text("locationSearchStatus", "Location search failed");
     }
 }
 
@@ -2897,13 +3049,13 @@ function renderLocationResults(results) {
             place.country
         ].filter(Boolean).join(", ");
 
-        button.append(strong,small);
+        button.append(strong, small);
 
-        button.addEventListener("click",() => {
+        button.addEventListener("click", () => {
             selectLocation({
-                name:place.name,
-                latitude:place.latitude,
-                longitude:place.longitude
+                name: place.name,
+                latitude: place.latitude,
+                longitude: place.longitude
             });
 
             container.replaceChildren();
@@ -2922,7 +3074,7 @@ function selectLocation(location) {
         JSON.stringify(location)
     );
 
-    text("locationName",location.name);
+    text("locationName", location.name);
 
     loadWeather();
     updateRadarLocation();
@@ -2934,11 +3086,11 @@ function selectLocation(location) {
 
 function useGPS() {
     if (!navigator.geolocation) {
-        text("locationSearchStatus","GPS not supported");
+        text("locationSearchStatus", "GPS not supported");
         return;
     }
 
-    text("locationSearchStatus","Getting location...");
+    text("locationSearchStatus", "Getting location...");
 
     navigator.geolocation.getCurrentPosition(
         async position => {
@@ -2949,11 +3101,11 @@ function useGPS() {
 
             try {
                 const params = new URLSearchParams({
-                    latitude:lat,
-                    longitude:lon,
-                    count:1,
-                    language:"en",
-                    format:"json"
+                    latitude: lat,
+                    longitude: lon,
+                    count: 1,
+                    language: "en",
+                    format: "json"
                 });
 
                 const result = await requestJSON(
@@ -2963,28 +3115,28 @@ function useGPS() {
                 if (result.results?.length) {
                     name = result.results[0].name;
                 }
-            } catch(error) {
+            } catch (error) {
                 console.warn(error);
             }
 
             selectLocation({
                 name,
-                latitude:lat,
-                longitude:lon
+                latitude: lat,
+                longitude: lon
             });
 
-            text("locationSearchStatus","GPS location updated");
+            text("locationSearchStatus", "GPS location updated");
         },
 
         error => {
             console.error(error);
-            text("locationSearchStatus","GPS permission unavailable");
+            text("locationSearchStatus", "GPS permission unavailable");
         },
 
         {
-            enableHighAccuracy:true,
-            timeout:15000,
-            maximumAge:60000
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 60000
         }
     );
 }
@@ -2998,14 +3150,14 @@ async function searchMountain() {
 
     if (query.length < 2) return;
 
-    text("mountainStatus","Searching mountain...");
+    text("mountainStatus", "Searching mountain...");
 
     try {
         const params = new URLSearchParams({
-            name:query,
-            count:5,
-            language:"en",
-            format:"json"
+            name: query,
+            count: 5,
+            language: "en",
+            format: "json"
         });
 
         const result = await requestJSON(
@@ -3013,7 +3165,7 @@ async function searchMountain() {
         );
 
         if (!result.results?.length) {
-            text("mountainStatus","Mountain not found");
+            text("mountainStatus", "Mountain not found");
             return;
         }
 
@@ -3031,10 +3183,10 @@ async function searchMountain() {
 
         const elevation = Number(data.elevation);
 
-        text("mountainName",place.name);
-        text("mountainIcon",info.icon);
-        text("mountainTemperature",`${Math.round(c.temperature_2m)}°`);
-        text("mountainDescription",info.description);
+        text("mountainName", place.name);
+        text("mountainIcon", info.icon);
+        text("mountainTemperature", `${Math.round(c.temperature_2m)}°`);
+        text("mountainDescription", info.description);
 
         text(
             "mountainElevation",
@@ -3043,95 +3195,95 @@ async function searchMountain() {
                 : "Unavailable"
         );
 
-        text("mountainWind",`${num(c.wind_speed_10m)} km/h`);
-        text("mountainGust",`${num(c.wind_gusts_10m)} km/h`);
-        text("mountainHumidity",`${c.relative_humidity_2m}%`);
-        text("mountainPressure",`${num(c.pressure_msl)} hPa`);
-        text("mountainPrecipitation",`${num(c.precipitation,1)} mm`);
-        text("mountainSnow",`${num(c.snowfall,1)} cm`);
+        text("mountainWind", `${num(c.wind_speed_10m)} km/h`);
+        text("mountainGust", `${num(c.wind_gusts_10m)} km/h`);
+        text("mountainHumidity", `${c.relative_humidity_2m}%`);
+        text("mountainPressure", `${num(c.pressure_msl)} hPa`);
+        text("mountainPrecipitation", `${num(c.precipitation, 1)} mm`);
+        text("mountainSnow", `${num(c.snowfall, 1)} cm`);
 
-        const index = getCurrentHourlyIndex(data.hourly,c.time);
+        const index = getCurrentHourlyIndex(data.hourly, c.time);
         const visibility = data.hourly.visibility?.[index];
 
         text(
             "mountainVisibility",
             valid(visibility)
-                ? `${(Number(visibility)/1000).toFixed(1)} km`
+                ? `${(Number(visibility) / 1000).toFixed(1)} km`
                 : "--"
         );
 
-        assessMountain(data,elevation);
+        assessMountain(data, elevation);
 
-        text("mountainStatus","Mountain forecast updated");
+        text("mountainStatus", "Mountain forecast updated");
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        text("mountainStatus","Mountain forecast unavailable");
+        text("mountainStatus", "Mountain forecast unavailable");
     }
 }
 
-function assessMountain(data,elevation) {
+function assessMountain(data, elevation) {
     const c = data.current;
-    const index = getCurrentHourlyIndex(data.hourly,c.time);
+    const index = getCurrentHourlyIndex(data.hourly, c.time);
 
     const visibility = data.hourly.visibility?.[index];
 
-    const wind = Number(c.wind_speed_10m)||0;
-    const gust = Number(c.wind_gusts_10m)||0;
+    const wind = Number(c.wind_speed_10m) || 0;
+    const gust = Number(c.wind_gusts_10m) || 0;
     const temperature = Number(c.temperature_2m);
     const code = Number(c.weather_code);
-    const rain = Number(c.precipitation)||0;
-    const snow = Number(c.snowfall)||0;
+    const rain = Number(c.precipitation) || 0;
+    const snow = Number(c.snowfall) || 0;
 
     const warnings = [];
     let level = "LOW";
 
-    if ([95,96,99].includes(code)) {
+    if ([95, 96, 99].includes(code)) {
         warnings.push("Thunderstorms reported: avoid exposed mountain areas.");
         level = "EXTREME";
     }
 
-    if (gust>=60 || wind>=50) {
+    if (gust >= 60 || wind >= 50) {
         warnings.push("Very strong wind: exposed areas may be dangerous.");
         level = "EXTREME";
-    } else if (gust>=40 || wind>=35) {
+    } else if (gust >= 40 || wind >= 35) {
         warnings.push("Strong wind: reconsider exposed routes.");
-        if(level==="LOW") level="HIGH";
+        if (level === "LOW") level = "HIGH";
     }
 
-    if(valid(visibility) && visibility<1000) {
+    if (valid(visibility) && visibility < 1000) {
         warnings.push("Very low visibility: navigation may be difficult.");
-        if(level!=="EXTREME") level="HIGH";
+        if (level !== "EXTREME") level = "HIGH";
     }
 
-    if(temperature<=0 && (rain>0 || snow>0)) {
+    if (temperature <= 0 && (rain > 0 || snow > 0)) {
         warnings.push("Freezing precipitation: ice may form.");
-        if(level==="LOW") level="HIGH";
+        if (level === "LOW") level = "HIGH";
     }
 
-    if(snow>0 || (code>=71 && code<=86)) {
+    if (snow > 0 || (code >= 71 && code <= 86)) {
         warnings.push("Snow conditions reported. Trail surfaces may change.");
-        if(level==="LOW") level="MODERATE";
+        if (level === "LOW") level = "MODERATE";
     }
 
-    if(rain>=5) {
+    if (rain >= 5) {
         warnings.push("Rain may make trails slippery.");
-        if(level==="LOW") level="MODERATE";
+        if (level === "LOW") level = "MODERATE";
     }
 
-    if(Number.isFinite(elevation) && elevation>=3000) {
+    if (Number.isFinite(elevation) && elevation >= 3000) {
         warnings.push("High elevation: consider acclimatisation.");
-        if(level==="LOW") level="MODERATE";
+        if (level === "LOW") level = "MODERATE";
     }
 
-    if(!warnings.length) {
+    if (!warnings.length) {
         warnings.push("No major hazards detected in the available forecast. This does not guarantee a safe trail.");
     }
 
-    text("mountainRiskLevel",level);
+    text("mountainRiskLevel", level);
 
     $("mountainRiskList").innerHTML =
-        warnings.map(w=>`<li>${safeHTML(w)}</li>`).join("");
+        warnings.map(w => `<li>${safeHTML(w)}</li>`).join("");
 
     $("mountainRiskPanel").dataset.risk = level.toLowerCase();
 }
@@ -3142,25 +3294,25 @@ function assessMountain(data,elevation) {
 
 function initializeRadar() {
     if (!window.L || !$("radarMap")) {
-        text("radarStatus","Leaflet unavailable");
+        text("radarStatus", "Leaflet unavailable");
         return;
     }
 
     if (radarMap) {
-        setTimeout(()=>radarMap.invalidateSize(),250);
+        setTimeout(() => radarMap.invalidateSize(), 250);
         return;
     }
 
     radarMap = L.map("radarMap").setView([
         currentLocation.latitude,
         currentLocation.longitude
-    ],7);
+    ], 7);
 
     L.tileLayer(
         "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
         {
-            attribution:"OpenStreetMap & CARTO",
-            maxZoom:19
+            attribution: "OpenStreetMap & CARTO",
+            maxZoom: 19
         }
     ).addTo(radarMap);
 
@@ -3178,7 +3330,7 @@ async function loadRadar() {
     if (!radarMap) return;
 
     try {
-        text("radarStatus","Loading radar...");
+        text("radarStatus", "Loading radar...");
 
         const data = await requestJSON(CONFIG.radarURL);
 
@@ -3191,38 +3343,38 @@ async function loadRadar() {
             throw new Error("No radar frames");
         }
 
-        const latest = frames[frames.length-1];
+        const latest = frames[frames.length - 1];
 
         const host = data.host || "https://tilecache.rainviewer.com";
 
         const url =
             `${host}${latest.path}/256/{z}/{x}/{y}/2/1_1.png`;
 
-        if(radarLayer) {
+        if (radarLayer) {
             radarMap.removeLayer(radarLayer);
         }
 
-        radarLayer = L.tileLayer(url,{
-            opacity:.72,
-            maxNativeZoom:7,
-            zIndex:10
+        radarLayer = L.tileLayer(url, {
+            opacity: .72,
+            maxNativeZoom: 7,
+            zIndex: 10
         }).addTo(radarMap);
 
-        text("radarStatus","Radar updated");
+        text("radarStatus", "Radar updated");
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        text("radarStatus","Radar temporarily unavailable");
+        text("radarStatus", "Radar temporarily unavailable");
     }
 }
 
 function updateRadarLocation() {
-    if(!radarMap) return;
+    if (!radarMap) return;
 
     radarMap.setView([
         currentLocation.latitude,
         currentLocation.longitude
-    ],7);
+    ], 7);
 
     radarMarker?.setLatLng([
         currentLocation.latitude,
@@ -3237,42 +3389,42 @@ function updateRadarLocation() {
    ========================================================= */
 
 function normalizeESP(address) {
-    let value = String(address||"").trim();
+    let value = String(address || "").trim();
 
-    if(!value) return "";
+    if (!value) return "";
 
-    if(!/^https?:\/\//i.test(value)) {
-        value="http://"+value;
+    if (!/^https?:\/\//i.test(value)) {
+        value = "http://" + value;
     }
 
-    return value.replace(/\/+$/,"");
+    return value.replace(/\/+$/, "");
 }
 
 async function connectESP() {
     const address = normalizeESP($("espAddress").value);
 
-    if(!address) {
-        text("stationStatus","Enter your ESP8266 address");
+    if (!address) {
+        text("stationStatus", "Enter your ESP8266 address");
         return;
     }
 
-    espAddress=address;
+    espAddress = address;
 
-    localStorage.setItem("sinaEspAddress",address);
+    localStorage.setItem("sinaEspAddress", address);
 
     await fetchStation();
 }
 
 async function fetchStation() {
-    if(!espAddress) {
-        text("stationStatus","Disconnected");
+    if (!espAddress) {
+        text("stationStatus", "Disconnected");
         return;
     }
 
     const controller = new AbortController();
 
     const timeout = setTimeout(
-        ()=>controller.abort(),
+        () => controller.abort(),
         4500
     );
 
@@ -3280,36 +3432,36 @@ async function fetchStation() {
         const response = await fetch(
             `${espAddress}/api/data`,
             {
-                cache:"no-store",
-                signal:controller.signal
+                cache: "no-store",
+                signal: controller.signal
             }
         );
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
         }
 
         const data = await response.json();
 
-        stationConnected=true;
+        stationConnected = true;
 
         renderStation(data);
 
         $("stationStatus").classList.add("connected");
-        text("stationStatus","Connected to ESP8266");
+        text("stationStatus", "Connected to ESP8266");
 
-    } catch(error) {
-        stationConnected=false;
+    } catch (error) {
+        stationConnected = false;
 
         $("stationStatus").classList.remove("connected");
 
-        text("stationStatus","ESP8266 offline");
-        text("balconyTemp","--");
-        text("balconyHumidity","--");
-        text("balconyWind","--");
-        text("balconyRain","--");
+        text("stationStatus", "ESP8266 offline");
+        text("balconyTemp", "--");
+        text("balconyHumidity", "--");
+        text("balconyWind", "--");
+        text("balconyRain", "--");
 
-        console.warn("ESP8266:",error);
+        console.warn("ESP8266:", error);
 
     } finally {
         clearTimeout(timeout);
@@ -3365,28 +3517,28 @@ function renderStation(data) {
             : "--"
     );
 
-    if(valid(temperature)) {
+    if (valid(temperature)) {
         stationHistory.push({
-            time:Date.now(),
-            value:Number(temperature)
+            time: Date.now(),
+            value: Number(temperature)
         });
 
-        if(stationHistory.length>40) {
+        if (stationHistory.length > 40) {
             stationHistory.shift();
         }
 
         drawStationChart();
     }
 
-    const cityTemp=currentWeatherData?.current?.temperature_2m;
+    const cityTemp = currentWeatherData?.current?.temperature_2m;
 
-    if(valid(temperature) && valid(cityTemp)) {
+    if (valid(temperature) && valid(cityTemp)) {
         const difference =
-            Number(temperature)-Number(cityTemp);
+            Number(temperature) - Number(cityTemp);
 
         text(
             "balconyWeatherStatus",
-            `Balcony vs city temperature: ${difference>0?"+":""}${difference.toFixed(1)}°C`
+            `Balcony vs city temperature: ${difference > 0 ? "+" : ""}${difference.toFixed(1)}°C`
         );
     }
 }
@@ -3396,188 +3548,224 @@ function renderStation(data) {
    ========================================================= */
 
 function drawStationChart() {
-    const canvas=$("stationChart");
+    const canvas = $("stationChart");
 
-    if(!canvas || !stationHistory.length) return;
+    if (!canvas || !stationHistory.length) return;
 
-    const width=canvas.clientWidth||600;
-    const height=200;
+    const width = canvas.clientWidth || 600;
+    const height = 200;
 
-    const ratio=Math.min(window.devicePixelRatio||1,2);
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
 
-    canvas.width=width*ratio;
-    canvas.height=height*ratio;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
 
-    const ctx=canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
-    ctx.setTransform(ratio,0,0,ratio,0,0);
-    ctx.clearRect(0,0,width,height);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.clearRect(0, 0, width, height);
 
-    const values=stationHistory.map(x=>x.value);
+    const values = stationHistory.map(x => x.value);
 
-    const min=Math.min(...values)-2;
-    const max=Math.max(...values)+2;
+    const min = Math.min(...values) - 2;
+    const max = Math.max(...values) + 2;
 
-    const padding=25;
-    const graphW=width-padding*2;
-    const graphH=height-padding*2;
+    const padding = 25;
+    const graphW = width - padding * 2;
+    const graphH = height - padding * 2;
 
-    for(let i=0;i<4;i++) {
-        const y=padding+i*graphH/3;
+    for (let i = 0; i < 4; i++) {
+        const y = padding + i * graphH / 3;
 
-        ctx.strokeStyle="rgba(255,255,255,.09)";
+        ctx.strokeStyle = "rgba(255,255,255,.09)";
         ctx.beginPath();
-        ctx.moveTo(padding,y);
-        ctx.lineTo(width-padding,y);
+        ctx.moveTo(padding, y);
+        ctx.lineTo(width - padding, y);
         ctx.stroke();
     }
 
-    const points=values.map((value,i)=>({
-        x:padding+i*graphW/Math.max(1,values.length-1),
-        y:padding+(1-(value-min)/(max-min))*graphH
+    const points = values.map((value, i) => ({
+        x: padding + i * graphW / Math.max(1, values.length - 1),
+        y: padding + (1 - (value - min) / (max - min)) * graphH
     }));
 
-    if(!points.length) return;
+    if (!points.length) return;
 
-    const gradient=ctx.createLinearGradient(0,padding,0,height);
+    const gradient = ctx.createLinearGradient(0, padding, 0, height);
 
-    gradient.addColorStop(0,"rgba(86,217,232,.28)");
-    gradient.addColorStop(1,"rgba(86,217,232,0)");
+    gradient.addColorStop(0, "rgba(86,217,232,.28)");
+    gradient.addColorStop(1, "rgba(86,217,232,0)");
 
     ctx.beginPath();
-    ctx.moveTo(points[0].x,points[0].y);
+    ctx.moveTo(points[0].x, points[0].y);
 
-    points.slice(1).forEach(p=>{
-        ctx.lineTo(p.x,p.y);
+    points.slice(1).forEach(p => {
+        ctx.lineTo(p.x, p.y);
     });
 
-    ctx.lineTo(points[points.length-1].x,height-padding);
-    ctx.lineTo(points[0].x,height-padding);
+    ctx.lineTo(points[points.length - 1].x, height - padding);
+    ctx.lineTo(points[0].x, height - padding);
     ctx.closePath();
 
-    ctx.fillStyle=gradient;
+    ctx.fillStyle = gradient;
     ctx.fill();
 
     ctx.beginPath();
-    ctx.moveTo(points[0].x,points[0].y);
+    ctx.moveTo(points[0].x, points[0].y);
 
-    points.slice(1).forEach(p=>{
-        ctx.lineTo(p.x,p.y);
+    points.slice(1).forEach(p => {
+        ctx.lineTo(p.x, p.y);
     });
 
-    ctx.strokeStyle="#5de1e8";
-    ctx.lineWidth=2.5;
+    ctx.strokeStyle = "#5de1e8";
+    ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    points.forEach(p=>{
+    points.forEach(p => {
         ctx.beginPath();
-        ctx.arc(p.x,p.y,3,0,Math.PI*2);
-        ctx.fillStyle="white";
+        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
         ctx.fill();
     });
 }
 
 /* =========================================================
-   24. WEATHER SCENE CONFIGURATION
+   24. REALISTIC WEATHER SCENE & SNOW ACCUMULATION ENGINE
    ========================================================= */
 
 const SCENES = {
-    clear:{clouds:3,rain:0,snow:0,wind:.35},
-    cloudy:{clouds:8,rain:0,snow:0,wind:.7},
-    wind:{clouds:9,rain:0,snow:0,wind:2},
-    rain:{clouds:11,rain:110,snow:0,wind:1.1},
-    "heavy-rain":{clouds:14,rain:250,snow:0,wind:2.4},
-    storm:{clouds:17,rain:290,snow:0,wind:3.2},
-    hail:{clouds:17,rain:100,snow:110,wind:3},
-    snow:{clouds:11,rain:0,snow:150,wind:1.2},
-    sleet:{clouds:13,rain:80,snow:70,wind:1.7},
-    fog:{clouds:8,rain:0,snow:0,wind:.3}
+    clear: { clouds: 3, rain: 0, snow: 0, wind: .35, snowRate: 0 },
+    cloudy: { clouds: 8, rain: 0, snow: 0, wind: .7, snowRate: 0 },
+    wind: { clouds: 9, rain: 0, snow: 0, wind: 2.2, snowRate: 0 },
+    rain: { clouds: 12, rain: 140, snow: 0, wind: 1.2, snowRate: -.015 },
+    "heavy-rain": { clouds: 15, rain: 280, snow: 0, wind: 2.5, snowRate: -.03 },
+    storm: { clouds: 18, rain: 320, snow: 0, wind: 3.4, snowRate: -.02 },
+    hail: { clouds: 18, rain: 110, snow: 130, wind: 3.1, snowRate: .03 },
+    snow: { clouds: 13, rain: 0, snow: 220, wind: 1.35, snowRate: .085 },
+    sleet: { clouds: 14, rain: 95, snow: 115, wind: 1.8, snowRate: .045 },
+    fog: { clouds: 9, rain: 0, snow: 0, wind: .35, snowRate: 0 }
 };
 
-let canvas=$("weatherEffects");
-let ctx=canvas.getContext("2d");
+let canvas = $("weatherEffects");
+let ctx = canvas.getContext("2d");
 
-let W=window.innerWidth;
-let H=window.innerHeight;
+let W = window.innerWidth;
+let H = window.innerHeight;
 
-let clouds=[];
-let particles=[];
-let birds=[];
-let lightningTimer=0;
-let lightningFlash=0;
-let atmosphereMode="clear";
-let sceneWind=0;
-let sceneTemperature=20;
-let lastFrame=0;
+let clouds = [];
+let particles = [];
+let splashes = [];
+let birds = [];
+let lightningTimer = 0;
+let lightningFlash = 0;
+let atmosphereMode = "clear";
+let sceneWind = 0;
+let sceneTemperature = 20;
+let snowAccumulation = 0; // 0.0 (bare) -> 1.0 (deep white blanket across landscape)
+let lastFrame = 0;
+
+function updateSnowUI() {
+    const pct = Math.round(clamp(snowAccumulation, 0, 1) * 100);
+    text("snowCoverValue", `${pct}%`);
+    const slider = $("snowCoverSlider");
+    if (slider && document.activeElement !== slider) {
+        slider.value = String(pct);
+    }
+
+    let label = "Bare";
+    if (pct >= 75) label = "Deep Snow Blanket";
+    else if (pct >= 40) label = "Heavy Snow Cover";
+    else if (pct >= 12) label = "Light Frost & Snow";
+    else if (pct > 0) label = "Dusting";
+
+    text("groundSnowReadout", label);
+}
+
+function setSnowAccumulation(value, syncSlider = true) {
+    snowAccumulation = clamp(Number(value) || 0, 0, 1);
+    if (syncSlider) {
+        updateSnowUI();
+    } else {
+        const pct = Math.round(snowAccumulation * 100);
+        text("snowCoverValue", `${pct}%`);
+        let label = "Bare";
+        if (pct >= 75) label = "Deep Snow Blanket";
+        else if (pct >= 40) label = "Heavy Snow Cover";
+        else if (pct >= 12) label = "Light Frost & Snow";
+        else if (pct > 0) label = "Dusting";
+        text("groundSnowReadout", label);
+    }
+}
 
 /* =========================================================
    25. CANVAS INITIALIZATION
    ========================================================= */
 
 function resizeCanvas() {
-    W=window.innerWidth;
-    H=window.innerHeight;
+    W = window.innerWidth;
+    H = window.innerHeight;
 
-    const ratio=Math.min(window.devicePixelRatio||1,2);
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
 
-    canvas.width=W*ratio;
-    canvas.height=H*ratio;
+    canvas.width = W * ratio;
+    canvas.height = H * ratio;
 
-    canvas.style.width=W+"px";
-    canvas.style.height=H+"px";
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
 
-    ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
     createScene();
 }
 
 function createScene() {
-    const config=SCENES[atmosphereMode]||SCENES.clear;
+    const config = SCENES[atmosphereMode] || SCENES.clear;
 
-    clouds=[];
-    particles=[];
-    birds=[];
+    clouds = [];
+    particles = [];
+    splashes = [];
+    birds = [];
 
-    for(let i=0;i<config.clouds;i++) {
+    for (let i = 0; i < config.clouds; i++) {
         clouds.push({
-            x:Math.random()*W,
-            y:Math.random()*H*.42,
-            width:120+Math.random()*220,
-            height:35+Math.random()*55,
-            speed:.02+Math.random()*.08,
-            opacity:.12+Math.random()*.18
+            x: Math.random() * W,
+            y: Math.random() * H * .42,
+            width: 130 + Math.random() * 230,
+            height: 38 + Math.random() * 58,
+            speed: .025 + Math.random() * .09,
+            opacity: .14 + Math.random() * .18
         });
     }
 
-    const count=config.rain+config.snow;
+    const count = config.rain + config.snow;
 
-    for(let i=0;i<count;i++) {
-        const snow=i>=config.rain;
+    for (let i = 0; i < count; i++) {
+        const snow = i >= config.rain;
 
         particles.push({
-            x:Math.random()*W,
-            y:Math.random()*H,
-            speed:snow
-                ? .5+Math.random()*1.4
-                : 5+Math.random()*9,
-            size:snow
-                ? 1+Math.random()*2.5
-                : 1,
-            length:snow
-                ? 3+Math.random()*3
-                : 8+Math.random()*16,
+            x: Math.random() * W,
+            y: Math.random() * H,
+            speed: snow
+                ? .55 + Math.random() * 1.45
+                : 6.5 + Math.random() * 9.5,
+            size: snow
+                ? 1.2 + Math.random() * 2.8
+                : 1.1,
+            length: snow
+                ? 3 + Math.random() * 3
+                : 10 + Math.random() * 18,
             snow,
-            sway:Math.random()*7
+            sway: Math.random() * 7
         });
     }
 
-    for(let i=0;i<7;i++) {
+    for (let i = 0; i < 7; i++) {
         birds.push({
-            x:Math.random()*W,
-            y:40+Math.random()*H*.26,
-            speed:.15+Math.random()*.25,
-            size:4+Math.random()*5,
-            phase:Math.random()*Math.PI*2
+            x: Math.random() * W,
+            y: 40 + Math.random() * H * .26,
+            speed: .15 + Math.random() * .25,
+            size: 4 + Math.random() * 5,
+            phase: Math.random() * Math.PI * 2
         });
     }
 }
@@ -3587,55 +3775,58 @@ function createScene() {
    ========================================================= */
 
 function drawCloud(cloud) {
-    const storm=[
+    const storm = [
         "storm",
         "hail",
         "heavy-rain"
     ].includes(atmosphereMode);
 
-    const gradient=ctx.createLinearGradient(
+    const gradient = ctx.createLinearGradient(
         cloud.x,
         cloud.y,
         cloud.x,
-        cloud.y+cloud.height
+        cloud.y + cloud.height
     );
 
-    if(storm) {
-        gradient.addColorStop(0,"rgba(90,100,120,.65)");
-        gradient.addColorStop(1,"rgba(15,25,40,.88)");
+    if (storm) {
+        gradient.addColorStop(0, "rgba(92, 104, 126, .68)");
+        gradient.addColorStop(1, "rgba(14, 24, 38, .9)");
+    } else if (atmosphereMode === "snow" || atmosphereMode === "sleet") {
+        gradient.addColorStop(0, "rgba(235, 245, 255, .48)");
+        gradient.addColorStop(1, "rgba(135, 165, 195, .22)");
     } else {
-        gradient.addColorStop(0,"rgba(230,240,255,.42)");
-        gradient.addColorStop(1,"rgba(110,145,175,.17)");
+        gradient.addColorStop(0, "rgba(230, 240, 255, .42)");
+        gradient.addColorStop(1, "rgba(110, 145, 175, .17)");
     }
 
     ctx.save();
-    ctx.globalAlpha=cloud.opacity;
-    ctx.fillStyle=gradient;
+    ctx.globalAlpha = cloud.opacity;
+    ctx.fillStyle = gradient;
 
     ctx.beginPath();
 
     ctx.ellipse(
         cloud.x,
-        cloud.y+cloud.height*.55,
-        cloud.width*.42,
-        cloud.height*.45,
-        0,0,Math.PI*2
+        cloud.y + cloud.height * .55,
+        cloud.width * .42,
+        cloud.height * .45,
+        0, 0, Math.PI * 2
     );
 
     ctx.ellipse(
-        cloud.x-cloud.width*.22,
-        cloud.y+cloud.height*.5,
-        cloud.width*.25,
-        cloud.height*.55,
-        0,0,Math.PI*2
+        cloud.x - cloud.width * .22,
+        cloud.y + cloud.height * .5,
+        cloud.width * .25,
+        cloud.height * .55,
+        0, 0, Math.PI * 2
     );
 
     ctx.ellipse(
-        cloud.x+cloud.width*.2,
-        cloud.y+cloud.height*.4,
-        cloud.width*.28,
-        cloud.height*.62,
-        0,0,Math.PI*2
+        cloud.x + cloud.width * .2,
+        cloud.y + cloud.height * .4,
+        cloud.width * .28,
+        cloud.height * .62,
+        0, 0, Math.PI * 2
     );
 
     ctx.fill();
@@ -3643,20 +3834,20 @@ function drawCloud(cloud) {
 }
 
 function drawClouds(delta) {
-    const config=SCENES[atmosphereMode];
+    const config = SCENES[atmosphereMode];
 
-    const factor=clamp(
-        .55+sceneWind/35,
+    const factor = clamp(
+        .55 + sceneWind / 35,
         .4,
         2.5
     );
 
-    clouds.forEach(cloud=>{
-        cloud.x+=cloud.speed*config.wind*factor*delta;
+    clouds.forEach(cloud => {
+        cloud.x += cloud.speed * config.wind * factor * delta;
 
-        if(cloud.x>W+cloud.width) {
-            cloud.x=-cloud.width;
-            cloud.y=Math.random()*H*.38;
+        if (cloud.x > W + cloud.width) {
+            cloud.x = -cloud.width;
+            cloud.y = Math.random() * H * .38;
         }
 
         drawCloud(cloud);
@@ -3664,79 +3855,144 @@ function drawClouds(delta) {
 }
 
 /* =========================================================
-   27. MOUNTAIN BACKGROUND
+   27. MOUNTAIN & LANDSCAPE WITH PROGRESSIVE SNOW BLANKET
    ========================================================= */
 
 function drawMountains() {
-    const base=H*.74;
+    const base = H * .74;
+    const snowFactor = clamp(snowAccumulation, 0, 1);
 
-    const drawRange=(points,color1,color2)=>{
+    const drawRange = (points, color1, color2) => {
         ctx.beginPath();
-        ctx.moveTo(0,H);
+        ctx.moveTo(0, H);
 
-        points.forEach(p=>{
-            ctx.lineTo(p[0],p[1]);
+        points.forEach(p => {
+            ctx.lineTo(p[0], p[1]);
         });
 
-        ctx.lineTo(W,H);
+        ctx.lineTo(W, H);
         ctx.closePath();
 
-        const gradient=ctx.createLinearGradient(
-            0,H*.42,0,H
+        const gradient = ctx.createLinearGradient(
+            0, H * .42, 0, H
         );
 
-        gradient.addColorStop(0,color1);
-        gradient.addColorStop(1,color2);
+        gradient.addColorStop(0, color1);
+        gradient.addColorStop(1, color2);
 
-        ctx.fillStyle=gradient;
+        ctx.fillStyle = gradient;
         ctx.fill();
     };
 
-    drawRange([
-        [0,base],
-        [W*.13,base-130],
-        [W*.25,base-35],
-        [W*.42,base-190],
-        [W*.58,base-55],
-        [W*.75,base-160],
-        [W*.92,base-55],
-        [W,base-110]
-    ],
-    "rgba(100,135,160,.35)",
-    "rgba(25,47,65,.75)");
+    const backRange = [
+        [0, base],
+        [W * .13, base - 130],
+        [W * .25, base - 35],
+        [W * .42, base - 190],
+        [W * .58, base - 55],
+        [W * .75, base - 160],
+        [W * .92, base - 55],
+        [W, base - 110]
+    ];
 
-    drawRange([
-        [0,H*.84],
-        [W*.2,H*.65],
-        [W*.38,H*.82],
-        [W*.62,H*.63],
-        [W*.8,H*.81],
-        [W,H*.68]
-    ],
-    "rgba(75,110,120,.4)",
-    "rgba(20,45,48,.78)");
+    const frontRange = [
+        [0, H * .84],
+        [W * .2, H * .65],
+        [W * .38, H * .82],
+        [W * .62, H * .63],
+        [W * .8, H * .81],
+        [W, H * .68]
+    ];
 
-    if(
-        atmosphereMode==="snow" ||
-        atmosphereMode==="sleet" ||
-        sceneTemperature<=0
+    drawRange(
+        backRange,
+        "rgba(100, 135, 160, .36)",
+        "rgba(25, 47, 65, .78)"
+    );
+
+    drawRange(
+        frontRange,
+        "rgba(75, 110, 120, .42)",
+        "rgba(20, 45, 48, .82)"
+    );
+
+    // Progressive snow coverage across mountain ridges & foreground terrain
+    if (snowFactor > 0.01) {
+        const snowAlpha = clamp(snowFactor * 0.92, 0, 0.94);
+
+        // Snow blanket along back mountain slopes
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        backRange.forEach(p => ctx.lineTo(p[0], p[1]));
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.clip();
+
+        const backSnowGrad = ctx.createLinearGradient(0, base - 200, 0, H);
+        backSnowGrad.addColorStop(0, `rgba(244, 250, 255, ${snowAlpha})`);
+        backSnowGrad.addColorStop(0.55, `rgba(210, 228, 245, ${snowAlpha * 0.78})`);
+        backSnowGrad.addColorStop(1, `rgba(175, 202, 228, ${snowAlpha * 0.45})`);
+        ctx.fillStyle = backSnowGrad;
+        ctx.fillRect(0, base - 210, W, 240);
+        ctx.restore();
+
+        // Snow blanket along foreground hills & valley floor
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        frontRange.forEach(p => ctx.lineTo(p[0], p[1]));
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.clip();
+
+        const frontSnowGrad = ctx.createLinearGradient(0, H * .62, 0, H);
+        frontSnowGrad.addColorStop(0, `rgba(250, 253, 255, ${snowAlpha})`);
+        frontSnowGrad.addColorStop(0.65, `rgba(224, 238, 250, ${snowAlpha * 0.85})`);
+        frontSnowGrad.addColorStop(1, `rgba(195, 218, 238, ${snowAlpha * 0.65})`);
+        ctx.fillStyle = frontSnowGrad;
+        ctx.fillRect(0, H * .6, W, H * .42);
+        ctx.restore();
+
+        // Ground snow drift bank at bottom of screen
+        const driftDepth = snowFactor * 34;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        for (let x = 0; x <= W + 40; x += 40) {
+            const wave = Math.sin(x * 0.012 + snowFactor * 4) * (4 + snowFactor * 6);
+            ctx.lineTo(x, H - driftDepth + wave);
+        }
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(244, 250, 255, ${clamp(snowFactor * 0.95, 0, 0.96)})`;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // Classic snow-capped peak accents when cold or snowy
+    if (
+        atmosphereMode === "snow" ||
+        atmosphereMode === "sleet" ||
+        sceneTemperature <= 0 ||
+        snowFactor > 0.15
     ) {
-        const peaks=[
-            [W*.13,base-130],
-            [W*.42,base-190],
-            [W*.75,base-160]
+        const peaks = [
+            [W * .13, base - 130],
+            [W * .42, base - 190],
+            [W * .75, base - 160]
         ];
 
-        ctx.fillStyle="rgba(245,250,255,.8)";
+        ctx.fillStyle = "rgba(248, 252, 255, .88)";
 
-        peaks.forEach(([x,y])=>{
+        peaks.forEach(([x, y]) => {
             ctx.beginPath();
-            ctx.moveTo(x-30,y+38);
-            ctx.lineTo(x,y);
-            ctx.lineTo(x+30,y+38);
-            ctx.lineTo(x+12,y+29);
-            ctx.lineTo(x,y+14);
-            ctx.lineTo(x-13,y+30);
+            ctx.moveTo(x - 30, y + 38);
+            ctx.lineTo(x, y);
+            ctx.lineTo(x + 30, y + 38);
+            ctx.lineTo(x + 12, y + 29);
+            ctx.lineTo(x, y + 14);
+            ctx.lineTo(x - 13, y + 30);
             ctx.closePath();
             ctx.fill();
         });
@@ -3744,180 +4000,256 @@ function drawMountains() {
 }
 
 /* =========================================================
-   28. RAIN / SNOW / HAIL
+   28. RAIN / SNOW / HAIL + GROUND SPLASHES & ACCUMULATION
    ========================================================= */
 
-function drawParticles(delta,time) {
-    const config=SCENES[atmosphereMode];
+function drawParticles(delta, time) {
+    const config = SCENES[atmosphereMode];
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+    const groundY = H - snowFactor * 28;
 
-    particles.forEach(p=>{
-        const wind=config.wind+sceneWind/25;
+    // Evolve snow accumulation dynamically from active precipitation & freezing temperature
+    if (config.snowRate !== 0) {
+        const tempFactor = sceneTemperature <= 2 ? 1.25 : 0.75;
+        const nextSnow = snowAccumulation + (config.snowRate * tempFactor * delta) / 1000;
+        if (Math.abs(nextSnow - snowAccumulation) >= 0.002) {
+            setSnowAccumulation(nextSnow, false);
+        } else {
+            snowAccumulation = clamp(nextSnow, 0, 1);
+        }
+    }
 
-        p.x+=wind*delta*.025;
-        p.y+=p.speed*delta*(p.snow?.025:.065);
+    particles.forEach(p => {
+        const wind = config.wind + sceneWind / 25;
 
-        if(p.snow) {
-            p.x+=Math.sin(time/1000+p.sway)*.4;
+        p.x += wind * delta * .025;
+        p.y += p.speed * delta * (p.snow ? .025 : .065);
+
+        if (p.snow) {
+            p.x += Math.sin(time / 1000 + p.sway) * .45;
 
             ctx.beginPath();
-            ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
 
-            ctx.fillStyle="rgba(255,255,255,.85)";
+            ctx.fillStyle = "rgba(255, 255, 255, .88)";
             ctx.fill();
 
         } else {
             ctx.beginPath();
-            ctx.moveTo(p.x,p.y);
+            ctx.moveTo(p.x, p.y);
 
             ctx.lineTo(
-                p.x-wind*.8,
-                p.y+p.length
+                p.x - wind * .8,
+                p.y + p.length
             );
 
-            ctx.strokeStyle=
-                atmosphereMode==="hail"
-                    ? "rgba(225,245,255,.95)"
-                    : "rgba(155,210,255,.57)";
+            ctx.strokeStyle =
+                atmosphereMode === "hail"
+                    ? "rgba(225, 245, 255, .95)"
+                    : "rgba(155, 210, 255, .6)";
 
-            ctx.lineWidth=
-                atmosphereMode==="hail"?2:1;
+            ctx.lineWidth =
+                atmosphereMode === "hail" ? 2 : 1.1;
 
             ctx.stroke();
+
+            // Spawn subtle splash ripple when rain/hail reaches lower ground
+            if (p.y >= groundY && splashes.length < 45 && Math.random() < 0.25) {
+                splashes.push({
+                    x: p.x,
+                    y: groundY + Math.random() * 14,
+                    r: 1.5,
+                    maxR: atmosphereMode === "hail" ? 11 : 7,
+                    alpha: 0.65
+                });
+            }
         }
 
-        if(p.y>H+20) {
-            p.y=-20;
-            p.x=Math.random()*W;
+        if (p.y > groundY + 14) {
+            p.y = -20;
+            p.x = Math.random() * W;
         }
 
-        if(p.x>W+20) p.x=-20;
-        if(p.x< -20) p.x=W+20;
+        if (p.x > W + 20) p.x = -20;
+        if (p.x < -20) p.x = W + 20;
     });
+
+    // Render rain/hail ground splashes
+    for (let i = splashes.length - 1; i >= 0; i--) {
+        const s = splashes[i];
+        s.r += delta * 0.025;
+        s.alpha -= delta * 0.0022;
+
+        if (s.alpha <= 0 || s.r >= s.maxR) {
+            splashes.splice(i, 1);
+            continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(s.x, s.y, s.r * 1.8, s.r * 0.55, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(175, 224, 255, ${s.alpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+    }
 }
 
 /* =========================================================
-   29. TREES
+   29. TREES WITH SNOW-LADEN BOUGHS
    ========================================================= */
 
-function drawPine(x,ground,height,sway) {
+function drawPine(x, ground, height, sway) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
     ctx.save();
-    ctx.translate(x,ground);
-    ctx.rotate(sway*.025);
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .025);
 
-    ctx.fillStyle="#513e31";
-    ctx.fillRect(-4,-height*.25,8,height*.25);
+    ctx.fillStyle = "#513e31";
+    ctx.fillRect(-4, -height * .25, 8, height * .25);
 
-    const colors=[
+    const colors = [
         "#194235",
         "#214c3e",
         "#2a5b45",
         "#34674b"
     ];
 
-    for(let i=0;i<4;i++) {
-        const y=-height+i*height*.2;
-        const width=height*(.25-i*.035);
+    for (let i = 0; i < 4; i++) {
+        const y = -height + i * height * .2;
+        const width = height * (.25 - i * .035);
 
         ctx.beginPath();
-        ctx.moveTo(0,y);
-        ctx.lineTo(-width,y+height*.3);
-        ctx.lineTo(width,y+height*.3);
+        ctx.moveTo(0, y);
+        ctx.lineTo(-width, y + height * .3);
+        ctx.lineTo(width, y + height * .3);
         ctx.closePath();
 
-        ctx.fillStyle=colors[i];
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+
+        if (snowFactor > 0.05) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(-width * .88, y + height * .22);
+            ctx.lineTo(-width * .25, y + height * .16);
+            ctx.lineTo(0, y + height * .22);
+            ctx.lineTo(width * .25, y + height * .16);
+            ctx.lineTo(width * .88, y + height * .22);
+            ctx.closePath();
+            ctx.fillStyle = `rgba(245, 251, 255, ${clamp(snowFactor * 0.9, 0, 0.92)})`;
+            ctx.fill();
+        }
+    }
+
+    ctx.restore();
+}
+
+function drawCypress(x, ground, height, sway) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .02);
+
+    ctx.beginPath();
+    ctx.moveTo(0, -height);
+
+    ctx.bezierCurveTo(
+        -height * .32, -height * .65,
+        -height * .18, -height * .15,
+        0, 0
+    );
+
+    ctx.bezierCurveTo(
+        height * .18, -height * .15,
+        height * .32, -height * .65,
+        0, -height
+    );
+
+    ctx.fillStyle = "#285b49";
+    ctx.fill();
+
+    if (snowFactor > 0.1) {
+        ctx.fillStyle = `rgba(242, 249, 255, ${clamp(snowFactor * 0.72, 0, 0.78)})`;
+        ctx.beginPath();
+        ctx.ellipse(0, -height * .55, height * .11, height * .32, 0, 0, Math.PI * 2);
         ctx.fill();
     }
 
     ctx.restore();
 }
 
-function drawCypress(x,ground,height,sway) {
+function drawRoundTree(x, ground, height, sway) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
     ctx.save();
-    ctx.translate(x,ground);
-    ctx.rotate(sway*.02);
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .03);
 
-    ctx.beginPath();
-    ctx.moveTo(0,-height);
+    ctx.fillStyle = "#624637";
+    ctx.fillRect(-5, -height * .42, 10, height * .42);
 
-    ctx.bezierCurveTo(
-        -height*.32,-height*.65,
-        -height*.18,-height*.15,
-        0,0
-    );
-
-    ctx.bezierCurveTo(
-        height*.18,-height*.15,
-        height*.32,-height*.65,
-        0,-height
-    );
-
-    ctx.fillStyle="#285b49";
-    ctx.fill();
-
-    ctx.restore();
-}
-
-function drawRoundTree(x,ground,height,sway) {
-    ctx.save();
-    ctx.translate(x,ground);
-    ctx.rotate(sway*.03);
-
-    ctx.fillStyle="#624637";
-    ctx.fillRect(-5,-height*.42,10,height*.42);
-
-    const positions=[
-        [-.16,0],
-        [.15,0],
-        [0,-.16],
-        [0,.12]
+    const positions = [
+        [-.16, 0],
+        [.15, 0],
+        [0, -.16],
+        [0, .12]
     ];
 
-    positions.forEach(([dx,dy])=>{
-        ctx.beginPath();
-        ctx.arc(
-            height*dx,
-            -height*.55+height*dy,
-            height*.22,
-            0,
-            Math.PI*2
-        );
+    positions.forEach(([dx, dy]) => {
+        const cx = height * dx;
+        const cy = -height * .55 + height * dy;
+        const r = height * .22;
 
-        ctx.fillStyle="#477d57";
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = "#477d57";
         ctx.fill();
+
+        if (snowFactor > 0.08) {
+            ctx.beginPath();
+            ctx.arc(cx, cy - r * 0.25, r * 0.82, Math.PI * 1.05, Math.PI * 1.95);
+            ctx.fillStyle = `rgba(246, 251, 255, ${clamp(snowFactor * 0.88, 0, 0.9)})`;
+            ctx.fill();
+        }
     });
 
     ctx.restore();
 }
 
-function drawAutumnTree(x,ground,height,sway) {
-    ctx.save();
-    ctx.translate(x,ground);
-    ctx.rotate(sway*.03);
+function drawAutumnTree(x, ground, height, sway) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
 
-    ctx.strokeStyle="#614936";
-    ctx.lineWidth=7;
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .03);
+
+    ctx.strokeStyle = "#614936";
+    ctx.lineWidth = 7;
 
     ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.lineTo(0,-height*.65);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -height * .65);
 
-    ctx.moveTo(0,-height*.4);
-    ctx.lineTo(-height*.25,-height*.75);
+    ctx.moveTo(0, -height * .4);
+    ctx.lineTo(-height * .25, -height * .75);
 
-    ctx.moveTo(0,-height*.5);
-    ctx.lineTo(height*.25,-height*.8);
+    ctx.moveTo(0, -height * .5);
+    ctx.lineTo(height * .25, -height * .8);
 
     ctx.stroke();
 
-    const leaves=[
-        [-.25,-.72],
-        [.25,-.78],
-        [0,-.88],
-        [-.08,-.55],
-        [.12,-.58]
+    const leaves = [
+        [-.25, -.72],
+        [.25, -.78],
+        [0, -.88],
+        [-.08, -.55],
+        [.12, -.58]
     ];
 
-    const colors=[
+    const colors = [
         "#bd7138",
         "#d18b3d",
         "#a84d32",
@@ -3925,63 +4257,68 @@ function drawAutumnTree(x,ground,height,sway) {
         "#b65c35"
     ];
 
-    leaves.forEach((p,i)=>{
-        ctx.beginPath();
-        ctx.arc(
-            p[0]*height,
-            p[1]*height,
-            height*.13,
-            0,Math.PI*2
-        );
+    leaves.forEach((p, i) => {
+        const lx = p[0] * height;
+        const ly = p[1] * height;
+        const lr = height * .13;
 
-        ctx.fillStyle=colors[i];
+        ctx.beginPath();
+        ctx.arc(lx, ly, lr, 0, Math.PI * 2);
+        ctx.fillStyle = colors[i];
         ctx.fill();
+
+        if (snowFactor > 0.08) {
+            ctx.beginPath();
+            ctx.arc(lx, ly - lr * 0.28, lr * 0.8, Math.PI * 1.05, Math.PI * 1.95);
+            ctx.fillStyle = `rgba(246, 251, 255, ${clamp(snowFactor * 0.86, 0, 0.88)})`;
+            ctx.fill();
+        }
     });
 
     ctx.restore();
 }
 
 function drawTrees(time) {
-    const ground=H+4;
+    const ground = H + 4;
 
-    const height=Math.min(H*.3,220);
+    const height = Math.min(H * .3, 220);
 
-    const wind=SCENES[atmosphereMode].wind+sceneWind/25;
+    const wind = SCENES[atmosphereMode].wind + sceneWind / 25;
 
-    const sway=Math.sin(time/650)*wind;
+    const sway = Math.sin(time / 650) * wind;
 
-    drawPine(W*.07,ground,height*.9,sway);
-    drawCypress(W*.24,ground,height*1.15,sway);
-    drawRoundTree(W*.78,ground,height,sway);
-    drawAutumnTree(W*.94,ground,height*.95,sway);
+    drawPine(W * .07, ground, height * .9, sway);
+    drawCypress(W * .24, ground, height * 1.15, sway);
+    drawRoundTree(W * .78, ground, height, sway);
+    drawAutumnTree(W * .94, ground, height * .95, sway);
 }
 
 /* =========================================================
    30. BIRDS
    ========================================================= */
 
-function drawBird(bird,time) {
-    const wing=Math.sin(time*.006+bird.phase)*4;
+function drawBird(bird, time) {
+    const wing = Math.sin(time * .006 + bird.phase) * 4;
 
     ctx.save();
-    ctx.translate(bird.x,bird.y);
+    ctx.translate(bird.x, bird.y);
 
-    ctx.strokeStyle="rgba(25,35,48,.75)";
-    ctx.lineWidth=1.7;
-    ctx.lineCap="round";
+    ctx.strokeStyle = "rgba(25, 35, 48, .75)";
+    ctx.lineWidth = 1.7;
+    ctx.lineCap = "round";
 
     ctx.beginPath();
-    ctx.moveTo(-bird.size,0);
+    ctx.moveTo(-bird.size, 0);
 
     ctx.quadraticCurveTo(
-        -bird.size/2,
+        -bird.size / 2,
         -wing,
         0,
         0
     );
 
     ctx.quadraticCurveTo(
-        bird.size/2,
+        bird.size / 2,
         -wing,
         bird.size,
         0
@@ -3991,24 +4328,24 @@ function drawBird(bird,time) {
     ctx.restore();
 }
 
-function updateBirds(delta,time) {
-    if(["storm","hail","heavy-rain"].includes(atmosphereMode)) {
+function updateBirds(delta, time) {
+    if (["storm", "hail", "heavy-rain"].includes(atmosphereMode)) {
         return;
     }
 
-    birds.forEach(bird=>{
-        bird.x+=bird.speed*delta;
+    birds.forEach(bird => {
+        bird.x += bird.speed * delta;
 
-        bird.y+=Math.sin(
-            time*.0008+bird.phase
-        )*.08*delta;
+        bird.y += Math.sin(
+            time * .0008 + bird.phase
+        ) * .08 * delta;
 
-        if(bird.x>W+30) {
-            bird.x=-30;
-            bird.y=40+Math.random()*H*.3;
+        if (bird.x > W + 30) {
+            bird.x = -30;
+            bird.y = 40 + Math.random() * H * .3;
         }
 
-        drawBird(bird,time);
+        drawBird(bird, time);
     });
 }
 
@@ -4017,23 +4354,23 @@ function updateBirds(delta,time) {
    ========================================================= */
 
 function drawFog(time) {
-    if(atmosphereMode!=="fog") return;
+    if (atmosphereMode !== "fog") return;
 
-    for(let i=0;i<5;i++) {
-        const y=H*(.3+i*.12);
+    for (let i = 0; i < 5; i++) {
+        const y = H * (.3 + i * .12);
 
-        const x=Math.sin(time/5000+i)*100;
+        const x = Math.sin(time / 5000 + i) * 100;
 
-        const gradient=ctx.createLinearGradient(
-            x,y,x+W,y
+        const gradient = ctx.createLinearGradient(
+            x, y, x + W, y
         );
 
-        gradient.addColorStop(0,"rgba(220,230,240,0)");
-        gradient.addColorStop(.5,"rgba(220,230,240,.12)");
-        gradient.addColorStop(1,"rgba(220,230,240,0)");
+        gradient.addColorStop(0, "rgba(220, 230, 240, 0)");
+        gradient.addColorStop(.5, "rgba(220, 230, 240, .13)");
+        gradient.addColorStop(1, "rgba(220, 230, 240, 0)");
 
-        ctx.fillStyle=gradient;
-        ctx.fillRect(x-100,y,W+200,60);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x - 100, y, W + 200, 60);
     }
 }
 
@@ -4042,50 +4379,50 @@ function drawFog(time) {
    ========================================================= */
 
 function drawLightningBolt() {
-    const startX=W*(.1+Math.random()*.8);
+    const startX = W * (.1 + Math.random() * .8);
 
-    let x=startX;
-    let y=0;
+    let x = startX;
+    let y = 0;
 
     ctx.save();
 
     ctx.beginPath();
-    ctx.moveTo(x,y);
+    ctx.moveTo(x, y);
 
-    for(let i=0;i<11;i++) {
-        x+=Math.random()*45-22;
-        y+=H*.045;
+    for (let i = 0; i < 11; i++) {
+        x += Math.random() * 45 - 22;
+        y += H * .045;
 
-        ctx.lineTo(x,y);
+        ctx.lineTo(x, y);
     }
 
-    ctx.strokeStyle="rgba(235,245,255,.95)";
-    ctx.lineWidth=2.5;
-    ctx.shadowColor="#b8dcff";
-    ctx.shadowBlur=25;
+    ctx.strokeStyle = "rgba(235, 245, 255, .95)";
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = "#b8dcff";
+    ctx.shadowBlur = 25;
     ctx.stroke();
 
     ctx.restore();
 }
 
 function updateLightning(delta) {
-    if(!["storm","hail"].includes(atmosphereMode)) return;
+    if (!["storm", "hail"].includes(atmosphereMode)) return;
 
-    lightningTimer+=delta;
+    lightningTimer += delta;
 
-    if(lightningTimer>1800+Math.random()*2500) {
-        lightningTimer=0;
-        lightningFlash=.8;
+    if (lightningTimer > 1800 + Math.random() * 2500) {
+        lightningTimer = 0;
+        lightningFlash = .8;
         drawLightningBolt();
     }
 
-    if(lightningFlash>0) {
-        ctx.fillStyle=`rgba(230,240,255,${lightningFlash*.10})`;
-        ctx.fillRect(0,0,W,H);
+    if (lightningFlash > 0) {
+        ctx.fillStyle = `rgba(230, 240, 255, ${lightningFlash * .11})`;
+        ctx.fillRect(0, 0, W, H);
 
-        lightningFlash-=delta*.002;
+        lightningFlash -= delta * .002;
 
-        if(lightningFlash<0) lightningFlash=0;
+        if (lightningFlash < 0) lightningFlash = 0;
     }
 }
 
@@ -4094,17 +4431,23 @@ function updateLightning(delta) {
    ========================================================= */
 
 function setWeatherTheme(mode) {
-    if(!SCENES[mode]) mode="clear";
+    if (!SCENES[mode]) mode = "clear";
 
-    atmosphereMode=mode;
+    atmosphereMode = mode;
 
-    document.body.className=
+    document.body.className =
         document.body.className
-        .split(" ")
-        .filter(x=>!x.startsWith("weather-"))
-        .join(" ");
+            .split(" ")
+            .filter(x => !x.startsWith("weather-"))
+            .join(" ");
 
     document.body.classList.add(`weather-${mode}`);
+
+    if (mode === "snow" && snowAccumulation < 0.25) {
+        setSnowAccumulation(0.45, true);
+    } else if (mode === "sleet" && snowAccumulation < 0.15) {
+        setSnowAccumulation(0.25, true);
+    }
 
     createScene();
 }
@@ -4113,22 +4456,22 @@ function setWeatherTheme(mode) {
    34. MAIN ANIMATION
    ========================================================= */
 
-function animate(time=0) {
-    const delta=Math.min(
-        time-(lastFrame||time),
+function animate(time = 0) {
+    const delta = Math.min(
+        time - (lastFrame || time),
         40
     );
 
-    lastFrame=time;
+    lastFrame = time;
 
-    ctx.clearRect(0,0,W,H);
+    ctx.clearRect(0, 0, W, H);
 
     drawMountains();
     drawClouds(delta);
-    drawParticles(delta,time);
+    drawParticles(delta, time);
     drawFog(time);
     drawTrees(time);
-    updateBirds(delta,time);
+    updateBirds(delta, time);
     updateLightning(delta);
 
     requestAnimationFrame(animate);
@@ -4139,14 +4482,14 @@ function animate(time=0) {
    ========================================================= */
 
 function applyBalconyWeather() {
-    const mode=$("balconyWeatherMode").value;
+    const mode = $("balconyWeatherMode").value;
 
-    if(mode==="auto") {
+    if (mode === "auto") {
         resetBalconyWeather();
         return;
     }
 
-    manualWeatherOverride=mode;
+    manualWeatherOverride = mode;
     setWeatherTheme(mode);
 
     text(
@@ -4156,9 +4499,9 @@ function applyBalconyWeather() {
 }
 
 function resetBalconyWeather() {
-    manualWeatherOverride=null;
+    manualWeatherOverride = null;
 
-    if(currentWeatherData) {
+    if (currentWeatherData) {
         setWeatherTheme(
             weatherInfo(currentWeatherData.current.weather_code).mode
         );
@@ -4166,7 +4509,7 @@ function resetBalconyWeather() {
         setWeatherTheme("clear");
     }
 
-    $("balconyWeatherMode").value="auto";
+    $("balconyWeatherMode").value = "auto";
 
     text(
         "balconyWeatherStatus",
@@ -4179,30 +4522,30 @@ function resetBalconyWeather() {
    ========================================================= */
 
 function initializeNavigation() {
-    document.querySelectorAll("[data-page]").forEach(button=>{
-        button.addEventListener("click",()=>{
-            const name=button.dataset.page;
+    document.querySelectorAll("[data-page]").forEach(button => {
+        button.addEventListener("click", () => {
+            const name = button.dataset.page;
 
-            document.querySelectorAll(".page").forEach(page=>{
+            document.querySelectorAll(".page").forEach(page => {
                 page.classList.remove("active");
             });
 
-            document.querySelectorAll("[data-page]").forEach(nav=>{
+            document.querySelectorAll("[data-page]").forEach(nav => {
                 nav.classList.remove("active");
             });
 
             $(`${name}Page`).classList.add("active");
             button.classList.add("active");
 
-            if(name==="radar") {
+            if (name === "radar") {
                 initializeRadar();
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     radarMap?.invalidateSize();
-                },250);
+                }, 250);
             }
 
-            if(name==="station") {
+            if (name === "station") {
                 drawStationChart();
                 fetchStation();
             }
@@ -4215,33 +4558,33 @@ function initializeNavigation() {
    ========================================================= */
 
 function initializeEvents() {
-    $("weatherRefresh").addEventListener("click",loadWeather);
+    $("weatherRefresh").addEventListener("click", loadWeather);
 
     $("locationSearchButton").addEventListener(
         "click",
-        ()=>searchLocation($("locationSearch").value)
+        () => searchLocation($("locationSearch").value)
     );
 
-    $("locationSearch").addEventListener("keydown",event=>{
-        if(event.key==="Enter") {
+    $("locationSearch").addEventListener("keydown", event => {
+        if (event.key === "Enter") {
             searchLocation(event.target.value);
         }
     });
 
-    $("gpsButton").addEventListener("click",useGPS);
+    $("gpsButton").addEventListener("click", useGPS);
 
     $("mountainSearchButton").addEventListener(
         "click",
         searchMountain
     );
 
-    $("mountainSearch").addEventListener("keydown",event=>{
-        if(event.key==="Enter") searchMountain();
+    $("mountainSearch").addEventListener("keydown", event => {
+        if (event.key === "Enter") searchMountain();
     });
 
-    $("connectESP").addEventListener("click",connectESP);
+    $("connectESP").addEventListener("click", connectESP);
 
-    $("radarRefresh").addEventListener("click",loadRadar);
+    $("radarRefresh").addEventListener("click", loadRadar);
 
     $("applyBalconyWeather").addEventListener(
         "click",
@@ -4258,6 +4601,28 @@ function initializeEvents() {
         enableNotifications
     );
 
+    $("snowCoverSlider")?.addEventListener("input", event => {
+        const val = Number(event.target.value) / 100;
+        setSnowAccumulation(val, false);
+    });
+
+    $("windBoostSlider")?.addEventListener("input", event => {
+        const val = Number(event.target.value);
+        if (val <= 0) {
+            manualWindOverride = null;
+            sceneWind = Number(currentWeatherData?.current?.wind_speed_10m) || 0;
+            text("windBoostValue", "Live");
+        } else {
+            manualWindOverride = val;
+            sceneWind = val;
+            text("windBoostValue", `${val} km/h`);
+        }
+    });
+
+    $("clearSnowButton")?.addEventListener("click", () => {
+        setSnowAccumulation(0, true);
+    });
+
     [
         "alertRain",
         "alertHeavyRain",
@@ -4267,11 +4632,11 @@ function initializeEvents() {
         "alertWind",
         "alertRainThreshold",
         "alertWindThreshold"
-    ].forEach(id=>{
-        $(id).addEventListener("change",()=>{
+    ].forEach(id => {
+        $(id).addEventListener("change", () => {
             saveAlertSettings();
 
-            if(currentWeatherData) {
+            if (currentWeatherData) {
                 checkAlerts(currentWeatherData);
             }
         });
@@ -4284,52 +4649,53 @@ function initializeEvents() {
 
 function restoreSettings() {
     try {
-        const location=JSON.parse(
-            localStorage.getItem("sinaWeatherLocation")||"null"
+        const location = JSON.parse(
+            localStorage.getItem("sinaWeatherLocation") || "null"
         );
 
-        if(
+        if (
             location &&
             location.name &&
             valid(location.latitude) &&
             valid(location.longitude)
         ) {
-            currentLocation=location;
+            currentLocation = location;
         }
-    } catch(error) {
-        console.warn("Location could not be restored",error);
+    } catch (error) {
+        console.warn("Location could not be restored", error);
     }
 
     try {
-        const saved=JSON.parse(
-            localStorage.getItem("sinaWeatherAlerts")||"{}"
+        const saved = JSON.parse(
+            localStorage.getItem("sinaWeatherAlerts") || "{}"
         );
 
-        alertSettings={
+        alertSettings = {
             ...alertSettings,
             ...saved
         };
-    } catch(error) {
+    } catch (error) {
         console.warn(error);
     }
 
-    const map={
-        rain:"alertRain",
-        heavyRain:"alertHeavyRain",
-        snow:"alertSnow",
-        hail:"alertHail",
-        storm:"alertStorm",
-        wind:"alertWind"
+    const map = {
+        rain: "alertRain",
+        heavyRain: "alertHeavyRain",
+        snow: "alertSnow",
+        hail: "alertHail",
+        storm: "alertStorm",
+        wind: "alertWind"
     };
 
-    Object.entries(map).forEach(([key,id])=>{
-        $(id).checked=!!alertSettings[key];
+    Object.entries(map).forEach(([key, id]) => {
+        $(id).checked = !!alertSettings[key];
     });
 
-    $("alertRainThreshold").value=alertSettings.rainThreshold;
-    $("alertWindThreshold").value=alertSettings.windThreshold;
+    $("alertRainThreshold").value = alertSettings.rainThreshold;
+    $("alertWindThreshold").value = alertSettings.windThreshold;
 
-    $("espAddress").value=espAddress;
+    $("espAddress").value = espAddress;
+    updateSnowUI();
 }
 
 /* =========================================================
@@ -4341,17 +4707,17 @@ function startTimers() {
     clearInterval(airTimer);
     clearInterval(stationTimer);
 
-    forecastTimer=setInterval(
+    forecastTimer = setInterval(
         loadWeather,
         CONFIG.weatherRefresh
     );
 
-    airTimer=setInterval(
+    airTimer = setInterval(
         loadAtmosphere,
         CONFIG.airRefresh
     );
 
-    stationTimer=setInterval(
+    stationTimer = setInterval(
         fetchStation,
         CONFIG.stationRefresh
     );
@@ -4373,7 +4739,7 @@ async function startApp() {
 
     requestAnimationFrame(animate);
 
-    window.addEventListener("resize",()=>{
+    window.addEventListener("resize", () => {
         resizeCanvas();
         renderAQChartIfReady();
         drawStationChart();
@@ -4381,7 +4747,7 @@ async function startApp() {
 
     await loadWeather();
 
-    if(espAddress) {
+    if (espAddress) {
         fetchStation();
     }
 
@@ -4391,7 +4757,7 @@ async function startApp() {
 }
 
 function renderAQChartIfReady() {
-    if(currentAirData) renderAQChart(currentAirData);
+    if (currentAirData) renderAQChart(currentAirData);
 }
 
 document.addEventListener(
