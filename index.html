@@ -12,26 +12,27 @@
 
 <style>
 /* =========================================================
-   SINA WEATHER — ULTRA-GLASSY METEOROLOGICAL SUITE
-   Preserves all original layout structure, IDs, and themes
-   while upgrading glass depth, specular rims, & controls.
+   SINA WEATHER — CRYSTAL FROSTED GLASS EDITION
    ========================================================= */
 
 :root {
     --bg: #07111f;
-    --panel: rgba(18, 39, 64, .62);
-    --panel-light: rgba(255, 255, 255, .085);
-    --border: rgba(255, 255, 255, .16);
-    --border-bright: rgba(130, 232, 255, .36);
+    --panel: rgba(15, 33, 56, .54);
+    --panel-light: rgba(255, 255, 255, .09);
+    --border: rgba(255, 255, 255, .17);
+    --border-specular: rgba(145, 236, 255, .42);
     --text: #f6faff;
-    --muted: #9eb2c9;
+    --muted: #9eb3ca;
     --cyan: #5de1e8;
     --blue: #58b9ff;
     --green: #72d6b0;
     --gold: #ffc978;
     --red: #ff7b86;
     --radius: 24px;
-    --shadow: 0 24px 70px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(255, 255, 255, .18);
+    --shadow:
+        0 24px 60px rgba(0, 0, 0, .38),
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        inset 0 0 24px rgba(255, 255, 255, .03);
 }
 
 * {
@@ -83,9 +84,9 @@ select:focus-visible {
     z-index: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at 12% 18%, rgba(93, 225, 232, .15), transparent 40%),
-        radial-gradient(circle at 88% 78%, rgba(88, 185, 255, .12), transparent 42%),
-        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, .04), transparent 55%);
+        radial-gradient(circle at 12% 18%, rgba(93, 225, 232, .14), transparent 40%),
+        radial-gradient(circle at 88% 78%, rgba(88, 185, 255, .11), transparent 42%),
+        radial-gradient(circle at 50% 8%, rgba(255, 255, 255, .05), transparent 55%);
 }
 
 .app-shell {
@@ -94,20 +95,41 @@ select:focus-visible {
     max-width: 1450px;
     margin: auto;
     padding: 0 38px 54px;
+    transition: opacity .45s ease, transform .45s ease;
 }
 
-/* Layered Frosted Glass Card with Specular Top Highlight */
+/* Pure Landscape Mode (hides main content while keeping floating restore button visible) */
+body.pure-landscape .main-nav,
+body.pure-landscape main,
+body.pure-landscape .app-footer {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(18px);
+}
+
+body.pure-landscape .topbar {
+    background: rgba(8, 20, 36, .42);
+    backdrop-filter: blur(18px);
+    border-radius: 0 0 22px 22px;
+    padding: 0 18px;
+}
+
+.main-nav, main, .app-footer {
+    transition: opacity .4s ease, transform .4s ease;
+}
+
+/* Multi-layered Frosted Crystal Glass */
 .glass {
     position: relative;
     overflow: hidden;
     background:
-        linear-gradient(155deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .018) 45%, rgba(93, 225, 232, .03)),
+        linear-gradient(155deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02) 48%, rgba(93, 225, 232, .035)),
         var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(28px) saturate(155%);
-    -webkit-backdrop-filter: blur(28px) saturate(155%);
+    backdrop-filter: blur(28px) saturate(165%);
+    -webkit-backdrop-filter: blur(28px) saturate(165%);
     transition: border-color .3s ease, transform .3s ease, background .3s ease, box-shadow .3s ease;
 }
 
@@ -116,13 +138,16 @@ select:focus-visible {
     position: absolute;
     inset: 0 0 auto 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .36), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent);
     pointer-events: none;
 }
 
 .glass:hover {
-    border-color: var(--border-bright);
-    box-shadow: 0 28px 78px rgba(0, 0, 0, .4), 0 0 28px rgba(93, 225, 232, .08);
+    border-color: var(--border-specular);
+    box-shadow:
+        0 28px 72px rgba(0, 0, 0, .44),
+        inset 0 1px 0 rgba(255, 255, 255, .32),
+        0 0 26px rgba(93, 225, 232, .11);
 }
 
 .topbar {
@@ -132,6 +157,7 @@ select:focus-visible {
     justify-content: space-between;
     gap: 15px;
     border-bottom: 1px solid var(--border);
+    transition: background .35s ease, padding .35s ease;
 }
 
 .brand {
@@ -149,7 +175,7 @@ select:focus-visible {
     height: 45px;
     border-radius: 15px;
     background: linear-gradient(135deg, #58b9ff, #5de1e8);
-    box-shadow: 0 0 25px rgba(88, 185, 255, .32), inset 0 1px 1px rgba(255, 255, 255, .65);
+    box-shadow: 0 0 25px rgba(88, 185, 255, .34), inset 0 1px 1px rgba(255, 255, 255, .7);
     font-size: 24px;
 }
 
@@ -167,6 +193,12 @@ select:focus-visible {
     letter-spacing: 3px;
 }
 
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .header-status {
     display: flex;
     align-items: center;
@@ -175,9 +207,10 @@ select:focus-visible {
     font-size: 11px;
     padding: 9px 14px;
     border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, .1);
-    background: rgba(255, 255, 255, .055);
-    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, .13);
+    background: rgba(255, 255, 255, .065);
+    backdrop-filter: blur(18px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15);
 }
 
 .status-dot {
@@ -200,15 +233,43 @@ select:focus-visible {
     border-radius: 14px;
     color: white;
     background: rgba(255, 255, 255, .08);
-    backdrop-filter: blur(12px);
-    font-size: 24px;
+    backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+    font-size: 22px;
     transition: .3s;
 }
 
 .icon-button:hover {
-    transform: rotate(180deg);
     background: rgba(88, 185, 255, .24);
     border-color: var(--cyan);
+}
+
+#weatherRefresh:hover {
+    transform: rotate(180deg);
+}
+
+.landscape-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 14px;
+    height: 43px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+    font-size: 11px;
+    font-weight: 700;
+    transition: .3s;
+}
+
+.landscape-toggle:hover,
+body.pure-landscape .landscape-toggle {
+    background: rgba(93, 225, 232, .22);
+    border-color: var(--cyan);
+    color: white;
 }
 
 /* Navigation */
@@ -221,9 +282,9 @@ select:focus-visible {
     max-width: 100%;
     border: 1px solid var(--border);
     border-radius: 18px;
-    background: rgba(6, 19, 36, .52);
-    backdrop-filter: blur(22px) saturate(140%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12);
+    background: rgba(7, 20, 38, .48);
+    backdrop-filter: blur(26px) saturate(160%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18), 0 12px 32px rgba(0, 0, 0, .25);
 }
 
 .nav-item {
@@ -240,9 +301,9 @@ select:focus-visible {
 .nav-item:hover,
 .nav-item.active {
     color: white;
-    border-color: rgba(93, 225, 232, .38);
-    background: linear-gradient(120deg, rgba(88, 185, 255, .24), rgba(93, 225, 232, .12));
-    box-shadow: 0 6px 20px rgba(88, 185, 255, .15);
+    border-color: rgba(93, 225, 232, .42);
+    background: linear-gradient(120deg, rgba(88, 185, 255, .26), rgba(93, 225, 232, .12));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 6px 20px rgba(88, 185, 255, .16);
 }
 
 .page {
@@ -280,7 +341,7 @@ select:focus-visible {
 .location-title h1 {
     font-size: clamp(30px, 4vw, 45px);
     letter-spacing: -1.7px;
-    text-shadow: 0 6px 24px rgba(0, 0, 0, .3);
+    text-shadow: 0 6px 24px rgba(0, 0, 0, .35);
 }
 
 .location-title p {
@@ -302,14 +363,15 @@ select:focus-visible {
     min-height: 52px;
     border: 1px solid var(--border);
     border-radius: 15px;
-    background: rgba(255, 255, 255, .065);
-    backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, .075);
+    backdrop-filter: blur(22px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
     transition: border-color .25s ease, box-shadow .25s ease;
 }
 
 .search-box:focus-within {
     border-color: var(--cyan);
-    box-shadow: 0 0 0 3px rgba(93, 225, 232, .12), 0 10px 28px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 0 3px rgba(93, 225, 232, .12), 0 10px 28px rgba(0, 0, 0, .25);
 }
 
 .search-box span {
@@ -328,7 +390,7 @@ select:focus-visible {
 }
 
 .search-box input::placeholder {
-    color: #879bb3;
+    color: #8ba0b8;
 }
 
 .search-box button,
@@ -339,7 +401,7 @@ select:focus-visible {
     border-radius: 10px;
     color: #07111f;
     background: linear-gradient(120deg, #65dce8, #65baff);
-    box-shadow: 0 6px 18px rgba(93, 225, 232, .22);
+    box-shadow: 0 6px 18px rgba(93, 225, 232, .25), inset 0 1px 0 rgba(255, 255, 255, .6);
     font-size: 11px;
     font-weight: 900;
     transition: .25s ease;
@@ -350,16 +412,17 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 11px;
     color: white;
-    background: rgba(255, 255, 255, .07);
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, .08);
+    backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16);
     font-size: 11px;
     font-weight: 700;
     transition: .25s ease;
 }
 
 .secondary-button:hover {
-    background: rgba(255, 255, 255, .15);
-    border-color: rgba(93, 225, 232, .35);
+    background: rgba(255, 255, 255, .16);
+    border-color: rgba(93, 225, 232, .4);
 }
 
 .search-box button:hover,
@@ -381,9 +444,9 @@ select:focus-visible {
     border: 1px solid var(--border);
     border-radius: 13px;
     overflow: hidden;
-    background: rgba(14, 31, 52, .92);
-    backdrop-filter: blur(22px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+    background: rgba(13, 29, 49, .92);
+    backdrop-filter: blur(26px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .48);
 }
 
 .location-result {
@@ -420,9 +483,9 @@ select:focus-visible {
     min-height: 295px;
     padding: 40px;
     background:
-        radial-gradient(circle at 85% 15%, rgba(93, 225, 232, .2), transparent 38%),
-        radial-gradient(circle at 15% 85%, rgba(88, 185, 255, .14), transparent 42%),
-        linear-gradient(125deg, rgba(47, 114, 168, .38), rgba(16, 40, 65, .7));
+        radial-gradient(circle at 85% 15%, rgba(93, 225, 232, .22), transparent 38%),
+        radial-gradient(circle at 12% 85%, rgba(88, 185, 255, .15), transparent 42%),
+        linear-gradient(125deg, rgba(46, 112, 166, .34), rgba(15, 36, 59, .62));
     border-radius: 30px;
 }
 
@@ -431,9 +494,9 @@ select:focus-visible {
     position: absolute;
     width: 320px;
     height: 320px;
-    right: 4%;
+    right: 5%;
     top: -200px;
-    background: rgba(93, 225, 232, .22);
+    background: rgba(93, 225, 232, .24);
     filter: blur(75px);
     border-radius: 50%;
     pointer-events: none;
@@ -459,7 +522,7 @@ select:focus-visible {
     line-height: 1;
     font-weight: 500;
     letter-spacing: -8px;
-    text-shadow: 0 12px 32px rgba(0, 0, 0, .28);
+    text-shadow: 0 12px 32px rgba(0, 0, 0, .3);
 }
 
 .weather-icon {
@@ -487,9 +550,10 @@ select:focus-visible {
     display: inline-block;
     padding: 6px 13px;
     margin-top: 13px;
-    border: 1px solid rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .2);
     border-radius: 25px;
-    background: rgba(255, 255, 255, .06);
+    background: rgba(255, 255, 255, .07);
+    backdrop-filter: blur(12px);
     font-size: 10px;
     color: var(--muted);
 }
@@ -503,17 +567,18 @@ select:focus-visible {
 .hero-info {
     padding: 16px;
     min-width: 115px;
-    border: 1px solid rgba(255, 255, 255, .15);
+    border: 1px solid rgba(255, 255, 255, .18);
     border-radius: 16px;
-    background: linear-gradient(160deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .03));
-    backdrop-filter: blur(16px);
+    background: linear-gradient(160deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .03));
+    backdrop-filter: blur(20px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .22);
     transition: .3s;
 }
 
 .hero-info:hover {
     transform: translateY(-4px);
-    background: rgba(255, 255, 255, .14);
-    border-color: rgba(93, 225, 232, .35);
+    background: rgba(255, 255, 255, .15);
+    border-color: var(--border-specular);
 }
 
 .hero-info span {
@@ -525,68 +590,6 @@ select:focus-visible {
 
 .hero-info strong {
     font-size: 17px;
-}
-
-/* Interactive Atmosphere & Snow Lab Strip */
-.atmosphere-lab {
-    margin-top: 16px;
-    padding: 18px 22px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-}
-
-.lab-controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 18px;
-}
-
-.lab-slider-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 155px;
-}
-
-.lab-slider-group label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--muted);
-}
-
-.lab-slider-group label em {
-    font-style: normal;
-    color: var(--cyan);
-    font-weight: 700;
-}
-
-.lab-slider-group input[type="range"] {
-    accent-color: var(--cyan);
-    cursor: pointer;
-}
-
-.lab-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.lab-pill {
-    padding: 6px 11px;
-    border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, .14);
-    background: rgba(255, 255, 255, .05);
-    font-size: 10px;
-    color: var(--muted);
-}
-
-.lab-pill strong {
-    color: var(--text);
 }
 
 /* Sections */
@@ -639,7 +642,7 @@ select:focus-visible {
     justify-content: center;
     padding: 20px;
     overflow: hidden;
-    background: linear-gradient(155deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02));
+    background: linear-gradient(155deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .02));
 }
 
 .stat-card:hover {
@@ -678,12 +681,12 @@ select:focus-visible {
     align-items: center;
     gap: 14px;
     padding: 11px;
-    border-right: 1px solid rgba(255, 255, 255, .07);
+    border-right: 1px solid rgba(255, 255, 255, .08);
     transition: background .25s ease, transform .25s ease;
 }
 
 .hour-item:hover {
-    background: rgba(88, 185, 255, .12);
+    background: rgba(88, 185, 255, .14);
     border-radius: 12px;
     transform: translateY(-2px);
 }
@@ -717,7 +720,7 @@ select:focus-visible {
     grid-template-columns: 1fr 45px 1.4fr 65px 85px 75px;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, .07);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
     padding: 8px;
     transition: background .25s ease;
 }
@@ -727,7 +730,7 @@ select:focus-visible {
 }
 
 .week-item:hover {
-    background: rgba(88, 185, 255, .09);
+    background: rgba(88, 185, 255, .1);
     border-radius: 12px;
 }
 
@@ -861,7 +864,7 @@ select:focus-visible {
     margin-bottom: 9px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: rgba(255, 255, 255, .05);
+    background: rgba(255, 255, 255, .055);
 }
 
 .weather-alert:last-child {
@@ -1023,7 +1026,7 @@ select:focus-visible {
     padding: 22px;
     border-radius: 18px;
     background: linear-gradient(135deg, rgba(88, 185, 255, .16), rgba(93, 225, 232, .06));
-    border: 1px solid rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .14);
 }
 
 .mountain-main > span {
@@ -1059,7 +1062,7 @@ select:focus-visible {
     gap: 9px;
     padding: 15px;
     border-radius: 13px;
-    background: rgba(255, 255, 255, .05);
+    background: rgba(255, 255, 255, .055);
     border: 1px solid var(--border);
 }
 
@@ -1213,7 +1216,7 @@ select:focus-visible {
     min-width: 0;
     padding: 13px;
     color: white;
-    background: rgba(255, 255, 255, .06);
+    background: rgba(255, 255, 255, .07);
     border: 1px solid var(--border);
     border-radius: 12px;
 }
@@ -1254,6 +1257,41 @@ select:focus-visible {
     background: #102238;
 }
 
+.simulator-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    background: rgba(255, 255, 255, .04);
+}
+
+.sim-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sim-control label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.sim-control label em {
+    font-style: normal;
+    color: var(--cyan);
+    font-weight: 800;
+}
+
+.sim-control input[type="range"] {
+    accent-color: var(--cyan);
+    cursor: pointer;
+}
+
 .simulator-actions {
     display: flex;
     flex-wrap: wrap;
@@ -1289,7 +1327,7 @@ select:focus-visible {
 
 .app-footer span {
     display: block;
-    color: #7b90a8;
+    color: #7c92aa;
     font-size: 9px;
     margin-top: 8px;
 }
@@ -1331,7 +1369,7 @@ body.weather-hail {
 
 body.weather-snow,
 body.weather-sleet {
-    background: linear-gradient(145deg, #10243b, #2b506e, #0b1929);
+    background: linear-gradient(145deg, #11243c, #2d5373, #0b1929);
 }
 
 body.weather-fog {
@@ -1386,6 +1424,10 @@ body.weather-fog {
 
     .header-status {
         font-size: 9px;
+    }
+
+    .landscape-toggle span {
+        display: none;
     }
 
     .main-nav {
@@ -1516,7 +1558,12 @@ body.weather-fog {
         <span id="weatherStatus">Connecting...</span>
     </div>
 
-    <button id="weatherRefresh" class="icon-button" title="Refresh">↻</button>
+    <div class="topbar-actions">
+        <button id="toggleLandscapeView" class="landscape-toggle" type="button" title="Toggle Pure Landscape View">
+            🏔️ <span>Landscape View</span>
+        </button>
+        <button id="weatherRefresh" class="icon-button" title="Refresh">↻</button>
+    </div>
 </header>
 
 <nav class="main-nav">
@@ -1591,36 +1638,8 @@ body.weather-fog {
     </div>
 </section>
 
-<!-- Interactive Scene & Snow Reaction Telemetry Bar -->
-<section class="atmosphere-lab glass" aria-label="Atmospheric scene reactions">
-    <div class="lab-controls">
-        <div class="lab-slider-group">
-            <label for="snowCoverSlider">
-                <span>❄️ Snow Accumulation</span>
-                <em id="snowCoverValue">0%</em>
-            </label>
-            <input id="snowCoverSlider" type="range" min="0" max="100" value="0">
-        </div>
-
-        <div class="lab-slider-group">
-            <label for="windBoostSlider">
-                <span>💨 Scene Wind Speed</span>
-                <em id="windBoostValue">Live</em>
-            </label>
-            <input id="windBoostSlider" type="range" min="0" max="90" value="0">
-        </div>
-
-        <button id="clearSnowButton" class="secondary-button" type="button">Reset Snow</button>
-    </div>
-
-    <div class="lab-badges">
-        <span class="lab-pill">Dew Point: <strong id="dewPointReadout">--°C</strong></span>
-        <span class="lab-pill">Rain Chance: <strong id="precipProbReadout">--%</strong></span>
-        <span class="lab-pill">Ground Cover: <strong id="groundSnowReadout">Bare</strong></span>
-    </div>
-</section>
-
 <!-- Alerts -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1637,6 +1656,7 @@ body.weather-fog {
 </section>
 
 <!-- Atmospheric details -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1656,12 +1676,15 @@ body.weather-fog {
         <div class="stat-card glass"><span class="stat-icon">👁️</span><span class="stat-label">Visibility</span><strong id="visibility">--</strong></div>
         <div class="stat-card glass"><span class="stat-icon">☀️</span><span class="stat-label">UV Index</span><strong id="uvIndex">--</strong></div>
         <div class="stat-card glass"><span class="stat-icon">❄️</span><span class="stat-label">Snowfall</span><strong id="currentSnow">--</strong></div>
-        <div class="stat-card glass"><span class="stat-icon">💦</span><span class="stat-label">Dew Point</span><strong id="dewPointDetail">--</strong></div>
-        <div class="stat-card glass"><span class="stat-icon">☔</span><span class="stat-label">Precip Probability</span><strong id="precipProbDetail">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">💦</span><span class="stat-label">Dew Point</span><strong id="dewPoint">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">☔</span><span class="stat-label">Precip Chance</span><strong id="precipProb">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">🔆</span><span class="stat-label">Solar Radiation</span><strong id="solarRadiation">--</strong></div>
+        <div class="stat-card glass"><span class="stat-icon">🫧</span><span class="stat-label">Air Density</span><strong id="airDensity">--</strong></div>
     </div>
 </section>
 
 <!-- Hourly -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1675,6 +1698,7 @@ body.weather-fog {
 </section>
 
 <!-- 14 days -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1690,6 +1714,7 @@ body.weather-fog {
 </section>
 
 <!-- Daily environment -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1709,6 +1734,7 @@ body.weather-fog {
 </section>
 
 <!-- Sun -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1724,6 +1750,7 @@ body.weather-fog {
 </section>
 
 <!-- AIR QUALITY -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1773,6 +1800,7 @@ body.weather-fog {
 </section>
 
 <!-- ATMOSPHERE AND EARTH -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1825,6 +1853,7 @@ body.weather-fog {
 </section>
 
 <!-- MOUNTAIN -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1875,6 +1904,7 @@ body.weather-fog {
 </section>
 
 <!-- ALERT SETTINGS -->
+
 <section class="content-section">
     <div class="section-heading">
         <div>
@@ -1995,6 +2025,36 @@ body.weather-fog {
                 <option value="fog">Fog</option>
             </select>
 
+            <div class="simulator-grid">
+                <div class="sim-control">
+                    <label for="simSnowDepth">
+                        <span>❄️ Landscape Snow Blanket</span>
+                        <em id="simSnowDepthLabel">0%</em>
+                    </label>
+                    <input id="simSnowDepth" type="range" min="0" max="100" value="0">
+                </div>
+
+                <div class="sim-control">
+                    <label for="simWindSpeed">
+                        <span>💨 Scene Wind Speed</span>
+                        <em id="simWindSpeedLabel">Live</em>
+                    </label>
+                    <input id="simWindSpeed" type="range" min="0" max="100" value="0">
+                </div>
+
+                <div class="sim-control">
+                    <label for="simDayCycle">
+                        <span>🌓 Sky Day / Night Cycle</span>
+                        <em id="simDayCycleLabel">Live</em>
+                    </label>
+                    <select id="simDayCycle" style="padding:8px;border-radius:9px;background:#102238;color:white;border:1px solid var(--border);font-size:11px;">
+                        <option value="auto">Automatic (Live City)</option>
+                        <option value="day">Daytime Sunbeams</option>
+                        <option value="night">Starlit Night & Cabin Glow</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="simulator-actions">
                 <button id="applyBalconyWeather" class="primary-button">Apply Weather</button>
                 <button id="resetBalconyWeather" class="secondary-button">Automatic Mode</button>
@@ -2052,6 +2112,7 @@ let currentMountainData = null;
 let currentMode = "clear";
 let manualWeatherOverride = null;
 let manualWindOverride = null;
+let manualDayOverride = null;
 
 let radarMap = null;
 let radarLayer = null;
@@ -2108,14 +2169,22 @@ const safeHTML = value =>
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 
-function computeDewPoint(tempC, humidity) {
-    if (!valid(tempC) || !valid(humidity)) return null;
+function calculateDewPoint(tempC, rh) {
+    if (!valid(tempC) || !valid(rh)) return null;
     const t = Number(tempC);
-    const rh = clamp(Number(humidity), 1, 100);
+    const h = clamp(Number(rh), 1, 100);
     const a = 17.27;
     const b = 237.7;
-    const alpha = ((a * t) / (b + t)) + Math.log(rh / 100);
+    const alpha = ((a * t) / (b + t)) + Math.log(h / 100);
     return (b * alpha) / (a - alpha);
+}
+
+function calculateAirDensity(pressureHpa, tempC) {
+    if (!valid(pressureHpa) || !valid(tempC)) return null;
+    const pPa = Number(pressureHpa) * 100;
+    const tK = Number(tempC) + 273.15;
+    const R = 287.058;
+    return pPa / (R * tK);
 }
 
 async function requestJSON(url, timeout = CONFIG.requestTimeout) {
@@ -2230,6 +2299,7 @@ async function getWeather(lat, lon) {
         hourly: [
             "temperature_2m",
             "relative_humidity_2m",
+            "dew_point_2m",
             "precipitation_probability",
             "precipitation",
             "rain",
@@ -2239,6 +2309,7 @@ async function getWeather(lat, lon) {
             "wind_gusts_10m",
             "visibility",
             "uv_index",
+            "shortwave_radiation",
             "soil_moisture_0_to_1cm",
             "soil_temperature_0cm"
         ].join(","),
@@ -2328,12 +2399,6 @@ async function loadWeather() {
 
         currentWeatherData = data;
 
-        // Synchronize atmospheric canvas temperature & wind with live weather
-        sceneTemperature = Number(data.current?.temperature_2m) || 20;
-        if (manualWindOverride === null) {
-            sceneWind = Number(data.current?.wind_speed_10m) || 0;
-        }
-
         renderCurrentWeather(data);
         renderHourly(data);
         renderDaily(data);
@@ -2346,9 +2411,8 @@ async function loadWeather() {
             setWeatherTheme(info.mode);
         }
 
-        // If snow or sleet is actively falling in live weather, boost snow accumulation automatically
         if (["snow", "sleet"].includes(info.mode) || Number(data.current.snowfall) > 0) {
-            setSnowAccumulation(Math.max(snowAccumulation, 0.45), true);
+            setSnowAccumulation(Math.max(snowAccumulation, 0.55));
         }
 
         checkAlerts(data);
@@ -2377,6 +2441,15 @@ async function loadWeather() {
 function renderCurrentWeather(data) {
     const c = data.current;
     const info = weatherInfo(c.weather_code);
+
+    // Synchronize live weather physics with canvas scene
+    sceneTemperature = Number(c.temperature_2m) || 20;
+    if (manualWindOverride === null) {
+        sceneWind = Number(c.wind_speed_10m) || 0;
+    }
+    if (manualDayOverride === null) {
+        sceneIsDay = Boolean(c.is_day);
+    }
 
     text("locationName", currentLocation.name);
 
@@ -2407,7 +2480,15 @@ function renderCurrentWeather(data) {
 
     const visibility = data.hourly.visibility?.[index];
     const uv = data.hourly.uv_index?.[index];
+    const dewApi = data.hourly.dew_point_2m?.[index];
     const precipProb = data.hourly.precipitation_probability?.[index];
+    const solarRad = data.hourly.shortwave_radiation?.[index];
+
+    const dewValue = valid(dewApi)
+        ? Number(dewApi)
+        : calculateDewPoint(c.temperature_2m, c.relative_humidity_2m);
+
+    const densityValue = calculateAirDensity(c.pressure_msl, c.temperature_2m);
 
     text(
         "visibility",
@@ -2417,16 +2498,12 @@ function renderCurrentWeather(data) {
     );
 
     text("uvIndex", num(uv));
+    text("dewPoint", valid(dewValue) ? `${dewValue.toFixed(1)}°C` : "--");
+    text("precipProb", valid(precipProb) ? `${Math.round(Number(precipProb))}%` : "--");
+    text("solarRadiation", valid(solarRad) ? `${Math.round(Number(solarRad))} W/m²` : "--");
+    text("airDensity", valid(densityValue) ? `${densityValue.toFixed(3)} kg/m³` : "--");
+
     text("dayNight", c.is_day ? "Daytime ☀️" : "Nighttime 🌙");
-
-    const dew = computeDewPoint(c.temperature_2m, c.relative_humidity_2m);
-    const dewText = valid(dew) ? `${dew.toFixed(1)}°C` : "--";
-    const probText = valid(precipProb) ? `${Math.round(Number(precipProb))}%` : "--";
-
-    text("dewPointReadout", dewText);
-    text("dewPointDetail", dewText);
-    text("precipProbReadout", probText);
-    text("precipProbDetail", probText);
 }
 
 /* =========================================================
@@ -3630,20 +3707,20 @@ function drawStationChart() {
 }
 
 /* =========================================================
-   24. REALISTIC WEATHER SCENE & SNOW ACCUMULATION ENGINE
+   24. CANADIAN REALISTIC WEATHER SCENE & SNOW ENGINE
    ========================================================= */
 
 const SCENES = {
-    clear: { clouds: 3, rain: 0, snow: 0, wind: .35, snowRate: 0 },
-    cloudy: { clouds: 8, rain: 0, snow: 0, wind: .7, snowRate: 0 },
-    wind: { clouds: 9, rain: 0, snow: 0, wind: 2.2, snowRate: 0 },
-    rain: { clouds: 12, rain: 140, snow: 0, wind: 1.2, snowRate: -.015 },
-    "heavy-rain": { clouds: 15, rain: 280, snow: 0, wind: 2.5, snowRate: -.03 },
-    storm: { clouds: 18, rain: 320, snow: 0, wind: 3.4, snowRate: -.02 },
-    hail: { clouds: 18, rain: 110, snow: 130, wind: 3.1, snowRate: .03 },
-    snow: { clouds: 13, rain: 0, snow: 220, wind: 1.35, snowRate: .085 },
-    sleet: { clouds: 14, rain: 95, snow: 115, wind: 1.8, snowRate: .045 },
-    fog: { clouds: 9, rain: 0, snow: 0, wind: .35, snowRate: 0 }
+    clear: { clouds: 4, rain: 0, snow: 0, wind: .35, snowRate: -.018 },
+    cloudy: { clouds: 9, rain: 0, snow: 0, wind: .7, snowRate: -.006 },
+    wind: { clouds: 10, rain: 0, snow: 0, wind: 2.3, snowRate: -.008 },
+    rain: { clouds: 13, rain: 150, snow: 0, wind: 1.25, snowRate: -.035 },
+    "heavy-rain": { clouds: 16, rain: 300, snow: 0, wind: 2.6, snowRate: -.055 },
+    storm: { clouds: 19, rain: 340, snow: 0, wind: 3.5, snowRate: -.04 },
+    hail: { clouds: 19, rain: 120, snow: 140, wind: 3.2, snowRate: .035 },
+    snow: { clouds: 14, rain: 0, snow: 260, wind: 1.4, snowRate: .085 },
+    sleet: { clouds: 15, rain: 105, snow: 125, wind: 1.85, snowRate: .045 },
+    fog: { clouds: 9, rain: 0, snow: 0, wind: .32, snowRate: 0 }
 };
 
 let canvas = $("weatherEffects");
@@ -3655,45 +3732,32 @@ let H = window.innerHeight;
 let clouds = [];
 let particles = [];
 let splashes = [];
+let fallingLeaves = [];
+let smokePuffs = [];
+let stars = [];
+let walkers = [];
 let birds = [];
+
 let lightningTimer = 0;
 let lightningFlash = 0;
+let activeBolt = null;
+
 let atmosphereMode = "clear";
 let sceneWind = 0;
 let sceneTemperature = 20;
-let snowAccumulation = 0; // 0.0 (bare) -> 1.0 (deep white blanket across landscape)
+let sceneIsDay = true;
+let snowAccumulation = 0; // 0 = bare ground, 1 = full white Canadian winter wonderland
 let lastFrame = 0;
-
-function updateSnowUI() {
-    const pct = Math.round(clamp(snowAccumulation, 0, 1) * 100);
-    text("snowCoverValue", `${pct}%`);
-    const slider = $("snowCoverSlider");
-    if (slider && document.activeElement !== slider) {
-        slider.value = String(pct);
-    }
-
-    let label = "Bare";
-    if (pct >= 75) label = "Deep Snow Blanket";
-    else if (pct >= 40) label = "Heavy Snow Cover";
-    else if (pct >= 12) label = "Light Frost & Snow";
-    else if (pct > 0) label = "Dusting";
-
-    text("groundSnowReadout", label);
-}
 
 function setSnowAccumulation(value, syncSlider = true) {
     snowAccumulation = clamp(Number(value) || 0, 0, 1);
+    const pct = Math.round(snowAccumulation * 100);
+    text("simSnowDepthLabel", `${pct}%`);
     if (syncSlider) {
-        updateSnowUI();
-    } else {
-        const pct = Math.round(snowAccumulation * 100);
-        text("snowCoverValue", `${pct}%`);
-        let label = "Bare";
-        if (pct >= 75) label = "Deep Snow Blanket";
-        else if (pct >= 40) label = "Heavy Snow Cover";
-        else if (pct >= 12) label = "Light Frost & Snow";
-        else if (pct > 0) label = "Dusting";
-        text("groundSnowReadout", label);
+        const slider = $("simSnowDepth");
+        if (slider && document.activeElement !== slider) {
+            slider.value = String(pct);
+        }
     }
 }
 
@@ -3724,16 +3788,29 @@ function createScene() {
     clouds = [];
     particles = [];
     splashes = [];
+    fallingLeaves = [];
+    smokePuffs = [];
+    stars = [];
+    walkers = [];
     birds = [];
+
+    for (let i = 0; i < 65; i++) {
+        stars.push({
+            x: Math.random() * W,
+            y: Math.random() * H * .55,
+            r: .6 + Math.random() * 1.6,
+            phase: Math.random() * Math.PI * 2
+        });
+    }
 
     for (let i = 0; i < config.clouds; i++) {
         clouds.push({
             x: Math.random() * W,
-            y: Math.random() * H * .42,
-            width: 130 + Math.random() * 230,
-            height: 38 + Math.random() * 58,
-            speed: .025 + Math.random() * .09,
-            opacity: .14 + Math.random() * .18
+            y: 25 + Math.random() * H * .36,
+            width: 150 + Math.random() * 250,
+            height: 40 + Math.random() * 60,
+            speed: .022 + Math.random() * .075,
+            opacity: .16 + Math.random() * .2
         });
     }
 
@@ -3741,38 +3818,108 @@ function createScene() {
 
     for (let i = 0; i < count; i++) {
         const snow = i >= config.rain;
+        const depth = .45 + Math.random() * .85;
 
         particles.push({
             x: Math.random() * W,
             y: Math.random() * H,
+            depth,
             speed: snow
-                ? .55 + Math.random() * 1.45
-                : 6.5 + Math.random() * 9.5,
+                ? (.48 + Math.random() * 1.35) * depth
+                : (6.5 + Math.random() * 9.5) * depth,
             size: snow
-                ? 1.2 + Math.random() * 2.8
-                : 1.1,
+                ? (1.1 + Math.random() * 2.6) * depth
+                : 1.0 * depth,
             length: snow
                 ? 3 + Math.random() * 3
-                : 10 + Math.random() * 18,
+                : (10 + Math.random() * 17) * depth,
             snow,
-            sway: Math.random() * 7
+            sway: Math.random() * Math.PI * 2
         });
     }
 
-    for (let i = 0; i < 7; i++) {
+    // Autumn/wind leaves drifting from Maple & Plane trees
+    const leafCount = atmosphereMode === "wind" ? 26 : (["clear", "cloudy"].includes(atmosphereMode) ? 9 : 4);
+    for (let i = 0; i < leafCount; i++) {
+        fallingLeaves.push({
+            x: Math.random() * W,
+            y: H * (.55 + Math.random() * .35),
+            vx: .4 + Math.random() * .9,
+            vy: .25 + Math.random() * .55,
+            rot: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - .5) * .06,
+            size: 3 + Math.random() * 3.5,
+            color: ["#d96b27", "#e39b32", "#b83b2b", "#c97a2e"][i % 4]
+        });
+    }
+
+    // Articulated Canadian village/park walkers along the foreground path
+    const walkerConfigs = [
+        { x: W * .34, dir: 1, speed: .026, coat: "#2d4c6b", scarf: "#e05a47", scale: .92 },
+        { x: W * .61, dir: -1, speed: .022, coat: "#7c3438", scarf: "#f2c14e", scale: .88 },
+        { x: W * .48, dir: 1, speed: .019, coat: "#284b42", scarf: "#72d6b0", scale: .84 }
+    ];
+    walkerConfigs.forEach((wc, idx) => {
+        walkers.push({
+            ...wc,
+            stride: idx * 2.1
+        });
+    });
+
+    for (let i = 0; i < 6; i++) {
         birds.push({
             x: Math.random() * W,
-            y: 40 + Math.random() * H * .26,
-            speed: .15 + Math.random() * .25,
-            size: 4 + Math.random() * 5,
+            y: 45 + Math.random() * H * .24,
+            speed: .14 + Math.random() * .22,
+            size: 4 + Math.random() * 4.5,
             phase: Math.random() * Math.PI * 2
         });
     }
 }
 
 /* =========================================================
-   26. CLOUDS
+   26. SKY CELESTIAL GLOW, STARS & VOLUMETRIC CLOUDS
    ========================================================= */
+
+function drawSkyAtmosphere(time) {
+    const stormy = ["storm", "hail", "heavy-rain"].includes(atmosphereMode);
+
+    if (!sceneIsDay) {
+        // Twinkling stars in clear/partly cloudy night sky
+        const starVis = stormy ? 0.1 : (atmosphereMode === "cloudy" || atmosphereMode === "fog" ? 0.3 : 0.85);
+        stars.forEach(s => {
+            const twinkle = 0.45 + 0.55 * Math.sin(time * 0.0025 + s.phase);
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(235, 245, 255, ${starVis * twinkle})`;
+            ctx.fill();
+        });
+
+        // Soft silver moonlight glow
+        const mx = W * .82;
+        const my = H * .16;
+        const moonGrad = ctx.createRadialGradient(mx, my, 4, mx, my, 130);
+        moonGrad.addColorStop(0, "rgba(235, 246, 255, .38)");
+        moonGrad.addColorStop(0.35, "rgba(155, 200, 245, .12)");
+        moonGrad.addColorStop(1, "rgba(155, 200, 245, 0)");
+        ctx.fillStyle = moonGrad;
+        ctx.beginPath();
+        ctx.arc(mx, my, 130, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (!stormy && atmosphereMode !== "fog") {
+        // Warm golden-cyan solar atmospheric glow & soft crepuscular rays
+        const sx = W * .84;
+        const sy = H * .14;
+        const sunGrad = ctx.createRadialGradient(sx, sy, 8, sx, sy, 260);
+        sunGrad.addColorStop(0, "rgba(255, 244, 210, .32)");
+        sunGrad.addColorStop(0.3, "rgba(130, 215, 255, .12)");
+        sunGrad.addColorStop(1, "rgba(130, 215, 255, 0)");
+        ctx.fillStyle = sunGrad;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 260, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
 
 function drawCloud(cloud) {
     const storm = [
@@ -3789,14 +3936,14 @@ function drawCloud(cloud) {
     );
 
     if (storm) {
-        gradient.addColorStop(0, "rgba(92, 104, 126, .68)");
-        gradient.addColorStop(1, "rgba(14, 24, 38, .9)");
+        gradient.addColorStop(0, "rgba(96, 110, 134, .72)");
+        gradient.addColorStop(1, "rgba(14, 23, 38, .92)");
     } else if (atmosphereMode === "snow" || atmosphereMode === "sleet") {
-        gradient.addColorStop(0, "rgba(235, 245, 255, .48)");
-        gradient.addColorStop(1, "rgba(135, 165, 195, .22)");
+        gradient.addColorStop(0, "rgba(240, 247, 255, .52)");
+        gradient.addColorStop(1, "rgba(145, 175, 205, .24)");
     } else {
-        gradient.addColorStop(0, "rgba(230, 240, 255, .42)");
-        gradient.addColorStop(1, "rgba(110, 145, 175, .17)");
+        gradient.addColorStop(0, "rgba(238, 246, 255, .46)");
+        gradient.addColorStop(1, "rgba(115, 150, 182, .18)");
     }
 
     ctx.save();
@@ -3847,7 +3994,7 @@ function drawClouds(delta) {
 
         if (cloud.x > W + cloud.width) {
             cloud.x = -cloud.width;
-            cloud.y = Math.random() * H * .38;
+            cloud.y = 25 + Math.random() * H * .36;
         }
 
         drawCloud(cloud);
@@ -3855,183 +4002,652 @@ function drawClouds(delta) {
 }
 
 /* =========================================================
-   27. MOUNTAIN & LANDSCAPE WITH PROGRESSIVE SNOW BLANKET
+   27. GENTLE CANADIAN FOOTHILLS & SNOW-COVERED TERRAIN
+       (Natural low rolling hills—not overly tall mountains)
    ========================================================= */
 
-function drawMountains() {
-    const base = H * .74;
+function drawLandscapeTerrain() {
     const snowFactor = clamp(snowAccumulation, 0, 1);
+    const hillBase = H * .82;
 
-    const drawRange = (points, color1, color2) => {
+    // Distant gentle Canadian boreal foothills (low, wide & natural)
+    const distantHills = [
+        [0, hillBase],
+        [W * .14, hillBase - 54],
+        [W * .30, hillBase - 22],
+        [W * .48, hillBase - 68],
+        [W * .66, hillBase - 28],
+        [W * .84, hillBase - 58],
+        [W, hillBase - 30]
+    ];
+
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    distantHills.forEach(([px, py]) => ctx.lineTo(px, py));
+    ctx.lineTo(W, H);
+    ctx.closePath();
+
+    const distGrad = ctx.createLinearGradient(0, hillBase - 75, 0, H);
+    distGrad.addColorStop(0, "rgba(62, 95, 118, .44)");
+    distGrad.addColorStop(1, "rgba(16, 36, 52, .82)");
+    ctx.fillStyle = distGrad;
+    ctx.fill();
+
+    // Snow blanket across distant foothills when snowing/cold
+    if (snowFactor > 0.02) {
+        ctx.save();
         ctx.beginPath();
         ctx.moveTo(0, H);
-
-        points.forEach(p => {
-            ctx.lineTo(p[0], p[1]);
-        });
-
+        distantHills.forEach(([px, py]) => ctx.lineTo(px, py));
         ctx.lineTo(W, H);
         ctx.closePath();
+        ctx.clip();
 
-        const gradient = ctx.createLinearGradient(
-            0, H * .42, 0, H
-        );
+        const hillSnow = ctx.createLinearGradient(0, hillBase - 72, 0, hillBase + 25);
+        hillSnow.addColorStop(0, `rgba(244, 250, 255, ${clamp(snowFactor * 0.92, 0, 0.92)})`);
+        hillSnow.addColorStop(1, `rgba(195, 220, 242, ${clamp(snowFactor * 0.55, 0, 0.6)})`);
+        ctx.fillStyle = hillSnow;
+        ctx.fillRect(0, hillBase - 80, W, 120);
+        ctx.restore();
+    }
 
-        gradient.addColorStop(0, color1);
-        gradient.addColorStop(1, color2);
+    // Foreground rolling meadow & village ground
+    const groundTop = H * .89;
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    ctx.lineTo(0, groundTop);
+    ctx.quadraticCurveTo(W * .25, groundTop - 16, W * .52, groundTop - 4);
+    ctx.quadraticCurveTo(W * .78, groundTop + 10, W, groundTop - 10);
+    ctx.lineTo(W, H);
+    ctx.closePath();
 
-        ctx.fillStyle = gradient;
-        ctx.fill();
-    };
+    const groundGrad = ctx.createLinearGradient(0, groundTop - 18, 0, H);
+    groundGrad.addColorStop(0, "#1c3b36");
+    groundGrad.addColorStop(1, "#0e2226");
+    ctx.fillStyle = groundGrad;
+    ctx.fill();
 
-    const backRange = [
-        [0, base],
-        [W * .13, base - 130],
-        [W * .25, base - 35],
-        [W * .42, base - 190],
-        [W * .58, base - 55],
-        [W * .75, base - 160],
-        [W * .92, base - 55],
-        [W, base - 110]
-    ];
-
-    const frontRange = [
-        [0, H * .84],
-        [W * .2, H * .65],
-        [W * .38, H * .82],
-        [W * .62, H * .63],
-        [W * .8, H * .81],
-        [W, H * .68]
-    ];
-
-    drawRange(
-        backRange,
-        "rgba(100, 135, 160, .36)",
-        "rgba(25, 47, 65, .78)"
-    );
-
-    drawRange(
-        frontRange,
-        "rgba(75, 110, 120, .42)",
-        "rgba(20, 45, 48, .82)"
-    );
-
-    // Progressive snow coverage across mountain ridges & foreground terrain
+    // Progressive white snow blanket turning the entire ground white when snowing
     if (snowFactor > 0.01) {
-        const snowAlpha = clamp(snowFactor * 0.92, 0, 0.94);
-
-        // Snow blanket along back mountain slopes
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(0, H);
-        backRange.forEach(p => ctx.lineTo(p[0], p[1]));
+        ctx.lineTo(0, groundTop - snowFactor * 8);
+        ctx.quadraticCurveTo(
+            W * .25,
+            groundTop - 16 - snowFactor * 10,
+            W * .52,
+            groundTop - 4 - snowFactor * 8
+        );
+        ctx.quadraticCurveTo(
+            W * .78,
+            groundTop + 10 - snowFactor * 9,
+            W,
+            groundTop - 10 - snowFactor * 8
+        );
         ctx.lineTo(W, H);
         ctx.closePath();
-        ctx.clip();
 
-        const backSnowGrad = ctx.createLinearGradient(0, base - 200, 0, H);
-        backSnowGrad.addColorStop(0, `rgba(244, 250, 255, ${snowAlpha})`);
-        backSnowGrad.addColorStop(0.55, `rgba(210, 228, 245, ${snowAlpha * 0.78})`);
-        backSnowGrad.addColorStop(1, `rgba(175, 202, 228, ${snowAlpha * 0.45})`);
-        ctx.fillStyle = backSnowGrad;
-        ctx.fillRect(0, base - 210, W, 240);
-        ctx.restore();
-
-        // Snow blanket along foreground hills & valley floor
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(0, H);
-        frontRange.forEach(p => ctx.lineTo(p[0], p[1]));
-        ctx.lineTo(W, H);
-        ctx.closePath();
-        ctx.clip();
-
-        const frontSnowGrad = ctx.createLinearGradient(0, H * .62, 0, H);
-        frontSnowGrad.addColorStop(0, `rgba(250, 253, 255, ${snowAlpha})`);
-        frontSnowGrad.addColorStop(0.65, `rgba(224, 238, 250, ${snowAlpha * 0.85})`);
-        frontSnowGrad.addColorStop(1, `rgba(195, 218, 238, ${snowAlpha * 0.65})`);
-        ctx.fillStyle = frontSnowGrad;
-        ctx.fillRect(0, H * .6, W, H * .42);
-        ctx.restore();
-
-        // Ground snow drift bank at bottom of screen
-        const driftDepth = snowFactor * 34;
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(0, H);
-        for (let x = 0; x <= W + 40; x += 40) {
-            const wave = Math.sin(x * 0.012 + snowFactor * 4) * (4 + snowFactor * 6);
-            ctx.lineTo(x, H - driftDepth + wave);
-        }
-        ctx.lineTo(W, H);
-        ctx.closePath();
-        ctx.fillStyle = `rgba(244, 250, 255, ${clamp(snowFactor * 0.95, 0, 0.96)})`;
+        const whiteGround = ctx.createLinearGradient(0, groundTop - 25, 0, H);
+        whiteGround.addColorStop(0, `rgba(248, 252, 255, ${clamp(snowFactor * 0.96, 0, 0.97)})`);
+        whiteGround.addColorStop(0.55, `rgba(225, 239, 252, ${clamp(snowFactor * 0.92, 0, 0.95)})`);
+        whiteGround.addColorStop(1, `rgba(198, 220, 240, ${clamp(snowFactor * 0.88, 0, 0.92)})`);
+        ctx.fillStyle = whiteGround;
         ctx.fill();
         ctx.restore();
     }
 
-    // Classic snow-capped peak accents when cold or snowy
-    if (
-        atmosphereMode === "snow" ||
-        atmosphereMode === "sleet" ||
-        sceneTemperature <= 0 ||
-        snowFactor > 0.15
-    ) {
-        const peaks = [
-            [W * .13, base - 130],
-            [W * .42, base - 190],
-            [W * .75, base - 160]
-        ];
-
-        ctx.fillStyle = "rgba(248, 252, 255, .88)";
-
-        peaks.forEach(([x, y]) => {
-            ctx.beginPath();
-            ctx.moveTo(x - 30, y + 38);
-            ctx.lineTo(x, y);
-            ctx.lineTo(x + 30, y + 38);
-            ctx.lineTo(x + 12, y + 29);
-            ctx.lineTo(x, y + 14);
-            ctx.lineTo(x - 13, y + 30);
-            ctx.closePath();
-            ctx.fill();
-        });
-    }
+    // Subtle cobblestone / forest village pathway
+    const pathY = H * .945;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(0, pathY + 6);
+    ctx.quadraticCurveTo(W * .5, pathY - 6, W, pathY + 4);
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = snowFactor > 0.45
+        ? "rgba(182, 205, 228, .45)"
+        : "rgba(95, 112, 126, .35)";
+    ctx.stroke();
+    ctx.restore();
 }
 
 /* =========================================================
-   28. RAIN / SNOW / HAIL + GROUND SPLASHES & ACCUMULATION
+   28. COZY CANADIAN WOODEN CABIN & STYLISH VILLAS
+       (کلبه چوبی با دودکش و ویلاهای شیک)
+   ========================================================= */
+
+function drawSmoke(delta, chimneyX, chimneyY) {
+    if (Math.random() < 0.14) {
+        smokePuffs.push({
+            x: chimneyX + (Math.random() - .5) * 4,
+            y: chimneyY,
+            r: 4 + Math.random() * 4,
+            alpha: .34,
+            vy: .28 + Math.random() * .25
+        });
+    }
+
+    for (let i = smokePuffs.length - 1; i >= 0; i--) {
+        const s = smokePuffs[i];
+        s.y -= s.vy * (delta * 0.06);
+        s.x += (0.25 + sceneWind * 0.025) * (delta * 0.06);
+        s.r += delta * 0.008;
+        s.alpha -= delta * 0.00018;
+
+        if (s.alpha <= 0) {
+            smokePuffs.splice(i, 1);
+            continue;
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(225, 236, 248, ${s.alpha})`;
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+function drawGlowingWindow(x, y, w, h, warmIntensity) {
+    ctx.save();
+    // Exterior warm light spill
+    ctx.shadowColor = `rgba(255, 198, 92, ${warmIntensity * 0.85})`;
+    ctx.shadowBlur = 14 * warmIntensity;
+    ctx.fillStyle = `rgba(255, 210, 115, ${0.45 + warmIntensity * 0.52})`;
+    ctx.fillRect(x, y, w, h);
+    ctx.shadowBlur = 0;
+
+    // Window muntin crossbars
+    ctx.strokeStyle = "#3a2518";
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(x, y, w, h);
+    ctx.beginPath();
+    ctx.moveTo(x + w * .5, y);
+    ctx.lineTo(x + w * .5, y + h);
+    ctx.moveTo(x, y + h * .5);
+    ctx.lineTo(x + w, y + h * .5);
+    ctx.stroke();
+    ctx.restore();
+}
+
+function drawCanadianCabin(x, groundY, scale, delta) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+    const warmGlow = !sceneIsDay || ["storm", "snow", "rain", "heavy-rain", "fog"].includes(atmosphereMode) ? 1.0 : 0.45;
+
+    ctx.save();
+    ctx.translate(x, groundY);
+    ctx.scale(scale, scale);
+
+    const w = 112;
+    const h = 58;
+    const roofH = 44;
+
+    // Stone chimney
+    const chimX = w * .24;
+    const chimTopY = -h - roofH + 6;
+    ctx.fillStyle = "#535d6b";
+    ctx.fillRect(chimX, chimTopY, 13, 32);
+    ctx.fillStyle = "#3a424d";
+    ctx.fillRect(chimX - 2, chimTopY, 17, 4);
+
+    // Log cabin timber body
+    const wallGrad = ctx.createLinearGradient(0, -h, 0, 0);
+    wallGrad.addColorStop(0, "#6d452b");
+    wallGrad.addColorStop(1, "#472b1a");
+    ctx.fillStyle = wallGrad;
+    ctx.fillRect(-w * .5, -h, w, h);
+
+    // Horizontal log lines
+    ctx.strokeStyle = "rgba(28, 15, 8, .45)";
+    ctx.lineWidth = 1.2;
+    for (let ly = -h + 8; ly < 0; ly += 8) {
+        ctx.beginPath();
+        ctx.moveTo(-w * .5, ly);
+        ctx.lineTo(w * .5, ly);
+        ctx.stroke();
+    }
+
+    // Covered front porch & wooden deck
+    ctx.fillStyle = "#382114";
+    ctx.fillRect(-w * .56, -5, w * 1.12, 6);
+
+    // Cabin door
+    ctx.fillStyle = "#3b2214";
+    ctx.fillRect(-10, -34, 20, 34);
+    ctx.fillStyle = "#f5c469";
+    ctx.beginPath();
+    ctx.arc(6, -17, 1.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Warm glowing cabin windows
+    drawGlowingWindow(-42, -36, 22, 18, warmGlow);
+    drawGlowingWindow(20, -36, 22, 18, warmGlow);
+
+    // Pitched chalet roof
+    ctx.beginPath();
+    ctx.moveTo(-w * .62, -h + 4);
+    ctx.lineTo(0, -h - roofH);
+    ctx.lineTo(w * .62, -h + 4);
+    ctx.closePath();
+    ctx.fillStyle = "#263240";
+    ctx.fill();
+
+    // Roof trim beam
+    ctx.strokeStyle = "#8a5836";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(-w * .62, -h + 4);
+    ctx.lineTo(0, -h - roofH);
+    ctx.lineTo(w * .62, -h + 4);
+    ctx.stroke();
+
+    // Thick white snow blanket on cabin roof when snow accumulates
+    if (snowFactor > 0.04) {
+        const thick = 3 + snowFactor * 9;
+        ctx.beginPath();
+        ctx.moveTo(-w * .64, -h + 4);
+        ctx.lineTo(0, -h - roofH - thick * 0.6);
+        ctx.lineTo(w * .64, -h + 4);
+        ctx.lineTo(w * .60, -h + 4 + thick * 0.45);
+        ctx.lineTo(0, -h - roofH + thick * 0.45);
+        ctx.lineTo(-w * .60, -h + 4 + thick * 0.45);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(248, 252, 255, ${clamp(snowFactor * 0.96, 0, 0.98)})`;
+        ctx.fill();
+    }
+
+    ctx.restore();
+
+    // Rising chimney smoke in world coordinates
+    drawSmoke(delta, x + (chimX + 6) * scale, groundY + chimTopY * scale);
+}
+
+function drawStylishVilla(x, groundY, scale, flip = false) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+    const warmGlow = !sceneIsDay || ["storm", "snow", "rain", "heavy-rain", "fog"].includes(atmosphereMode) ? 1.0 : 0.42;
+
+    ctx.save();
+    ctx.translate(x, groundY);
+    ctx.scale(flip ? -scale : scale, scale);
+
+    // Main modern-classic two-story villa wing
+    ctx.fillStyle = "#cfd8e3";
+    ctx.fillRect(-52, -66, 68, 66);
+
+    // Timber & stone accent wing
+    ctx.fillStyle = "#5c493e";
+    ctx.fillRect(16, -48, 42, 48);
+
+    // Panoramic villa windows
+    drawGlowingWindow(-42, -54, 24, 18, warmGlow);
+    drawGlowingWindow(-12, -54, 18, 18, warmGlow);
+    drawGlowingWindow(-42, -26, 28, 20, warmGlow);
+    drawGlowingWindow(24, -34, 24, 18, warmGlow);
+
+    // Modern architectural pitched roofs
+    ctx.fillStyle = "#1f2b38";
+    ctx.beginPath();
+    ctx.moveTo(-58, -66);
+    ctx.lineTo(-18, -92);
+    ctx.lineTo(22, -66);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(12, -48);
+    ctx.lineTo(37, -66);
+    ctx.lineTo(64, -48);
+    ctx.closePath();
+    ctx.fill();
+
+    // Snow accumulation on villa roofs
+    if (snowFactor > 0.04) {
+        const sThick = 2.5 + snowFactor * 7.5;
+        ctx.fillStyle = `rgba(247, 252, 255, ${clamp(snowFactor * 0.96, 0, 0.98)})`;
+
+        ctx.beginPath();
+        ctx.moveTo(-60, -66);
+        ctx.lineTo(-18, -92 - sThick * 0.55);
+        ctx.lineTo(24, -66);
+        ctx.lineTo(20, -63);
+        ctx.lineTo(-18, -87);
+        ctx.lineTo(-56, -63);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(10, -48);
+        ctx.lineTo(37, -66 - sThick * 0.5);
+        ctx.lineTo(66, -48);
+        ctx.lineTo(62, -45);
+        ctx.lineTo(37, -61);
+        ctx.lineTo(14, -45);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    ctx.restore();
+}
+
+/* =========================================================
+   29. REALISTIC CANADIAN TREES:
+       - Tall Boreal Pines & Spruces (درخت‌های کاج مرتفع)
+       - Canadian Maples (درخت افرا)
+       - Sycamore / Plane Trees (درخت چنار)
+   ========================================================= */
+
+function drawTallCanadianPine(x, ground, height, sway, variant = 0) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .022);
+
+    // Textured bark trunk
+    const trunkW = Math.max(5, height * 0.042);
+    ctx.fillStyle = "#3d2b20";
+    ctx.fillRect(-trunkW * .5, -height * .22, trunkW, height * .22);
+
+    // Multi-tiered lush boreal spruce/pine boughs (7 dense tiers)
+    const tiers = 7;
+    const palette = variant === 0
+        ? ["#12352b", "#174235", "#1d4f3f", "#235c49", "#2a6953", "#31765d", "#398367"]
+        : ["#153832", "#1b463e", "#21544a", "#286256", "#2f7062", "#377e6e", "#408c7a"];
+
+    for (let i = 0; i < tiers; i++) {
+        const progress = i / (tiers - 1);
+        const tierBottomY = -height * (0.14 + progress * 0.72);
+        const tierTopY = tierBottomY - height * (0.24 - progress * 0.06);
+        const halfW = height * (0.23 * (1 - progress * 0.68) + 0.04);
+
+        // Main needle bough silhouette with jagged natural branch tips
+        ctx.beginPath();
+        ctx.moveTo(0, tierTopY);
+        ctx.lineTo(-halfW * 0.55, tierTopY + (tierBottomY - tierTopY) * 0.52);
+        ctx.lineTo(-halfW, tierBottomY);
+        ctx.lineTo(-halfW * 0.35, tierBottomY - 4);
+        ctx.lineTo(0, tierBottomY + 2);
+        ctx.lineTo(halfW * 0.35, tierBottomY - 4);
+        ctx.lineTo(halfW, tierBottomY);
+        ctx.lineTo(halfW * 0.55, tierTopY + (tierBottomY - tierTopY) * 0.52);
+        ctx.closePath();
+
+        ctx.fillStyle = palette[i];
+        ctx.fill();
+
+        // Heavy white snow resting on each pine bough when snowing
+        if (snowFactor > 0.05) {
+            ctx.beginPath();
+            ctx.moveTo(0, tierTopY);
+            ctx.lineTo(-halfW * 0.88, tierBottomY - 3);
+            ctx.lineTo(-halfW * 0.35, tierBottomY - 7);
+            ctx.lineTo(0, tierBottomY - 3);
+            ctx.lineTo(halfW * 0.35, tierBottomY - 7);
+            ctx.lineTo(halfW * 0.88, tierBottomY - 3);
+            ctx.closePath();
+            ctx.fillStyle = `rgba(246, 251, 255, ${clamp(snowFactor * 0.92, 0, 0.94)})`;
+            ctx.fill();
+        }
+    }
+
+    ctx.restore();
+}
+
+function drawMapleTree(x, ground, height, sway) {
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .028);
+
+    // Forked maple trunk & limbs
+    ctx.strokeStyle = "#4f3829";
+    ctx.lineWidth = Math.max(5, height * 0.048);
+    ctx.lineCap = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -height * .55);
+    ctx.moveTo(0, -height * .36);
+    ctx.lineTo(-height * .22, -height * .66);
+    ctx.moveTo(0, -height * .42);
+    ctx.lineTo(height * .22, -height * .68);
+    ctx.stroke();
+
+    // Rich Canadian crimson-amber-gold maple crown clusters
+    const clusters = [
+        [-.24, -.64, .18, "#c8462b"],
+        [.23, -.66, .18, "#d96b27"],
+        [0, -.78, .22, "#e08e2b"],
+        [-.12, -.54, .16, "#b53826"],
+        [.13, -.55, .16, "#cc5828"],
+        [0, -.64, .19, "#de7926"]
+    ];
+
+    clusters.forEach(([dx, dy, rRatio, col]) => {
+        const cx = dx * height;
+        const cy = dy * height;
+        const r = rRatio * height;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.fill();
+
+        if (snowFactor > 0.08) {
+            ctx.beginPath();
+            ctx.arc(cx, cy - r * 0.28, r * 0.82, Math.PI * 1.05, Math.PI * 1.95);
+            ctx.fillStyle = `rgba(247, 252, 255, ${clamp(snowFactor * 0.9, 0, 0.92)})`;
+            ctx.fill();
+        }
+    });
+
+    ctx.restore();
+}
+
+function drawPlaneSycamoreTree(x, ground, height, sway) {
+    // Tall urban/village Plane tree (درخت چنار) with pale mottled bark & broad emerald-olive crown
+    const snowFactor = clamp(snowAccumulation, 0, 1);
+
+    ctx.save();
+    ctx.translate(x, ground);
+    ctx.rotate(sway * .025);
+
+    // Characteristic pale grey-tan Plane tree trunk & ascending branches
+    ctx.strokeStyle = "#8a8579";
+    ctx.lineWidth = Math.max(6, height * 0.052);
+    ctx.lineCap = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -height * .58);
+    ctx.moveTo(0, -height * .38);
+    ctx.lineTo(-height * .24, -height * .72);
+    ctx.moveTo(0, -height * .44);
+    ctx.lineTo(height * .24, -height * .74);
+    ctx.stroke();
+
+    // Broad layered Plane tree foliage
+    const canopy = [
+        [-.25, -.70, .20, "#386b4c"],
+        [.25, -.72, .20, "#437a57"],
+        [0, -.84, .24, "#4e8762"],
+        [-.12, -.58, .18, "#2f5c41"],
+        [.14, -.60, .18, "#3c7050"]
+    ];
+
+    canopy.forEach(([dx, dy, rRatio, col]) => {
+        const cx = dx * height;
+        const cy = dy * height;
+        const r = rRatio * height;
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.fill();
+
+        if (snowFactor > 0.08) {
+            ctx.beginPath();
+            ctx.arc(cx, cy - r * 0.28, r * 0.82, Math.PI * 1.05, Math.PI * 1.95);
+            ctx.fillStyle = `rgba(247, 252, 255, ${clamp(snowFactor * 0.9, 0, 0.92)})`;
+            ctx.fill();
+        }
+    });
+
+    ctx.restore();
+}
+
+function drawCanadianVillageAndForest(delta, time) {
+    const ground = H * .915;
+    const baseTreeH = clamp(H * .27, 130, 225);
+    const wind = SCENES[atmosphereMode].wind + sceneWind / 25;
+    const sway = Math.sin(time / 680) * wind;
+
+    // Background Canadian boreal pine forest grove (tall pines framing left & right)
+    drawTallCanadianPine(W * .035, ground + 4, baseTreeH * 1.18, sway * .9, 0);
+    drawTallCanadianPine(W * .085, ground + 2, baseTreeH * 1.32, sway, 1);
+    drawTallCanadianPine(W * .145, ground + 5, baseTreeH * 1.05, sway * 1.05, 0);
+    drawTallCanadianPine(W * .30, ground, baseTreeH * .92, sway * .85, 1);
+
+    drawTallCanadianPine(W * .71, ground, baseTreeH * .95, sway * .9, 0);
+    drawTallCanadianPine(W * .87, ground + 4, baseTreeH * 1.28, sway, 1);
+    drawTallCanadianPine(W * .93, ground + 2, baseTreeH * 1.15, sway * 1.05, 0);
+    drawTallCanadianPine(W * .975, ground + 6, baseTreeH * 1.02, sway * .95, 1);
+
+    // Cozy Canadian Wooden Cabin (left-center clearing) & Stylish Villas (right-center village)
+    const buildScale = clamp(W / 1380, 0.65, 1.05);
+    drawCanadianCabin(W * .215, ground + 6, buildScale, delta);
+    drawStylishVilla(W * .785, ground + 6, buildScale * 0.96, false);
+
+    // City/Village Maple (افرا) & Plane/Sycamore (چنار) trees
+    drawMapleTree(W * .37, ground + 8, baseTreeH * .82, sway * 1.1);
+    drawPlaneSycamoreTree(W * .64, ground + 8, baseTreeH * .94, sway * 1.05);
+}
+
+/* =========================================================
+   30. ANIMATED LITTLE PEOPLE / WALKERS (آدمک‌های متحرک)
+   ========================================================= */
+
+function drawWalkers(delta) {
+    const isRaining = ["rain", "heavy-rain", "storm", "sleet", "hail"].includes(atmosphereMode);
+    const isSnowing = ["snow", "sleet"].includes(atmosphereMode) || snowAccumulation > 0.25;
+    const pathY = H * .948;
+
+    walkers.forEach(w => {
+        w.x += w.dir * w.speed * delta;
+        w.stride += delta * 0.0085;
+
+        if (w.x > W * .88) w.dir = -1;
+        if (w.x < W * .12) w.dir = 1;
+
+        const swing = Math.sin(w.stride) * 5;
+        const bob = Math.abs(Math.cos(w.stride)) * 1.6;
+
+        ctx.save();
+        ctx.translate(w.x, pathY - bob);
+        ctx.scale(w.dir * w.scale, w.scale);
+
+        // Ground shadow
+        ctx.fillStyle = "rgba(0, 0, 0, .28)";
+        ctx.beginPath();
+        ctx.ellipse(0, 2 + bob, 8, 2.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Walking legs
+        ctx.strokeStyle = "#182230";
+        ctx.lineWidth = 2.6;
+        ctx.lineCap = "round";
+
+        ctx.beginPath();
+        ctx.moveTo(-1, -11);
+        ctx.lineTo(-swing, 0);
+        ctx.moveTo(1, -11);
+        ctx.lineTo(swing, 0);
+        ctx.stroke();
+
+        // Winter coat / jacket torso
+        ctx.fillStyle = w.coat;
+        ctx.beginPath();
+        ctx.roundRect(-5, -24, 10, 14, 3);
+        ctx.fill();
+
+        // Warm scarf
+        ctx.fillStyle = w.scarf;
+        ctx.fillRect(-5, -25, 10, 3);
+
+        // Swinging arm
+        ctx.strokeStyle = w.coat;
+        ctx.lineWidth = 2.3;
+        ctx.beginPath();
+        ctx.moveTo(0, -21);
+        ctx.lineTo(isRaining ? 6 : -swing * 0.7, isRaining ? -26 : -13);
+        ctx.stroke();
+
+        // Head & winter beanie when cold/snowy
+        ctx.fillStyle = "#f2cbb0";
+        ctx.beginPath();
+        ctx.arc(0, -29, 3.8, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (isSnowing || sceneTemperature <= 8) {
+            ctx.fillStyle = w.scarf;
+            ctx.beginPath();
+            ctx.arc(0, -30.5, 4, Math.PI, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Open umbrella when raining or sleeting
+        if (isRaining) {
+            ctx.strokeStyle = "#d9e6f2";
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.moveTo(6, -25);
+            ctx.lineTo(6, -42);
+            ctx.stroke();
+
+            ctx.fillStyle = w.scarf;
+            ctx.beginPath();
+            ctx.arc(6, -41, 14, Math.PI, Math.PI * 2);
+            ctx.fill();
+        }
+
+        ctx.restore();
+    });
+}
+
+/* =========================================================
+   31. RAIN / SNOW / HAIL + GROUND SPLASHES & LEAVES
    ========================================================= */
 
 function drawParticles(delta, time) {
     const config = SCENES[atmosphereMode];
     const snowFactor = clamp(snowAccumulation, 0, 1);
-    const groundY = H - snowFactor * 28;
+    const groundY = H * .93 - snowFactor * 10;
 
-    // Evolve snow accumulation dynamically from active precipitation & freezing temperature
+    // Gradually accumulate white snow when snowing, or melt when warm/rainy
     if (config.snowRate !== 0) {
-        const tempFactor = sceneTemperature <= 2 ? 1.25 : 0.75;
-        const nextSnow = snowAccumulation + (config.snowRate * tempFactor * delta) / 1000;
-        if (Math.abs(nextSnow - snowAccumulation) >= 0.002) {
-            setSnowAccumulation(nextSnow, false);
+        const tempMult = sceneTemperature <= 1 ? 1.25 : 0.8;
+        const nextSnow = snowAccumulation + (config.snowRate * tempMult * delta) / 1000;
+        if (Math.abs(nextSnow - snowAccumulation) >= 0.003) {
+            setSnowAccumulation(nextSnow, true);
         } else {
             snowAccumulation = clamp(nextSnow, 0, 1);
         }
     }
 
     particles.forEach(p => {
-        const wind = config.wind + sceneWind / 25;
+        const wind = (config.wind + sceneWind / 25) * p.depth;
 
         p.x += wind * delta * .025;
         p.y += p.speed * delta * (p.snow ? .025 : .065);
 
         if (p.snow) {
-            p.x += Math.sin(time / 1000 + p.sway) * .45;
+            p.x += Math.sin(time / 950 + p.sway) * .48 * p.depth;
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
 
-            ctx.fillStyle = "rgba(255, 255, 255, .88)";
+            ctx.fillStyle = `rgba(255, 255, 255, ${clamp(0.55 + p.depth * 0.35, 0.5, 0.95)})`;
             ctx.fill();
 
         } else {
@@ -4045,22 +4661,22 @@ function drawParticles(delta, time) {
 
             ctx.strokeStyle =
                 atmosphereMode === "hail"
-                    ? "rgba(225, 245, 255, .95)"
-                    : "rgba(155, 210, 255, .6)";
+                    ? "rgba(230, 246, 255, .95)"
+                    : `rgba(155, 212, 255, ${clamp(0.35 + p.depth * 0.25, 0.35, 0.68)})`;
 
             ctx.lineWidth =
-                atmosphereMode === "hail" ? 2 : 1.1;
+                atmosphereMode === "hail" ? 2.1 : 1.1;
 
             ctx.stroke();
 
-            // Spawn subtle splash ripple when rain/hail reaches lower ground
-            if (p.y >= groundY && splashes.length < 45 && Math.random() < 0.25) {
+            // Rain & hail splash ripples on ground
+            if (p.y >= groundY && splashes.length < 48 && Math.random() < 0.24) {
                 splashes.push({
                     x: p.x,
                     y: groundY + Math.random() * 14,
                     r: 1.5,
                     maxR: atmosphereMode === "hail" ? 11 : 7,
-                    alpha: 0.65
+                    alpha: 0.62
                 });
             }
         }
@@ -4074,7 +4690,7 @@ function drawParticles(delta, time) {
         if (p.x < -20) p.x = W + 20;
     });
 
-    // Render rain/hail ground splashes
+    // Draw rain ground splashes
     for (let i = splashes.length - 1; i >= 0; i--) {
         const s = splashes[i];
         s.r += delta * 0.025;
@@ -4093,208 +4709,35 @@ function drawParticles(delta, time) {
         ctx.stroke();
         ctx.restore();
     }
+
+    // Drifting maple leaves when bare/light snow
+    if (snowFactor < 0.5) {
+        const windBoost = 1 + sceneWind / 20;
+        fallingLeaves.forEach(leaf => {
+            leaf.x += leaf.vx * windBoost * (delta * 0.05);
+            leaf.y += (leaf.vy + Math.sin(time * 0.003 + leaf.rot) * 0.25) * (delta * 0.05);
+            leaf.rot += leaf.rotSpeed * (delta * 0.06);
+
+            if (leaf.x > W + 20) leaf.x = -20;
+            if (leaf.y > H * .96) {
+                leaf.y = H * (.52 + Math.random() * .2);
+                leaf.x = Math.random() * W;
+            }
+
+            ctx.save();
+            ctx.translate(leaf.x, leaf.y);
+            ctx.rotate(leaf.rot);
+            ctx.fillStyle = leaf.color;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, leaf.size, leaf.size * 0.55, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+    }
 }
 
 /* =========================================================
-   29. TREES WITH SNOW-LADEN BOUGHS
-   ========================================================= */
-
-function drawPine(x, ground, height, sway) {
-    const snowFactor = clamp(snowAccumulation, 0, 1);
-
-    ctx.save();
-    ctx.translate(x, ground);
-    ctx.rotate(sway * .025);
-
-    ctx.fillStyle = "#513e31";
-    ctx.fillRect(-4, -height * .25, 8, height * .25);
-
-    const colors = [
-        "#194235",
-        "#214c3e",
-        "#2a5b45",
-        "#34674b"
-    ];
-
-    for (let i = 0; i < 4; i++) {
-        const y = -height + i * height * .2;
-        const width = height * (.25 - i * .035);
-
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(-width, y + height * .3);
-        ctx.lineTo(width, y + height * .3);
-        ctx.closePath();
-
-        ctx.fillStyle = colors[i];
-        ctx.fill();
-
-        if (snowFactor > 0.05) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(-width * .88, y + height * .22);
-            ctx.lineTo(-width * .25, y + height * .16);
-            ctx.lineTo(0, y + height * .22);
-            ctx.lineTo(width * .25, y + height * .16);
-            ctx.lineTo(width * .88, y + height * .22);
-            ctx.closePath();
-            ctx.fillStyle = `rgba(245, 251, 255, ${clamp(snowFactor * 0.9, 0, 0.92)})`;
-            ctx.fill();
-        }
-    }
-
-    ctx.restore();
-}
-
-function drawCypress(x, ground, height, sway) {
-    const snowFactor = clamp(snowAccumulation, 0, 1);
-
-    ctx.save();
-    ctx.translate(x, ground);
-    ctx.rotate(sway * .02);
-
-    ctx.beginPath();
-    ctx.moveTo(0, -height);
-
-    ctx.bezierCurveTo(
-        -height * .32, -height * .65,
-        -height * .18, -height * .15,
-        0, 0
-    );
-
-    ctx.bezierCurveTo(
-        height * .18, -height * .15,
-        height * .32, -height * .65,
-        0, -height
-    );
-
-    ctx.fillStyle = "#285b49";
-    ctx.fill();
-
-    if (snowFactor > 0.1) {
-        ctx.fillStyle = `rgba(242, 249, 255, ${clamp(snowFactor * 0.72, 0, 0.78)})`;
-        ctx.beginPath();
-        ctx.ellipse(0, -height * .55, height * .11, height * .32, 0, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    ctx.restore();
-}
-
-function drawRoundTree(x, ground, height, sway) {
-    const snowFactor = clamp(snowAccumulation, 0, 1);
-
-    ctx.save();
-    ctx.translate(x, ground);
-    ctx.rotate(sway * .03);
-
-    ctx.fillStyle = "#624637";
-    ctx.fillRect(-5, -height * .42, 10, height * .42);
-
-    const positions = [
-        [-.16, 0],
-        [.15, 0],
-        [0, -.16],
-        [0, .12]
-    ];
-
-    positions.forEach(([dx, dy]) => {
-        const cx = height * dx;
-        const cy = -height * .55 + height * dy;
-        const r = height * .22;
-
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.fillStyle = "#477d57";
-        ctx.fill();
-
-        if (snowFactor > 0.08) {
-            ctx.beginPath();
-            ctx.arc(cx, cy - r * 0.25, r * 0.82, Math.PI * 1.05, Math.PI * 1.95);
-            ctx.fillStyle = `rgba(246, 251, 255, ${clamp(snowFactor * 0.88, 0, 0.9)})`;
-            ctx.fill();
-        }
-    });
-
-    ctx.restore();
-}
-
-function drawAutumnTree(x, ground, height, sway) {
-    const snowFactor = clamp(snowAccumulation, 0, 1);
-
-    ctx.save();
-    ctx.translate(x, ground);
-    ctx.rotate(sway * .03);
-
-    ctx.strokeStyle = "#614936";
-    ctx.lineWidth = 7;
-
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, -height * .65);
-
-    ctx.moveTo(0, -height * .4);
-    ctx.lineTo(-height * .25, -height * .75);
-
-    ctx.moveTo(0, -height * .5);
-    ctx.lineTo(height * .25, -height * .8);
-
-    ctx.stroke();
-
-    const leaves = [
-        [-.25, -.72],
-        [.25, -.78],
-        [0, -.88],
-        [-.08, -.55],
-        [.12, -.58]
-    ];
-
-    const colors = [
-        "#bd7138",
-        "#d18b3d",
-        "#a84d32",
-        "#c28a3e",
-        "#b65c35"
-    ];
-
-    leaves.forEach((p, i) => {
-        const lx = p[0] * height;
-        const ly = p[1] * height;
-        const lr = height * .13;
-
-        ctx.beginPath();
-        ctx.arc(lx, ly, lr, 0, Math.PI * 2);
-        ctx.fillStyle = colors[i];
-        ctx.fill();
-
-        if (snowFactor > 0.08) {
-            ctx.beginPath();
-            ctx.arc(lx, ly - lr * 0.28, lr * 0.8, Math.PI * 1.05, Math.PI * 1.95);
-            ctx.fillStyle = `rgba(246, 251, 255, ${clamp(snowFactor * 0.86, 0, 0.88)})`;
-            ctx.fill();
-        }
-    });
-
-    ctx.restore();
-}
-
-function drawTrees(time) {
-    const ground = H + 4;
-
-    const height = Math.min(H * .3, 220);
-
-    const wind = SCENES[atmosphereMode].wind + sceneWind / 25;
-
-    const sway = Math.sin(time / 650) * wind;
-
-    drawPine(W * .07, ground, height * .9, sway);
-    drawCypress(W * .24, ground, height * 1.15, sway);
-    drawRoundTree(W * .78, ground, height, sway);
-    drawAutumnTree(W * .94, ground, height * .95, sway);
-}
-
-/* =========================================================
-   30. BIRDS
+   32. BIRDS, FOG & FORKED LIGHTNING
    ========================================================= */
 
 function drawBird(bird, time) {
@@ -4303,7 +4746,7 @@ function drawBird(bird, time) {
     ctx.save();
     ctx.translate(bird.x, bird.y);
 
-    ctx.strokeStyle = "rgba(25, 35, 48, .75)";
+    ctx.strokeStyle = sceneIsDay ? "rgba(25, 35, 48, .75)" : "rgba(205, 220, 238, .45)";
     ctx.lineWidth = 1.7;
     ctx.lineCap = "round";
 
@@ -4349,15 +4792,11 @@ function updateBirds(delta, time) {
     });
 }
 
-/* =========================================================
-   31. FOG ANIMATION
-   ========================================================= */
-
 function drawFog(time) {
     if (atmosphereMode !== "fog") return;
 
     for (let i = 0; i < 5; i++) {
-        const y = H * (.3 + i * .12);
+        const y = H * (.32 + i * .12);
 
         const x = Math.sin(time / 5000 + i) * 100;
 
@@ -4366,63 +4805,91 @@ function drawFog(time) {
         );
 
         gradient.addColorStop(0, "rgba(220, 230, 240, 0)");
-        gradient.addColorStop(.5, "rgba(220, 230, 240, .13)");
+        gradient.addColorStop(.5, "rgba(220, 230, 240, .14)");
         gradient.addColorStop(1, "rgba(220, 230, 240, 0)");
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(x - 100, y, W + 200, 60);
+        ctx.fillRect(x - 100, y, W + 200, 62);
     }
 }
 
-/* =========================================================
-   32. LIGHTNING
-   ========================================================= */
-
-function drawLightningBolt() {
-    const startX = W * (.1 + Math.random() * .8);
-
+function createLightningBolt() {
+    const startX = W * (.12 + Math.random() * .76);
     let x = startX;
     let y = 0;
+    const segments = [{ x, y }];
+    const branches = [];
 
-    ctx.save();
+    for (let i = 0; i < 12; i++) {
+        x += Math.random() * 48 - 24;
+        y += H * .048;
+        segments.push({ x, y });
 
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-
-    for (let i = 0; i < 11; i++) {
-        x += Math.random() * 45 - 22;
-        y += H * .045;
-
-        ctx.lineTo(x, y);
+        if (i === 4 || i === 7) {
+            let bx = x;
+            let by = y;
+            const branchPts = [{ x: bx, y: by }];
+            const dir = Math.random() > 0.5 ? 1 : -1;
+            for (let b = 0; b < 4; b++) {
+                bx += dir * (14 + Math.random() * 18);
+                by += H * .035;
+                branchPts.push({ x: bx, y: by });
+            }
+            branches.push(branchPts);
+        }
     }
 
-    ctx.strokeStyle = "rgba(235, 245, 255, .95)";
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = "#b8dcff";
-    ctx.shadowBlur = 25;
-    ctx.stroke();
-
-    ctx.restore();
+    activeBolt = { segments, branches, alpha: 1.0 };
 }
 
 function updateLightning(delta) {
-    if (!["storm", "hail"].includes(atmosphereMode)) return;
+    if (!["storm", "hail"].includes(atmosphereMode)) {
+        activeBolt = null;
+        return;
+    }
 
     lightningTimer += delta;
 
     if (lightningTimer > 1800 + Math.random() * 2500) {
         lightningTimer = 0;
-        lightningFlash = .8;
-        drawLightningBolt();
+        lightningFlash = .85;
+        createLightningBolt();
     }
 
     if (lightningFlash > 0) {
-        ctx.fillStyle = `rgba(230, 240, 255, ${lightningFlash * .11})`;
+        ctx.fillStyle = `rgba(230, 240, 255, ${lightningFlash * .12})`;
         ctx.fillRect(0, 0, W, H);
 
-        lightningFlash -= delta * .002;
-
+        lightningFlash -= delta * .0022;
         if (lightningFlash < 0) lightningFlash = 0;
+    }
+
+    if (activeBolt && activeBolt.alpha > 0) {
+        ctx.save();
+        ctx.strokeStyle = `rgba(238, 246, 255, ${activeBolt.alpha})`;
+        ctx.lineWidth = 2.6;
+        ctx.shadowColor = "#9ad0ff";
+        ctx.shadowBlur = 26;
+
+        ctx.beginPath();
+        activeBolt.segments.forEach((pt, idx) => {
+            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+        });
+        ctx.stroke();
+
+        ctx.lineWidth = 1.3;
+        activeBolt.branches.forEach(branch => {
+            ctx.beginPath();
+            branch.forEach((pt, idx) => {
+                if (idx === 0) ctx.moveTo(pt.x, pt.y);
+                else ctx.lineTo(pt.x, pt.y);
+            });
+            ctx.stroke();
+        });
+        ctx.restore();
+
+        activeBolt.alpha -= delta * 0.0045;
     }
 }
 
@@ -4443,10 +4910,10 @@ function setWeatherTheme(mode) {
 
     document.body.classList.add(`weather-${mode}`);
 
-    if (mode === "snow" && snowAccumulation < 0.25) {
-        setSnowAccumulation(0.45, true);
-    } else if (mode === "sleet" && snowAccumulation < 0.15) {
-        setSnowAccumulation(0.25, true);
+    if (mode === "snow" && snowAccumulation < 0.35) {
+        setSnowAccumulation(0.55, true);
+    } else if (mode === "sleet" && snowAccumulation < 0.2) {
+        setSnowAccumulation(0.3, true);
     }
 
     createScene();
@@ -4466,11 +4933,13 @@ function animate(time = 0) {
 
     ctx.clearRect(0, 0, W, H);
 
-    drawMountains();
+    drawSkyAtmosphere(time);
     drawClouds(delta);
+    drawLandscapeTerrain();
+    drawCanadianVillageAndForest(delta, time);
+    drawWalkers(delta);
     drawParticles(delta, time);
     drawFog(time);
-    drawTrees(time);
     updateBirds(delta, time);
     updateLightning(delta);
 
@@ -4500,12 +4969,27 @@ function applyBalconyWeather() {
 
 function resetBalconyWeather() {
     manualWeatherOverride = null;
+    manualWindOverride = null;
+    manualDayOverride = null;
+
+    if ($("simWindSpeed")) {
+        $("simWindSpeed").value = "0";
+        text("simWindSpeedLabel", "Live");
+    }
+    if ($("simDayCycle")) {
+        $("simDayCycle").value = "auto";
+        text("simDayCycleLabel", "Live");
+    }
 
     if (currentWeatherData) {
+        sceneWind = Number(currentWeatherData.current?.wind_speed_10m) || 0;
+        sceneIsDay = Boolean(currentWeatherData.current?.is_day);
         setWeatherTheme(
             weatherInfo(currentWeatherData.current.weather_code).mode
         );
     } else {
+        sceneWind = 0;
+        sceneIsDay = true;
         setWeatherTheme("clear");
     }
 
@@ -4560,6 +5044,16 @@ function initializeNavigation() {
 function initializeEvents() {
     $("weatherRefresh").addEventListener("click", loadWeather);
 
+    $("toggleLandscapeView")?.addEventListener("click", () => {
+        const active = document.body.classList.toggle("pure-landscape");
+        const btn = $("toggleLandscapeView");
+        if (btn) {
+            btn.innerHTML = active
+                ? '🪟 <span>Show UI</span>'
+                : '🏔️ <span>Landscape View</span>';
+        }
+    });
+
     $("locationSearchButton").addEventListener(
         "click",
         () => searchLocation($("locationSearch").value)
@@ -4596,32 +5090,44 @@ function initializeEvents() {
         resetBalconyWeather
     );
 
-    $("enableNotifications").addEventListener(
-        "click",
-        enableNotifications
-    );
-
-    $("snowCoverSlider")?.addEventListener("input", event => {
-        const val = Number(event.target.value) / 100;
-        setSnowAccumulation(val, false);
+    $("simSnowDepth")?.addEventListener("input", event => {
+        setSnowAccumulation(Number(event.target.value) / 100, false);
     });
 
-    $("windBoostSlider")?.addEventListener("input", event => {
+    $("simWindSpeed")?.addEventListener("input", event => {
         const val = Number(event.target.value);
         if (val <= 0) {
             manualWindOverride = null;
             sceneWind = Number(currentWeatherData?.current?.wind_speed_10m) || 0;
-            text("windBoostValue", "Live");
+            text("simWindSpeedLabel", "Live");
         } else {
             manualWindOverride = val;
             sceneWind = val;
-            text("windBoostValue", `${val} km/h`);
+            text("simWindSpeedLabel", `${val} km/h`);
         }
     });
 
-    $("clearSnowButton")?.addEventListener("click", () => {
-        setSnowAccumulation(0, true);
+    $("simDayCycle")?.addEventListener("change", event => {
+        const mode = event.target.value;
+        if (mode === "auto") {
+            manualDayOverride = null;
+            sceneIsDay = currentWeatherData ? Boolean(currentWeatherData.current?.is_day) : true;
+            text("simDayCycleLabel", "Live");
+        } else if (mode === "day") {
+            manualDayOverride = true;
+            sceneIsDay = true;
+            text("simDayCycleLabel", "Day");
+        } else {
+            manualDayOverride = false;
+            sceneIsDay = false;
+            text("simDayCycleLabel", "Night");
+        }
     });
+
+    $("enableNotifications").addEventListener(
+        "click",
+        enableNotifications
+    );
 
     [
         "alertRain",
@@ -4695,7 +5201,7 @@ function restoreSettings() {
     $("alertWindThreshold").value = alertSettings.windThreshold;
 
     $("espAddress").value = espAddress;
-    updateSnowUI();
+    setSnowAccumulation(0, true);
 }
 
 /* =========================================================
