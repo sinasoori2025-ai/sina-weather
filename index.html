@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -45,7 +45,7 @@
       width: 100%;
       max-width: 100%;
       min-height: 100%;
-      font-family: 'Inter', 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg-deep);
       color: var(--text-main);
       overflow-x: clip;
@@ -427,7 +427,7 @@
       }
     }
 
-    /* Mobile Landscape Fix (e.g. phone rotated horizontally) */
+    /* Mobile Landscape Fix */
     @media (orientation: landscape) and (max-height: 540px) {
       .app-shell {
         padding-left: calc(10px + env(safe-area-inset-left));
@@ -905,9 +905,7 @@
       }
     }
 
-    /* =======================================================================
-       BOTTOM SECTION: AIR QUALITY, OZONE, OXYGEN, CO2 & REACTIVE CYCLISTS
-       ======================================================================= */
+    /* Air Quality, Ozone, Oxygen, CO2 & Reactive Cyclists */
     .aq-cyclist-panel {
       margin-top: 14px;
       border: 1px solid rgba(125, 211, 252, 0.3);
@@ -1049,6 +1047,107 @@
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: #e2f1ff;
       pointer-events: none;
+    }
+
+    /* Mountain Peak & Elevation Explorer (Very Bottom Section) */
+    .peak-explorer-panel {
+      margin-top: 14px;
+      border: 1px solid rgba(167, 243, 208, 0.28);
+      background: linear-gradient(155deg, rgba(10, 25, 46, 0.76), rgba(7, 16, 32, 0.64));
+    }
+
+    .peak-search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .peak-presets {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+
+    .peak-presets::-webkit-scrollbar {
+      display: none;
+    }
+
+    .elevation-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .elev-btn {
+      padding: 6px 11px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-soft);
+      font-family: inherit;
+      font-size: 0.73rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .elev-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .elev-btn.active {
+      background: rgba(52, 211, 153, 0.24);
+      border-color: rgba(52, 211, 153, 0.62);
+      color: #ecfdf5;
+    }
+
+    .peak-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .peak-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .elevation-profile-box {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .elev-track-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .elev-step-card {
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .elev-step-card.selected {
+      background: rgba(52, 211, 153, 0.18);
+      border-color: rgba(52, 211, 153, 0.55);
     }
 
     /* Toast Message Box — Safe Within Viewport */
@@ -1319,16 +1418,16 @@
         </div>
       </section>
 
-      <!-- Bottom Section: Air Quality, Ozone, Oxygen, CO2 & Reactive Cyclists -->
+      <!-- Air Quality, Ozone, Oxygen, CO2 & Reactive Cyclists -->
       <section id="airQualityCyclistSection" class="glass-card aq-cyclist-panel">
         <div class="card-header">
-          <span class="card-title">🌿 Air Quality, Gases &amp; Cyclists • کیفیت هوا، گازها و آدمک‌های دوچرخه‌سوار</span>
+          <span class="card-title">🌿 Air Quality, Gases &amp; Reactive Cyclists</span>
           <span id="aqSourceBadge" class="brand-badge">Live Atmosphere</span>
         </div>
 
         <div class="aq-summary-banner">
           <div>
-            <div id="aqHeadline" style="font-size:0.95rem;font-weight:700;">Clean &amp; Refreshing Air • هوای پاک و مطبوع</div>
+            <div id="aqHeadline" style="font-size:0.95rem;font-weight:700;">Clean &amp; Refreshing Air</div>
             <p id="aqDescription" class="aq-desc-text">
               Low particulate load and clear airflow allow comfortable outdoor breathing with minimal respiratory strain.
             </p>
@@ -1338,22 +1437,22 @@
 
         <div class="aq-metrics-grid">
           <div class="mini-stat">
-            <div class="mini-stat-label">Air Pollution • آلودگی هوا</div>
+            <div class="mini-stat-label">Air Pollution</div>
             <div id="aqPollutionVal" class="mini-stat-val">14%</div>
             <div id="aqPmSub" class="metric-sub">PM2.5: -- µg/m³</div>
           </div>
           <div class="mini-stat">
-            <div class="mini-stat-label">Ozone Health • سلامت لایه اوزون</div>
+            <div class="mini-stat-label">Ozone Layer Health</div>
             <div id="aqOzoneVal" class="mini-stat-val">96%</div>
             <div id="aqOzoneSub" class="metric-sub">O₃: -- µg/m³</div>
           </div>
           <div class="mini-stat">
-            <div class="mini-stat-label">Oxygen • اکسیژن هوا</div>
+            <div class="mini-stat-label">Oxygen Level</div>
             <div id="aqOxygenVal" class="mini-stat-val">20.9%</div>
             <div id="aqOxygenSub" class="metric-sub">Freshness: Optimal</div>
           </div>
           <div class="mini-stat">
-            <div class="mini-stat-label">CO₂ Level • کربن دی‌اکسید</div>
+            <div class="mini-stat-label">Carbon Dioxide (CO₂)</div>
             <div id="aqCo2Val" class="mini-stat-val">418 ppm</div>
             <div id="aqCo2Sub" class="metric-sub">Dispersion: Steady</div>
           </div>
@@ -1362,24 +1461,75 @@
         <div class="suitability-row">
           <div class="suitability-card">
             <div>
-              <div style="font-size:0.84rem;font-weight:700;">🚶 Walking • مناسب پیاده‌روی</div>
+              <div style="font-size:0.84rem;font-weight:700;">🚶 Walking Suitability</div>
               <div id="walkSuitDetail" class="metric-sub">Pleasant conditions for a stroll</div>
             </div>
-            <span id="walkSuitBadge" class="suit-badge suit-good">Suitable • مناسب</span>
+            <span id="walkSuitBadge" class="suit-badge suit-good">Suitable for Walking</span>
           </div>
           <div class="suitability-card">
             <div>
-              <div style="font-size:0.84rem;font-weight:700;">🚴 Cycling • مناسب دوچرخه‌سواری</div>
+              <div style="font-size:0.84rem;font-weight:700;">🚴 Cycling Suitability</div>
               <div id="cycleSuitDetail" class="metric-sub">Smooth road &amp; clean airflow</div>
             </div>
-            <span id="cycleSuitBadge" class="suit-badge suit-good">Suitable • مناسب</span>
+            <span id="cycleSuitBadge" class="suit-badge suit-good">Suitable for Cycling</span>
           </div>
         </div>
 
         <!-- Animated Cyclist Characters Reacting to Weather & Air Quality -->
         <div class="cyclist-stage-wrap">
           <canvas id="cyclistCanvas"></canvas>
-          <div id="cyclistReactionTag" class="cyclist-reaction-tag">😊 Smiling &amp; Energetic Ride</div>
+          <div id="cyclistReactionTag" class="cyclist-reaction-tag">😊 Smiling &amp; Smooth Ride</div>
+        </div>
+      </section>
+
+      <!-- Very Bottom Section: Mountain Peak & Elevation Explorer -->
+      <section id="mountainPeakSection" class="glass-card peak-explorer-panel">
+        <div class="card-header">
+          <span class="card-title">⛰️ Mountain Peak &amp; Elevation Station Explorer</span>
+          <span id="peakSelectedBadge" class="brand-badge">Tochal • 3,964m Peak</span>
+        </div>
+
+        <div class="peak-search-row">
+          <input id="mountainSearchInput" class="esp-input" type="text" placeholder="Search mountain peak (Tochal, Damavand, Mont Blanc, Fuji)..." autocomplete="off" />
+          <button id="mountainSearchBtn" class="pill-btn">Find Peak</button>
+        </div>
+
+        <div id="mountainPresets" class="peak-presets" aria-label="Famous Mountains"></div>
+
+        <div style="margin-bottom:6px;font-size:0.74rem;color:var(--text-soft);font-weight:600;">
+          Select Elevation Checkpoint / Altitude Level:
+        </div>
+        <div id="elevationPills" class="elevation-pills"></div>
+
+        <div class="peak-stats-grid">
+          <div class="mini-stat">
+            <div class="mini-stat-label">Selected Altitude</div>
+            <div id="peakCurrentElevVal" class="mini-stat-val">2,000 m</div>
+            <div id="peakMaxElevSub" class="metric-sub">Peak: 3,964 m</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Elevation Temp</div>
+            <div id="peakElevTempVal" class="mini-stat-val">--°</div>
+            <div id="peakLapseSub" class="metric-sub">Δ vs base: --°</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Mountain Wind</div>
+            <div id="peakElevWindVal" class="mini-stat-val">-- km/h</div>
+            <div id="peakZoneSub" class="metric-sub">Zone: Sub-Alpine</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-label">Trail Conditions</div>
+            <div id="peakTrailCondVal" class="mini-stat-val">Clear Trail</div>
+            <div id="peakSnowLineSub" class="metric-sub">Snow line: -- m</div>
+          </div>
+        </div>
+
+        <div class="elevation-profile-box">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.78rem;font-weight:700;">Altitude Climb Comparison (Base → Summit)</span>
+            <span id="peakCoordsLabel" style="font-size:0.72rem;color:var(--text-muted);">35.881°N, 51.415°E</span>
+          </div>
+          <div id="elevationTrackList" class="elev-track-list"></div>
         </div>
       </section>
     </div>
@@ -1406,8 +1556,8 @@
         unit: 'C',
         weatherData: null,
         airData: null,
-        simMode: 'live', // 'live' | 'clear' | 'autumn' | 'rain' | 'snow' | 'hail'
-        sceneCondition: 'clear', // 'clear' | 'cloudy' | 'rain' | 'snow' | 'hail' | 'storm'
+        simMode: 'live',
+        sceneCondition: 'clear',
         sceneTemperature: 22,
         windSpeedKmh: 16,
         windDirectionDeg: 270,
@@ -1419,17 +1569,75 @@
         snowAccumulation: 0,
         wetness: 0,
         espTimer: null,
-        // Computed Air Quality metrics
         pollutionPct: 16,
         ozoneHealthPct: 95,
         oxygenPct: 20.9,
         co2Ppm: 422,
         pm25: 9.5,
         o3Level: 54,
-        walkingSuitable: 'good',
-        cyclingSuitable: 'good',
-        cyclistMood: 'happy' // 'happy' | 'rain' | 'snow' | 'hail' | 'polluted' | 'windy'
+        cyclistMood: 'happy',
+        selectedMountain: null,
+        selectedElevationM: 2000,
+        peakBaseTempC: 18
       };
+
+      const FAMOUS_MOUNTAINS = [
+        {
+          id: 'tochal',
+          name: 'Tochal',
+          range: 'Alborz Range • Iran',
+          lat: 35.8814,
+          lon: 51.4147,
+          peakElev: 3964,
+          stations: [1000, 1900, 2000, 2900, 3000, 3964]
+        },
+        {
+          id: 'damavand',
+          name: 'Mount Damavand',
+          range: 'Alborz Range • Iran',
+          lat: 35.9519,
+          lon: 52.1092,
+          peakElev: 5609,
+          stations: [1500, 2000, 3000, 4200, 5609]
+        },
+        {
+          id: 'mont-blanc',
+          name: 'Mont Blanc',
+          range: 'Graian Alps • France / Italy',
+          lat: 45.8326,
+          lon: 6.8652,
+          peakElev: 4808,
+          stations: [1000, 2000, 3000, 3842, 4808]
+        },
+        {
+          id: 'fuji',
+          name: 'Mount Fuji',
+          range: 'Honshu • Japan',
+          lat: 35.3606,
+          lon: 138.7274,
+          peakElev: 3776,
+          stations: [1000, 2000, 2300, 3000, 3776]
+        },
+        {
+          id: 'matterhorn',
+          name: 'Matterhorn',
+          range: 'Pennine Alps • Switzerland / Italy',
+          lat: 45.9766,
+          lon: 7.6585,
+          peakElev: 4478,
+          stations: [1600, 2000, 3000, 3800, 4478]
+        },
+        {
+          id: 'kilimanjaro',
+          name: 'Mount Kilimanjaro',
+          range: 'Eastern Rift • Tanzania',
+          lat: -3.0674,
+          lon: 37.3556,
+          peakElev: 5895,
+          stations: [1800, 2700, 3700, 4700, 5895]
+        }
+      ];
+      state.selectedMountain = FAMOUS_MOUNTAINS[0];
 
       const WMO_MAP = {
         0: { label: 'Clear Sky', icon: '☀️', scene: 'clear' },
@@ -1460,10 +1668,11 @@
 
       function showToast(msg) {
         const box = document.getElementById('toastBox');
+        if (!box) return;
         box.textContent = msg;
         box.classList.add('show');
         clearTimeout(box._timer);
-        box._timer = setTimeout(() => box.classList.remove('show'), 2600);
+        box._timer = setTimeout(() => box.classList.remove('show'), 2800);
       }
 
       function formatTemp(celsius) {
@@ -1494,7 +1703,7 @@
       }
 
       // =========================================================================
-      // 2. LIVE OPEN-METEO WEATHER & AIR QUALITY API INTEGRATION
+      // 2. LIVE OPEN-METEO API INTEGRATION & UI UPDATER
       // =========================================================================
       async function fetchWeather(lat, lon, cityName, country) {
         state.lat = lat;
@@ -1507,12 +1716,16 @@
           : state.cityName;
 
         const radar = document.getElementById('radarIframe');
-        radar.src = `https://embed.windy.com/embed2.html?lat=${lat.toFixed(3)}&lon=${lon.toFixed(3)}&detailLat=${lat.toFixed(3)}&detailLon=${lon.toFixed(3)}&width=650&height=450&zoom=6&level=surface&overlay=radar&product=radar&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1`;
+        if (radar) {
+          radar.src = `https://embed.windy.com/embed2.html?lat=${lat.toFixed(3)}&lon=${lon.toFixed(3)}&detailLat=${lat.toFixed(3)}&detailLon=${lon.toFixed(3)}&width=650&height=450&zoom=6&level=surface&overlay=radar&product=radar&menu=&message=true&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C&radarRange=-1`;
+        }
         document.getElementById('radarCoordsLabel').textContent = `${lat.toFixed(2)}°, ${lon.toFixed(2)}°`;
 
         const weatherPromise = fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m&hourly=temperature_2m,precipitation_probability,weather_code,is_day&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,precipitation_probability_max&timezone=auto&forecast_days=10`
-        ).then((r) => (r.ok ? r.json() : null));
+        )
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
 
         const airPromise = fetch(
           `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm2_5,pm10,ozone,carbon_dioxide,european_aqi&timezone=auto`
@@ -1612,7 +1825,9 @@
         });
       }
 
-      // Compute Air Quality, Ozone Health, Oxygen, CO2 & Walking/Cycling Suitability
+      // =========================================================================
+      // 2B. AIR QUALITY, OZONE, OXYGEN, CO2 & CYCLIST REACTION ENGINE
+      // =========================================================================
       function updateAirQualityAndSuitability() {
         const airCur = state.airData?.current;
         const windFactor = Math.max(0.55, Math.min(1.35, 18 / Math.max(6, state.windSpeedKmh)));
@@ -1650,23 +1865,19 @@
         state.o3Level = Math.round(o3);
         state.co2Ppm = Math.round(co2);
 
-        // Pollution percentage (0% clean -> 100% heavy)
-        const rawPoll = Math.round(Math.min(96, Math.max(5, pm25 * 1.45 + (state.co2Ppm - 400) * 0.14)));
+        const rawPoll = Math.round(Math.min(96, Math.max(5, Number(state.pm25) * 1.45 + (state.co2Ppm - 400) * 0.14)));
         state.pollutionPct = rawPoll;
 
-        // Ozone layer health % (high health when surface O3 is balanced and sky is clear/moderate)
         const rawOzoneHealth = Math.round(
           Math.min(99, Math.max(64, 98 - Math.max(0, state.o3Level - 45) * 0.28 - (state.simMode === 'hail' ? 4 : 0)))
         );
         state.ozoneHealthPct = rawOzoneHealth;
 
-        // Oxygen level % (ambient ~20.9%, slightly lower in dense/stagnant air)
         const rawOxygen = Number(
           Math.min(21.0, Math.max(19.8, 20.95 - Math.max(0, state.pollutionPct - 15) * 0.008)).toFixed(1)
         );
         state.oxygenPct = rawOxygen;
 
-        // Description & Badge
         const badgeEl = document.getElementById('aqPollutionBadge');
         const headlineEl = document.getElementById('aqHeadline');
         const descEl = document.getElementById('aqDescription');
@@ -1675,20 +1886,20 @@
 
         badgeEl.classList.remove('moderate', 'poor');
         if (state.pollutionPct <= 28) {
-          headlineEl.textContent = 'Clean & Fresh Air • هوای پاک و سالم';
+          headlineEl.textContent = 'Clean & Refreshing Air';
           descEl.textContent =
-            'Low air pollution percentage with healthy oxygen and ozone balance. Ideal for outdoor activity. • درصد آلودگی پایین و اکسیژن مناسب؛ عالی برای فعالیت بیرون از خانه.';
+            'Low air pollution percentage with healthy oxygen and ozone layer balance. Ideal for outdoor activity.';
           badgeEl.textContent = `Pollution: ${state.pollutionPct}% • Clean`;
         } else if (state.pollutionPct <= 55) {
-          headlineEl.textContent = 'Moderate Air Quality • کیفیت هوای متوسط';
+          headlineEl.textContent = 'Moderate Air Quality';
           descEl.textContent =
-            'Moderate particulate levels; sensitive individuals should pace outdoor exertion. • آلودگی در حد متوسط؛ افراد حساس با احتیاط در فضای باز باشند.';
+            'Moderate particulate levels; sensitive individuals should pace outdoor exertion and monitor breathing.';
           badgeEl.textContent = `Pollution: ${state.pollutionPct}% • Moderate`;
           badgeEl.classList.add('moderate');
         } else {
-          headlineEl.textContent = 'Elevated Air Pollution • هوای آلوده و سنگین';
+          headlineEl.textContent = 'Elevated Air Pollution';
           descEl.textContent =
-            'High pollution percentage and elevated CO₂/particulates. Wearing a mask and limiting strenuous cycling is advised. • درصد آلودگی بالا؛ استفاده از ماسک و پرهیز از دوچرخه‌سواری طولانی توصیه می‌شود.';
+            'High pollution percentage and elevated CO₂/particulates. Wearing a mask and limiting strenuous cycling is advised.';
           badgeEl.textContent = `Pollution: ${state.pollutionPct}% • High`;
           badgeEl.classList.add('poor');
         }
@@ -1704,30 +1915,28 @@
         document.getElementById('aqCo2Sub').textContent =
           state.co2Ppm <= 430 ? 'Dispersion: Good' : 'Dispersion: Elevated';
 
-        // Walking Suitability
         const walkBadge = document.getElementById('walkSuitBadge');
         const walkDetail = document.getElementById('walkSuitDetail');
         walkBadge.classList.remove('suit-good', 'suit-warn', 'suit-bad');
         if (state.sceneCondition === 'hail') {
-          walkBadge.textContent = 'Not Ideal • نامناسب';
+          walkBadge.textContent = 'Not Ideal for Walking';
           walkBadge.classList.add('suit-bad');
           walkDetail.textContent = 'Hail pellets falling — take shelter';
         } else if (state.pollutionPct > 60 || state.sceneCondition === 'storm') {
-          walkBadge.textContent = 'Caution • با احتیاط';
+          walkBadge.textContent = 'Caution for Walking';
           walkBadge.classList.add('suit-warn');
           walkDetail.textContent = 'Heavy air load or storm gusts';
         } else {
-          walkBadge.textContent = 'Suitable • مناسب پیاده‌روی';
+          walkBadge.textContent = 'Suitable for Walking';
           walkBadge.classList.add('suit-good');
           walkDetail.textContent = 'Comfortable for walking outside';
         }
 
-        // Cycling Suitability
         const cycleBadge = document.getElementById('cycleSuitBadge');
         const cycleDetail = document.getElementById('cycleSuitDetail');
         cycleBadge.classList.remove('suit-good', 'suit-warn', 'suit-bad');
         if (state.sceneCondition === 'hail' || state.sceneCondition === 'storm' || state.pollutionPct > 62) {
-          cycleBadge.textContent = 'Not Suitable • نامناسب';
+          cycleBadge.textContent = 'Not Suitable for Cycling';
           cycleBadge.classList.add('suit-bad');
           cycleDetail.textContent = 'Hazardous road or high pollution';
         } else if (
@@ -1736,36 +1945,150 @@
           state.windSpeedKmh > 28 ||
           state.pollutionPct > 35
         ) {
-          cycleBadge.textContent = 'Moderate • با احتیاط';
+          cycleBadge.textContent = 'Moderate for Cycling';
           cycleBadge.classList.add('suit-warn');
           cycleDetail.textContent = 'Wet/windy conditions or moderate air';
         } else {
-          cycleBadge.textContent = 'Suitable • مناسب دوچرخه‌سواری';
+          cycleBadge.textContent = 'Suitable for Cycling';
           cycleBadge.classList.add('suit-good');
           cycleDetail.textContent = 'Great air & smooth riding weather';
         }
 
-        // Determine Cyclist Character Mood Reaction
         const tagEl = document.getElementById('cyclistReactionTag');
         if (state.sceneCondition === 'hail') {
           state.cyclistMood = 'hail';
-          tagEl.textContent = '🧊 Ducking from Hail • واکنش به تگرگ';
+          tagEl.textContent = '🧊 Ducking from Hail';
         } else if (state.sceneCondition === 'rain' || state.sceneCondition === 'storm') {
           state.cyclistMood = 'rain';
-          tagEl.textContent = '🌧️ Rain Gear & Cautious Ride • واکنش به باران';
+          tagEl.textContent = '🌧️ Rain Gear & Cautious Ride';
         } else if (state.sceneCondition === 'snow' || state.sceneTemperature <= 1) {
           state.cyclistMood = 'snow';
-          tagEl.textContent = '❄️ Bundled & Chilly • واکنش به برف و سرما';
+          tagEl.textContent = '❄️ Bundled & Chilly Ride';
         } else if (state.pollutionPct >= 45) {
           state.cyclistMood = 'polluted';
-          tagEl.textContent = '😷 Masked & Tired of Pollution • واکنش به آلودگی';
+          tagEl.textContent = '😷 Masked & Pacing in Pollution';
         } else if (state.windSpeedKmh >= 24) {
           state.cyclistMood = 'windy';
-          tagEl.textContent = '💨 Leaning Into Wind • واکنش به باد';
+          tagEl.textContent = '💨 Leaning Into Strong Wind';
         } else {
           state.cyclistMood = 'happy';
-          tagEl.textContent = '😊 Smiling & Smooth Ride • هوای عالی و خوشحال';
+          tagEl.textContent = '😊 Smiling & Smooth Ride';
         }
+      }
+
+      // =========================================================================
+      // 2C. MOUNTAIN PEAK & ELEVATION STATION EXPLORER
+      // =========================================================================
+      async function fetchMountainElevationWeather(mountain, elevationM) {
+        if (!mountain) return;
+        state.selectedMountain = mountain;
+        state.selectedElevationM = elevationM;
+
+        document.getElementById('peakSelectedBadge').textContent =
+          `${mountain.name} • ${mountain.peakElev.toLocaleString()}m Peak`;
+        document.getElementById('peakCoordsLabel').textContent =
+          `${Math.abs(mountain.lat).toFixed(3)}°${mountain.lat >= 0 ? 'N' : 'S'}, ${Math.abs(mountain.lon).toFixed(3)}°${mountain.lon >= 0 ? 'E' : 'W'}`;
+
+        const baseTempC = state.weatherData?.current?.temperature_2m ?? state.sceneTemperature ?? 16;
+        let baseElevM = state.weatherData?.elevation ?? 1200;
+        const windKmh = state.windSpeedKmh || 14;
+
+        try {
+          const url = `https://api.open-meteo.com/v1/elevation?latitude=${mountain.lat}&longitude=${mountain.lon}`;
+          const res = await fetch(url);
+          if (res.ok) {
+            const json = await res.json();
+            if (Array.isArray(json.elevation) && typeof json.elevation[0] === 'number') {
+              baseElevM = json.elevation[0];
+            }
+          }
+        } catch (e) {
+          // Fallback cleanly to lapse rate
+        }
+
+        state.peakBaseTempC = baseTempC;
+
+        const calcElevTemp = (targetElev) => {
+          const deltaM = targetElev - baseElevM;
+          return baseTempC - (deltaM / 100) * 0.65;
+        };
+
+        const elevTempC = calcElevTemp(elevationM);
+        const lapseDiffC = elevTempC - baseTempC;
+        const elevWindKmh = Math.round(windKmh * (1 + Math.max(0, (elevationM - 1000) / 4500) * 0.85));
+        const snowLineM = Math.round(Math.max(1200, 1800 + (baseTempC - 12) * 110));
+
+        let zone = 'Valley & Base';
+        if (elevationM >= 5000) zone = 'High Alpine / Extreme';
+        else if (elevationM >= 3500) zone = 'Alpine Ridge / Summit';
+        else if (elevationM >= 2200) zone = 'Sub-Alpine Zone';
+        else if (elevationM >= 1000) zone = 'Foothill Trail';
+
+        let trailCond = 'Clear Trail';
+        if (elevTempC <= -2 || elevationM >= snowLineM) trailCond = 'Snow & Frost';
+        else if (state.sceneCondition === 'rain' || state.sceneCondition === 'storm') trailCond = 'Wet & Slippery';
+        else if (elevWindKmh > 35) trailCond = 'Gusty Ridge';
+
+        document.getElementById('peakCurrentElevVal').textContent = `${elevationM.toLocaleString()} m`;
+        document.getElementById('peakMaxElevSub').textContent = `Peak: ${mountain.peakElev.toLocaleString()} m`;
+        document.getElementById('peakElevTempVal').textContent = formatTemp(elevTempC);
+        document.getElementById('peakLapseSub').textContent =
+          `Δ vs base: ${lapseDiffC >= 0 ? '+' : ''}${formatTemp(lapseDiffC)}`;
+        document.getElementById('peakElevWindVal').textContent = `${elevWindKmh} km/h`;
+        document.getElementById('peakZoneSub').textContent = `Zone: ${zone}`;
+        document.getElementById('peakTrailCondVal').textContent = trailCond;
+        document.getElementById('peakSnowLineSub').textContent = `Snow line: ~${snowLineM.toLocaleString()} m`;
+
+        renderElevationPillsAndTrack(mountain, elevationM, calcElevTemp);
+      }
+
+      function renderElevationPillsAndTrack(mountain, activeElev, calcElevTemp) {
+        const pillsWrap = document.getElementById('elevationPills');
+        const trackWrap = document.getElementById('elevationTrackList');
+        pillsWrap.innerHTML = '';
+        trackWrap.innerHTML = '';
+
+        mountain.stations.forEach((elev) => {
+          const isSummit = elev === mountain.peakElev;
+          const btn = document.createElement('button');
+          btn.className = 'elev-btn' + (elev === activeElev ? ' active' : '');
+          btn.textContent = isSummit ? `${elev.toLocaleString()} m (Summit)` : `${elev.toLocaleString()} m`;
+          btn.addEventListener('click', () => {
+            fetchMountainElevationWeather(mountain, elev);
+          });
+          pillsWrap.appendChild(btn);
+
+          const stepTemp = calcElevTemp(elev);
+          const card = document.createElement('div');
+          card.className = 'elev-step-card' + (elev === activeElev ? ' selected' : '');
+          card.innerHTML = `
+            <div style="font-weight:700;">${elev.toLocaleString()} m${isSummit ? ' 🏔️' : ''}</div>
+            <div style="margin-top:3px;font-size:0.88rem;font-weight:700;color:#6ee7b7;">${formatTemp(stepTemp)}</div>
+            <div style="font-size:0.68rem;color:var(--text-muted);">${stepTemp <= 0 ? 'Freezing / Snow' : 'Cool Mountain'}</div>
+          `;
+          card.addEventListener('click', () => {
+            fetchMountainElevationWeather(mountain, elev);
+          });
+          trackWrap.appendChild(card);
+        });
+      }
+
+      function renderMountainPresets() {
+        const wrap = document.getElementById('mountainPresets');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        FAMOUS_MOUNTAINS.forEach((m) => {
+          const chip = document.createElement('button');
+          chip.className = 'city-chip' + (state.selectedMountain?.id === m.id ? ' active' : '');
+          chip.textContent = `${m.name} (${m.peakElev.toLocaleString()}m)`;
+          chip.addEventListener('click', () => {
+            wrap.querySelectorAll('.city-chip').forEach((c) => c.classList.remove('active'));
+            chip.classList.add('active');
+            const defaultElev = m.stations.includes(2000) ? 2000 : m.stations[Math.floor(m.stations.length / 2)];
+            fetchMountainElevationWeather(m, defaultElev);
+          });
+          wrap.appendChild(chip);
+        });
       }
 
       function applyAtmosphericState() {
@@ -1829,6 +2152,9 @@
         document.getElementById('skyPhaseBadge').textContent = phase;
 
         updateAirQualityAndSuitability();
+        if (state.selectedMountain) {
+          fetchMountainElevationWeather(state.selectedMountain, state.selectedElevationM);
+        }
       }
 
       // =========================================================================
@@ -1864,8 +2190,8 @@
 
       function resizeCanvas() {
         DPR = Math.min(window.devicePixelRatio || 1, 2);
-        W = window.innerWidth;
-        H = window.innerHeight;
+        W = Math.max(320, window.innerWidth);
+        H = Math.max(480, window.innerHeight);
         canvas.width = Math.floor(W * DPR);
         canvas.height = Math.floor(H * DPR);
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -1993,21 +2319,36 @@
         }
         pineTrees.sort((a, b) => a.y - b.y);
 
-        const villaCount = Math.max(5, Math.min(9, Math.floor(W / 175)));
+        const villaCount = Math.max(5, Math.min(8, Math.floor(W / 190)));
+        const flowerPalette = ['#f43f5e', '#f59e0b', '#ec4899', '#a855f7', '#38bdf8', '#fb7185'];
+        const yardCarColors = ['#ef4444', '#3b82f6', '#eab308', '#10b981', '#f8fafc'];
+
         for (let i = 0; i < villaCount; i++) {
           const xNorm = (i + 0.5) / villaCount + (seededRand(i * 23) - 0.5) * 0.04;
           const x = xNorm * W;
-          const y = H * (0.67 + (i % 2) * 0.035);
+          const y = H * (0.67 + (i % 2) * 0.032);
           const isTwoStory = i % 2 === 0;
+          const flowers = Array.from({ length: 9 }, (_, fIdx) => ({
+            dx: -36 + fIdx * 9 + (seededRand(i * 97 + fIdx) - 0.5) * 3,
+            dy: 8 + seededRand(i * 103 + fIdx) * 14,
+            color: flowerPalette[(i + fIdx) % flowerPalette.length],
+            phase: seededRand(i * 109 + fIdx) * Math.PI * 2
+          }));
+
           villas.push({
             x,
             y,
-            w: isTwoStory ? 84 : 68,
-            h: isTwoStory ? 62 : 44,
+            w: isTwoStory ? 86 : 70,
+            h: isTwoStory ? 60 : 44,
             isTwoStory,
             roofColor: i % 3 === 0 ? '#5c2d26' : i % 3 === 1 ? '#334155' : '#4a3525',
-            wallColor: i % 2 === 0 ? '#e6dfd3' : '#d6cbb8',
+            wallColor: i % 2 === 0 ? '#ebe4d8' : '#d8cebc',
             hasChimney: true,
+            hasYardCar: i % 2 === 0,
+            yardCarColor: yardCarColors[i % yardCarColors.length],
+            hasGardener: i < 4,
+            gardenerPhase: seededRand(i * 127) * Math.PI * 2,
+            flowers,
             seed: i * 29
           });
         }
@@ -2083,26 +2424,31 @@
           streetLamps.push({ x, y: H * 0.818 });
         }
 
-        const carColors = ['#e2e8f0', '#1e293b', '#991b1b', '#1d4ed8', '#cbd5e1', '#374151'];
-        for (let i = 0; i < 6; i++) {
+        const isRushHour =
+          (state.localHourDecimal >= 7.5 && state.localHourDecimal <= 9.8) ||
+          (state.localHourDecimal >= 16.5 && state.localHourDecimal <= 19.5);
+        const carCount = isRushHour ? 12 : 8;
+        const carColors = ['#e2e8f0', '#1e293b', '#991b1b', '#1d4ed8', '#cbd5e1', '#374151', '#0ea5e9', '#d97706'];
+        for (let i = 0; i < carCount; i++) {
           const dir = i % 2 === 0 ? 1 : -1;
           vehicles.push({
-            x: (i / 6) * W,
+            x: (i / carCount) * W,
             dir,
-            speed: (1.5 + seededRand(i * 43) * 1.1) * dir,
+            speed: (1.45 + seededRand(i * 43) * 1.15) * dir,
             color: carColors[i % carColors.length],
-            w: 48,
-            h: 17
+            w: 46,
+            h: 16
           });
         }
 
-        for (let i = 0; i < 5; i++) {
+        const pedCount = 11;
+        for (let i = 0; i < pedCount; i++) {
           const dir = i % 2 === 0 ? 1 : -1;
           pedestrians.push({
             x: seededRand(i * 71) * W,
             dir,
-            speed: (0.34 + seededRand(i * 73) * 0.22) * dir,
-            coat: ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'][i],
+            speed: (0.34 + seededRand(i * 73) * 0.24) * dir,
+            coat: ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][i % 6],
             stride: seededRand(i * 79) * Math.PI * 2
           });
         }
@@ -2470,13 +2816,95 @@
         ctx.restore();
       }
 
-      function drawVillas() {
+      function drawVillas(timeSec) {
         const day = getDaylightFactor();
         const snow = state.snowAccumulation;
+        const isMorning = state.localHourDecimal >= 5.5 && state.localHourDecimal <= 11.5;
 
         villas.forEach((v) => {
           const left = v.x - v.w / 2;
           const top = v.y - v.h;
+
+          const yardTop = v.y;
+          const yardH = 24;
+          ctx.fillStyle = snow > 0.3
+            ? (day > 0.35 ? '#e2ecf7' : '#7b8c9f')
+            : (day > 0.35 ? '#3b7a3e' : '#15331e');
+          ctx.beginPath();
+          ctx.roundRect(left - 18, yardTop, v.w + 36, yardH, 7);
+          ctx.fill();
+
+          ctx.fillStyle = day > 0.35 ? '#d6c7b2' : '#475569';
+          ctx.fillRect(v.x - 5, yardTop, 10, yardH);
+
+          if (snow < 0.45) {
+            v.flowers.forEach((fl) => {
+              const fx = v.x + fl.dx;
+              const fy = yardTop + fl.dy;
+              const sway = Math.sin(timeSec * 3.2 + fl.phase) * 1.4;
+              ctx.strokeStyle = '#22c55e';
+              ctx.lineWidth = 1.4;
+              ctx.beginPath();
+              ctx.moveTo(fx, fy + 3);
+              ctx.lineTo(fx + sway * 0.5, fy - 2);
+              ctx.stroke();
+              ctx.fillStyle = fl.color;
+              ctx.beginPath();
+              ctx.arc(fx + sway, fy - 3, 2.7, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.fillStyle = '#fef08a';
+              ctx.beginPath();
+              ctx.arc(fx + sway, fy - 3, 1.0, 0, Math.PI * 2);
+              ctx.fill();
+            });
+          }
+
+          if (v.hasYardCar) {
+            const carX = left - 14;
+            const carY = yardTop + 5;
+            ctx.fillStyle = v.yardCarColor;
+            ctx.beginPath();
+            ctx.roundRect(carX, carY, 26, 11, 3.5);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(186, 230, 253, 0.75)';
+            ctx.fillRect(carX + 6, carY - 3.5, 13, 4);
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(carX + 6, carY + 11, 2.8, 0, Math.PI * 2);
+            ctx.arc(carX + 20, carY + 11, 2.8, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          if (v.hasGardener && isMorning && snow < 0.5 && state.sceneCondition !== 'hail') {
+            const gx = v.x + 18 + Math.sin(timeSec * 1.4 + v.gardenerPhase) * 8;
+            const gy = yardTop + 14;
+            const tendBob = Math.abs(Math.sin(timeSec * 5.2 + v.gardenerPhase)) * 3.5;
+
+            ctx.strokeStyle = '#1e3a8a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(gx, gy - 5);
+            ctx.lineTo(gx - 2.5, gy + 1);
+            ctx.moveTo(gx, gy - 5);
+            ctx.lineTo(gx + 2.5, gy + 1);
+            ctx.stroke();
+
+            ctx.fillStyle = '#10b981';
+            ctx.fillRect(gx - 3, gy - 12 + tendBob * 0.4, 6, 7);
+            ctx.strokeStyle = '#fbd38d';
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.moveTo(gx + 2, gy - 10 + tendBob * 0.4);
+            ctx.lineTo(gx + 7, gy - 6 + tendBob);
+            ctx.stroke();
+
+            ctx.fillStyle = '#fbd38d';
+            ctx.beginPath();
+            ctx.arc(gx, gy - 15 + tendBob * 0.4, 2.7, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#facc15';
+            ctx.fillRect(gx - 4.5, gy - 17.5 + tendBob * 0.4, 9, 1.8);
+          }
 
           ctx.fillStyle = day > 0.35 ? v.wallColor : '#4c566a';
           ctx.fillRect(left, top, v.w, v.h);
@@ -2915,7 +3343,7 @@
       }
 
       // =========================================================================
-      // 4. ANIMATED REACTIVE CYCLIST CHARACTERS STAGE (آدمک‌های دوچرخه‌سوار)
+      // 4. ANIMATED REACTIVE CYCLIST CHARACTERS STAGE
       // =========================================================================
       const cyclistCanvas = document.getElementById('cyclistCanvas');
       const cCtx = cyclistCanvas.getContext('2d');
@@ -2955,17 +3383,16 @@
         cCtx.translate(cx, roadY);
         cCtx.scale(dir * s, s);
 
-        // Bobbing & posture reaction by weather/air quality
         let bobY = Math.sin(timeSec * 12 + cy.phase) * 2.2;
         let torsoLean = 0.24;
         if (mood === 'hail') {
           bobY = Math.sin(timeSec * 22 + cy.phase) * 3.5;
-          torsoLean = 0.58; // Ducking down from hail
+          torsoLean = 0.58;
         } else if (mood === 'snow') {
-          bobY = Math.sin(timeSec * 18 + cy.phase) * 2.8; // Shivering/bracing
+          bobY = Math.sin(timeSec * 18 + cy.phase) * 2.8;
           torsoLean = 0.36;
         } else if (mood === 'windy') {
-          torsoLean = 0.42; // Leaning against strong wind
+          torsoLean = 0.42;
         } else if (mood === 'polluted') {
           bobY = Math.sin(timeSec * 7 + cy.phase) * 1.4;
           torsoLean = 0.32;
@@ -2974,7 +3401,6 @@
         const wheelR = 16;
         const wheelSpin = timeSec * 9 * speedMult;
 
-        // Draw Rear & Front Wheels + Spokes
         [-22, 22].forEach((wx) => {
           cCtx.strokeStyle = cy.wheelColor;
           cCtx.lineWidth = 2.4;
@@ -2982,7 +3408,6 @@
           cCtx.arc(wx, -wheelR, wheelR, 0, Math.PI * 2);
           cCtx.stroke();
 
-          // Rotating spokes
           cCtx.strokeStyle = 'rgba(226, 232, 240, 0.55)';
           cCtx.lineWidth = 1.1;
           for (let sp = 0; sp < 4; sp++) {
@@ -2994,7 +3419,6 @@
           }
         });
 
-        // Bicycle Frame & Crank
         const crankX = -3;
         const crankY = -wheelR;
         const seatX = -11;
@@ -3016,7 +3440,6 @@
         cCtx.lineTo(22, -wheelR);
         cCtx.stroke();
 
-        // Pedaling Leg
         const pedalAngle = wheelSpin * 1.25;
         const footX = crankX + Math.cos(pedalAngle) * 6;
         const footY = crankY + Math.sin(pedalAngle) * 6;
@@ -3027,18 +3450,15 @@
         cCtx.lineTo(footX, footY);
         cCtx.stroke();
 
-        // Cyclist Torso & Head
         cCtx.save();
         cCtx.translate(seatX, seatY + bobY);
         cCtx.rotate(torsoLean);
 
-        // Jacket / Rain Poncho / Winter Coat
         cCtx.fillStyle = mood === 'rain' ? '#38bdf8' : mood === 'snow' ? '#e11d48' : cy.jersey;
         cCtx.beginPath();
         cCtx.roundRect(-5, -20, 12, 20, 5);
         cCtx.fill();
 
-        // Arm reaching to handlebar
         cCtx.strokeStyle = mood === 'snow' ? '#f43f5e' : cy.jersey;
         cCtx.lineWidth = 3;
         cCtx.beginPath();
@@ -3046,17 +3466,15 @@
         cCtx.lineTo(18, -8);
         cCtx.stroke();
 
-        // Head
         cCtx.save();
         cCtx.translate(4, -27);
-        cCtx.rotate(-torsoLean * 0.7); // Keep head relatively upright/readable
+        cCtx.rotate(-torsoLean * 0.7);
 
         cCtx.fillStyle = '#fbd38d';
         cCtx.beginPath();
         cCtx.arc(0, 0, 7.5, 0, Math.PI * 2);
         cCtx.fill();
 
-        // Helmet / Hood / Beanie reaction
         if (mood === 'rain') {
           cCtx.fillStyle = '#0284c7';
           cCtx.beginPath();
@@ -3074,10 +3492,8 @@
           cCtx.fill();
         }
 
-        // Expressive Face Reaction (Eyes & Mouth/Mask)
         cCtx.fillStyle = '#0f172a';
         if (mood === 'happy') {
-          // Bright eyes + big smile
           cCtx.beginPath();
           cCtx.arc(2.5, -0.5, 1.2, 0, Math.PI * 2);
           cCtx.arc(6.0, -0.5, 1.2, 0, Math.PI * 2);
@@ -3088,7 +3504,6 @@
           cCtx.arc(4.2, 2.0, 3.2, 0.1 * Math.PI, 0.9 * Math.PI);
           cCtx.stroke();
         } else if (mood === 'rain' || mood === 'hail' || mood === 'windy') {
-          // Squinting / startled eyes + tense expression
           cCtx.strokeStyle = '#0f172a';
           cCtx.lineWidth = 1.4;
           cCtx.beginPath();
@@ -3097,14 +3512,12 @@
           cCtx.moveTo(4.8, 0.4);
           cCtx.lineTo(7.2, -1);
           cCtx.stroke();
-          // Wavy/worried mouth
           cCtx.beginPath();
           cCtx.moveTo(2.2, 3.5);
           cCtx.lineTo(4.2, 2.3);
           cCtx.lineTo(6.2, 3.5);
           cCtx.stroke();
         } else if (mood === 'snow') {
-          // Cold cheeks + small shiver mouth
           cCtx.fillStyle = '#0f172a';
           cCtx.beginPath();
           cCtx.arc(2.8, -0.5, 1.1, 0, Math.PI * 2);
@@ -3115,13 +3528,11 @@
           cCtx.arc(4.8, 1.8, 2.0, 0, Math.PI * 2);
           cCtx.fill();
         } else {
-          // Polluted air: protective mask + tired eyes
           cCtx.fillStyle = '#0f172a';
           cCtx.beginPath();
           cCtx.arc(2.8, -0.8, 1.1, 0, Math.PI * 2);
           cCtx.arc(6.0, -0.8, 1.1, 0, Math.PI * 2);
           cCtx.fill();
-          // White pollution mask over lower face
           cCtx.fillStyle = '#f8fafc';
           cCtx.fillRect(1.2, 1.2, 7.5, 5.2);
           cCtx.strokeStyle = '#cbd5e1';
@@ -3129,7 +3540,6 @@
           cCtx.strokeRect(1.2, 1.2, 7.5, 5.2);
         }
 
-        // If hail is falling, show protective hand or ice pellet near head
         if (mood === 'hail') {
           cCtx.strokeStyle = '#fbd38d';
           cCtx.lineWidth = 2.6;
@@ -3139,16 +3549,15 @@
           cCtx.stroke();
         }
 
-        cCtx.restore(); // head
-        cCtx.restore(); // torso
-        cCtx.restore(); // cyclist
+        cCtx.restore();
+        cCtx.restore();
+        cCtx.restore();
       }
 
       function renderCyclistStage(dt, timeSec) {
         if (!cW || !cH) resizeCyclistCanvas();
         cCtx.clearRect(0, 0, cW, cH);
 
-        // Road surface inside cyclist stage
         const roadY = cH * 0.76;
         cCtx.fillStyle = 'rgba(15, 23, 42, 0.85)';
         cCtx.fillRect(0, roadY, cW, cH - roadY);
@@ -3162,7 +3571,6 @@
         cCtx.stroke();
         cCtx.setLineDash([]);
 
-        // Pollution haze tint when air pollution is high
         if (state.pollutionPct >= 40) {
           const hazeAlpha = Math.min(0.35, (state.pollutionPct - 35) * 0.006);
           cCtx.fillStyle = `rgba(168, 152, 126, ${hazeAlpha})`;
@@ -3171,7 +3579,6 @@
 
         cyclists.forEach((cy) => drawSingleCyclist(cy, timeSec, dt));
 
-        // Mini weather particles in cyclist stage
         if (state.sceneCondition === 'rain' || state.sceneCondition === 'storm') {
           cCtx.strokeStyle = 'rgba(186, 230, 253, 0.55)';
           cCtx.lineWidth = 1.1;
@@ -3242,7 +3649,7 @@
           if (pineTrees[i].depthBand <= 1) drawPineTree(pineTrees[i], timeSec);
         }
 
-        drawVillas();
+        drawVillas(timeSec);
 
         for (let i = 0; i < pineTrees.length; i++) {
           if (pineTrees[i].depthBand >= 2) drawPineTree(pineTrees[i], timeSec);
@@ -3346,6 +3753,7 @@
         document.getElementById('unitToggleBtn').addEventListener('click', () => {
           state.unit = state.unit === 'C' ? 'F' : 'C';
           renderWeatherDashboard();
+          applyAtmosphericState();
           showToast(`Switched to °${state.unit}`);
         });
 
@@ -3427,6 +3835,48 @@
           };
           pollEsp();
           state.espTimer = setInterval(pollEsp, 5000);
+        });
+
+        renderMountainPresets();
+        const peakInput = document.getElementById('mountainSearchInput');
+        const peakSearchBtn = document.getElementById('mountainSearchBtn');
+
+        function handleMountainSearch() {
+          const query = peakInput.value.trim().toLowerCase();
+          if (!query) {
+            showToast('Type a mountain name like Tochal, Damavand, or Mont Blanc');
+            return;
+          }
+          const matched = FAMOUS_MOUNTAINS.find(
+            (m) => m.name.toLowerCase().includes(query) || m.range.toLowerCase().includes(query)
+          );
+          if (matched) {
+            document.querySelectorAll('#mountainPresets .city-chip').forEach((c) => {
+              c.classList.toggle('active', c.textContent.toLowerCase().includes(matched.name.toLowerCase()));
+            });
+            const defaultElev = matched.stations.includes(2000)
+              ? 2000
+              : matched.stations[Math.floor(matched.stations.length / 2)];
+            fetchMountainElevationWeather(matched, defaultElev);
+            showToast(`Loaded ${matched.name} (${matched.peakElev.toLocaleString()}m peak)`);
+          } else {
+            const customPeak = {
+              id: 'custom-' + query.replace(/\s+/g, '-'),
+              name: peakInput.value.trim(),
+              range: 'Mountain Peak',
+              lat: state.lat,
+              lon: state.lon,
+              peakElev: 3600,
+              stations: [1000, 1500, 2000, 2500, 3000, 3600]
+            };
+            fetchMountainElevationWeather(customPeak, 2000);
+            showToast(`Showing elevation profile for ${customPeak.name}`);
+          }
+        }
+
+        peakSearchBtn.addEventListener('click', handleMountainSearch);
+        peakInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') handleMountainSearch();
         });
       }
 
